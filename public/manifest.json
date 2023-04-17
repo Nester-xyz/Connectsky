@@ -1,0 +1,14 @@
+{
+  "name": "dummy extension for unnamed app",
+  "description": "nothing to show here",
+  "version": "0.1",
+  "manifest_version": 3,
+  "action": {
+    "default_title": "WaverlyApp - a deso extension"
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
