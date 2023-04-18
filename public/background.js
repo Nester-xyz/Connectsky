@@ -2,7 +2,7 @@ chrome.action.onClicked.addListener((tab) => {
   // Define variables for the window properties
   let redirect = "../index.html";
   let type = "popup";
-  let width = 800;
+  let width = 400;
   let height = 600;
 
   // Get the display info and calculate the center of the screen
