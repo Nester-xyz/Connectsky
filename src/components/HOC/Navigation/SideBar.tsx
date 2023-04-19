@@ -1,17 +1,14 @@
 // when i am writing this text, this component is only called from Layout.tsx
 
 import React from "react";
-
 // react icons imports
 import { AiFillRobot } from "react-icons/ai";
 import { BsFillGearFill, BsPencilSquare } from "react-icons/bs";
 import { IoNotifications } from "react-icons/io5";
-
 // type imports
-import { BottomBarProps, linksType } from "../../@types/Layout/BottomBar";
-
+import { SideBarProps, linksType } from "../../@types/Layout/SideBar";
 // component imports
-import HoverButtonIconOnly from "../../UI/HoverButtonIconOnly";
+import HoverButton from "../../UI/HoverButton";
 
 // this contains the actual links which will be made into the buttons
 const links: linksType[] = [
@@ -38,9 +35,9 @@ const links: linksType[] = [
 ];
 
 // the components code begins from here
-const BottomBar = ({ activePage, setActivePage }: BottomBarProps) => {
+const SideBar = ({ activePage, setActivePage }: SideBarProps) => {
   return (
-    <div className="flex justify-evenly items-center h-16 border-t-2 border-black bg-white">
+    <div className="flex flex-col items-start gap-14 py-7 px-3 h-screen w-52 border-t-2 bg-neutral-300">
       {links.map((link, index) => {
         return (
           <div
@@ -48,9 +45,10 @@ const BottomBar = ({ activePage, setActivePage }: BottomBarProps) => {
             onClick={() => {
               setActivePage(link.linkName);
             }}
-            className="w-10 h-10  relative"
+            className="relative bg-yellow-300 w-44"
           >
-            <HoverButtonIconOnly
+            {/* since this button doesn't do anything yet I haven't added anything to the action */}
+            <HoverButton
               checkOne={activePage}
               checkTwo={link.linkName}
               icon={link.icon}
@@ -63,4 +61,4 @@ const BottomBar = ({ activePage, setActivePage }: BottomBarProps) => {
   );
 };
 
-export default BottomBar;
+export default SideBar;

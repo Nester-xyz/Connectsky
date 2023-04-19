@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useState, useContext } from "react";
 import Layout from "./components/HOC/Navigation/Layout";
 
 export type activePageCheck = "post" | "notification" | "bot" | "settings";
