@@ -31,3 +31,13 @@ chrome.action.onClicked.addListener((tab) => {
     }
   });
 });
+
+//Login page redirect once installing the app
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.tabs.create({ url: "./welcome.html" });
+});
+
+//To create same login welcome page while clicked on extension icon
+chrome.action.onClicked.addListener(function(tab) {
+  chrome.tabs.create({ url: chrome.runtime.getURL("./welcome.html") });
+});
