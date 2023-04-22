@@ -9,7 +9,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         welcome: "public/welcome.tsx",
-        background: "public/background.jsx",
+        background: "public/background.tsx",
         main: resolve(__dirname, "index.html"),
       },
       output: {
