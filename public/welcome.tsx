@@ -1,39 +1,63 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
-import { BskyAgent, AtpAgentLoginOpts } from "@atproto/api";
+import { useState, useMemo, useCallback, FormEvent, ChangeEvent } from "react";
+import * as bsky from "@atproto/api";
+const { BskyAgent } = bsky;
+import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
 
 // for Ankit to change
-const agent = new BskyAgent({
-  service: "https://bsky.social",
-  persistSession: (evt, sess) => {
-    localStorage.setItem("bsky-session", JSON.stringify(sess));
-    // store the session-data for reuse
-    // [how to do this??]
-    console.log("Persisting session data...");
-  },
-});
-
 const text =
   "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Non unde saepe? Quis iusto molestias";
 
 const Welcome = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [session, setSession] = useState<AtpSessionData>();
 
-  const handleLogin = async () => {
-    try {
-      // Call the login method with the appropriate options
-      const loginOptions: AtpAgentLoginOpts = {
-        identifier: "yourUsername",
-        password: "yourPassword",
-      };
-      const response = await agent.login(loginOptions);
-      console.log("Login successful:", response);
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
-  };
+  const agent = useMemo(
+    () =>
+      new BskyAgent({
+        service: "https://bsky.social",
+        persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
+          console.log("setSession", sess);
+          if (sess != null) {
+            setSession(sess!);
+          }
+        },
+      }),
+    []
+  );
 
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const login = useCallback(async () => {
+    await agent!.login({
+      identifier: username,
+      password: password,
+    });
+    setLoggedIn(true);
+  }, [username, password, agent]);
+
+  const handleLoginSubmit = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      await login();
+    },
+    [login]
+  );
+
+  const handleUsernameChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setUsername(e.target.value);
+    },
+    []
+  );
+
+  const handlePasswordChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
+    },
+    []
+  );
   return (
     <div className="screen">
       <div className="container">
@@ -51,25 +75,25 @@ const Welcome = () => {
         <div className="right">
           {/* login */}
 
-          <form action="">
-            <h1>LOGIN</h1>
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <button className="btn login" onClick={handleLogin}>
-              Login
-            </button>
+          <form id="login" onSubmit={handleLoginSubmit}>
+            Username:&nbsp;
+            <input
+              type="text"
+              placeholder="username"
+              onChange={handleUsernameChange}
+              value={username}
+            />
+            <br />
+            Password:&nbsp;
+            <input
+              type="password"
+              placeholder="password"
+              onChange={handlePasswordChange}
+              value={password}
+            />
+            <input type="submit" value="login" disabled={loggedIn} />
+            <br />
+            <br />
           </form>
         </div>
       </div>
