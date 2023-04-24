@@ -29,7 +29,7 @@ const PostSection: React.FC<Props> = ({ differentButtonsForFeed }) => {
                 className="bg-white border rounded-md border-gray-300 flex-1 md:w-48 min-w-[100px]"
               >
                 <button
-                  className="flex gap-2 items-center justify-center w-full  py-2"
+                  className="flex gap-2 items-center justify-center w-full py-2"
                   onClick={item.action}
                 >
                   {item.icon}
