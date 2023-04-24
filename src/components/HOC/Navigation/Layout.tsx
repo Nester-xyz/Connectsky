@@ -19,7 +19,7 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
         <div className="hidden md:block">
           <SideBar activePage={activePage} setActivePage={setActivePage} />
         </div>
-        <div>{children}</div>
+        <div className="w-full">{children}</div>
       </div>
 
       {/* this component hides when the display is sent over 768px */}

@@ -1,5 +1,4 @@
 // when i am writing this text, this component is only called from Layout.tsx
-
 import React from "react";
 
 // react icons imports
