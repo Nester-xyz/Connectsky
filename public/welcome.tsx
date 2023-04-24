@@ -2,12 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { useState, useMemo, useCallback, FormEvent, ChangeEvent } from "react";
 import * as bsky from "@atproto/api";
-const { BskyAgent } = bsky;
 import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
-
-// for Ankit to change
-const text =
-  "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Non unde saepe? Quis iusto molestias";
+import Left from "./welcome/Left";
+const { BskyAgent } = bsky;
 
 const Welcome = () => {
   const [username, setUsername] = useState<string>("");
@@ -29,6 +26,7 @@ const Welcome = () => {
   );
 
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
   const login = useCallback(async () => {
     await agent!.login({
       identifier: username,
@@ -58,39 +56,41 @@ const Welcome = () => {
     },
     []
   );
+
   return (
     <div className="screen">
+      <div className="text">
+        <div className="title">Welcome</div>
+        <div className="sub-title">to Unnamed</div>
+      </div>
       <div className="container">
-        <div className="left">
-          {/* text */}
-          <div className="text">
-            <h1>WELCOME</h1>
-            <p>{text}</p>
-          </div>
-          <div className="button-group">
-            <button className="btn docs">Read more</button>
-            <button className="btn guithub">Github?</button>
-          </div>
-        </div>
+        {/* <Left /> */}
+        {/* text */}
         <div className="right">
           {/* login */}
 
           <form id="login" onSubmit={handleLoginSubmit}>
-            Username:&nbsp;
-            <input
-              type="text"
-              placeholder="username"
-              onChange={handleUsernameChange}
-              value={username}
-            />
+            <div>
+              <label htmlFor="username">Username:&nbsp;</label>
+              <input
+                type="text"
+                id="username"
+                placeholder="username"
+                onChange={handleUsernameChange}
+                value={username}
+              />
+            </div>
             <br />
-            Password:&nbsp;
-            <input
-              type="password"
-              placeholder="password"
-              onChange={handlePasswordChange}
-              value={password}
-            />
+            <div>
+              <label htmlFor="app-password">App Password:&nbsp;</label>
+              <input
+                type="password"
+                id="app-password"
+                placeholder="password"
+                onChange={handlePasswordChange}
+                value={password}
+              />
+            </div>
             <input type="submit" value="login" disabled={loggedIn} />
             <br />
             <br />
