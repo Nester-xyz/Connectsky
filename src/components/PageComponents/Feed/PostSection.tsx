@@ -18,7 +18,7 @@ const PostSection: React.FC<Props> = ({ differentButtonsForFeed }) => {
           <textarea
             name=""
             id=""
-            className="w-full h-40 resize-none "
+            className="w-full h-40 resize-none px-4 py-2"
           ></textarea>
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">
