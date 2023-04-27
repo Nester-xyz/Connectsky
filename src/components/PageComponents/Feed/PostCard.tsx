@@ -1,5 +1,6 @@
 import React from "react";
-
+import { AiFillHeart } from "react-icons/ai";
+import { FiMessageCircle } from "react-icons/fi";
 type Props = {
   profileImg?: string;
   author: string;
@@ -29,7 +30,7 @@ const PostCard = ({
    * @returns {JSX.Element} A React component that renders a post card with the given data.
    */
   return (
-    <div className="w-full bg-slate-100 p-5">
+    <div className="w-full bg-white p-5 rounded-sm shadow_custom">
       <div className="flex">
         {/* Render author's profile image, name and caption */}
         <div className="flex flex-col gap-2">
@@ -47,16 +48,22 @@ const PostCard = ({
 
       <div>
         {/* Render the post image */}
-        <div>
-          <img src={image} alt="" />
+        <div className="w-full aspect-video overflow-hidden">
+          <img src={image} alt="" className="w-full h-full object-contain" />
         </div>
       </div>
 
       <div>
         {/* Render the number of likes and comments */}
-        <div className="flex gap-5">
-          <p>{likes}</p>
-          <p>{comments}</p>
+        <div className="flex gap-5 mt-2">
+          <div>
+            <AiFillHeart />
+            <p>{likes}</p>
+          </div>
+          <div>
+            <FiMessageCircle />
+            <p>{comments}</p>
+          </div>
         </div>
       </div>
     </div>

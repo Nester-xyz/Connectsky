@@ -12,13 +12,13 @@ type Props = {
 
 const PostSection: React.FC<Props> = ({ differentButtonsForFeed }) => {
   return (
-    <div>
+    <div className="">
       <div className="w-full">
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
           <textarea
             name=""
             id=""
-            className="w-full h-40 resize-none px-4 py-2"
+            className="w-full h-40 resize-none px-4 py-2 focus:outline-none"
           ></textarea>
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">

@@ -7,17 +7,17 @@ type Props = {};
 
 const differentButtonsForFeed = [
   {
-    name: "Post",
+    name: "Media",
     icon: undefined,
     action: () => {},
   },
   {
-    name: "Post",
+    name: "Links",
     icon: undefined,
     action: () => {},
   },
   {
-    name: "Post",
+    name: "GIF",
     icon: undefined,
     action: () => {},
   },
@@ -50,7 +50,7 @@ const Feed = (props: Props) => {
 
       <div className="grid grid-cols-4 gap-5 h-screen relative overflow-hidden">
         <div className="col-span-4 md:col-span-3 overflow-scroll mt-5">
-          <div className="flex gap-3 sticky top-0">
+          <div className="flex gap-3 sticky top-0 pb-2 bg-white">
             {feedOptionsButtons.map((item, index) => {
               return (
                 <div key={index}>
@@ -67,11 +67,8 @@ const Feed = (props: Props) => {
 
           <PostSection differentButtonsForFeed={differentButtonsForFeed} />
 
-          {/* just to get an nice underline here */}
-          <div className="bg-white h-1 w-full my-3 px-2"></div>
-
           {/* create the feed */}
-          <div className=" border rounded-md border-gray-300 w-full flex flex-col gap-2">
+          <div className=" rounded-md  w-full flex flex-col gap-5 mt-5">
             {
               // here we will map the feed
 
