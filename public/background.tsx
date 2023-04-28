@@ -1,6 +1,7 @@
 type typeValue = "popup" | "normal" | "panel";
+let responseReceived: boolean = false;
 
-chrome.action.onClicked.addListener((tab) => {
+function createWindow() {
   // Define variables for the window properties
   let redirect = "../index.html";
   let type: typeValue = "popup";
@@ -44,14 +45,24 @@ chrome.action.onClicked.addListener((tab) => {
       console.error("No displays found");
     }
   });
-});
+}
+
+//function to either create a window / display login page
+function onClickHandler() {
+  chrome.storage.sync.get("isLoggedIn", function (result) {
+    if (result.isLoggedIn) {
+      createWindow();
+      console.log(result.isLoggedIn + "yes worked");
+    } else {
+      chrome.tabs.create({ url: "./welcome.html" });
+    }
+  });
+}
+
+// Reading message passed from Welcome.tsx to either create a window / display login page
+chrome.action.onClicked.addListener(onClickHandler);
 
 //Login page redirect once installing the app
-chrome.runtime.onInstalled.addListener(function() {
+chrome.runtime.onInstalled.addListener(function () {
   chrome.tabs.create({ url: "./welcome.html" });
-});
-
-//To create same login welcome page while clicked on extension icon
-chrome.action.onClicked.addListener(function(tab) {
-  chrome.tabs.create({ url: chrome.runtime.getURL("./welcome.html") });
 });

@@ -1,12 +1,13 @@
 :root {
-  --screen-background-color: #00b4d8;
+  --screen-background-color: #efefef;
   --border-color: #515151;
-  --left-background-color: #00d989;
-  --right-background-color: #514538;
-  --left-text-color: ##ff00c6;
-  --left-heading-color: #ffa500;
-  --right-text-color: #ffa500;
-  --right-heading-color: #ffa500;
+  --border-radius: 20px;
+  --left-background-color: url("https://images.unsplash.com/photo-1682299225157-2bdce55fac2f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80");
+  --right-background-color: #ffffffcc;
+  --left-text-color: #1da1f2;
+  --left-heading-color: #1da1f2;
+  --right-text-color: #1da1f2;
+  --right-heading-color: #1da1f2;
 }
 
 * {
@@ -20,15 +21,40 @@
   height: 100vh;
   background: var(--screen-background-color);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: "Roboto Mono", monospace;
+  font-family: "Cabin", sans-serif;
+  overflow: hidden;
+}
+
+.text {
+  width: 40vw;
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.text .title {
+  font-size: 5rem;
+  color: var(--left-heading-color);
+  text-align: center;
+  line-height: 8rem;
+}
+
+.text .sub-title {
+  font-size: 1.5rem;
+  color: var(--left-text-color);
+  text-align: center;
 }
 
 .container {
-  width: 65vw;
+  width: 30vw;
   height: 50vh;
   border: var(--border-color) 2px solid;
+  border-radius: var(--border-radius);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,6 +69,21 @@
 
 .container .left {
   background: var(--left-background-color);
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.container .left .leftContainer {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .container .left h1 {
@@ -68,7 +109,7 @@
 }
 
 .left .button-group .btn {
-  background: var(--left-background-color);
+  background: #515151;
   color: var(--left-text-color);
   border: 1px solid var(--left-text-color);
   padding: 0.5rem 1rem;
@@ -80,14 +121,20 @@
 .container .right {
   background: var(--right-background-color);
   padding: 20px;
+  border-radius: var(--border-radius);
 }
 
-.container .right h1 {
-  font-size: 5rem;
-  color: var(--right-heading-color);
+.right #login {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 10px;
+}
+
+.right label {
+  font-size: 1.5rem;
+  color: var(--right-text-color);
   text-align: left;
-  margin: 1rem;
-  line-height: 8rem;
 }
 
 .right input {
@@ -96,7 +143,7 @@
   background: var(--left-background-color);
   color: var(--right-text-color);
   border: none;
-  font-size: 1.5rem;
+  font-size: 1rem;
   padding: 0.5rem;
   margin-top: 0.5rem;
 }

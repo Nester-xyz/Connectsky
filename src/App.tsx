@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import Layout from "./components/HOC/Navigation/Layout";
+import Feed from "./Page/Feed";
 
 export type activePageCheck = "post" | "notification" | "bot" | "settings";
 
@@ -10,7 +11,7 @@ function App() {
   return (
     <div>
       <Layout activePage={activePage} setActivePage={setActivePage}>
-        {activePage}
+        <Feed />
       </Layout>
     </div>
   );

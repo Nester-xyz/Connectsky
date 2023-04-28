@@ -8,7 +8,7 @@ const HoverButton = ({ checkOne, checkTwo, icon, text, action }: Props) => {
   return (
     <button
       onClick={action}
-      className={` px-3 py-2 absolute w-full flex items-center gap-4 rounded-md transition-all duration-500 origin-center text-xl   ${
+      className={` px-3 py-2 absolute w-full flex items-center gap-4 rounded-md transition-all duration-500 origin-center text-2xl   ${
         checkOne === checkTwo ? "bg-white " : "hover:bg-slate-100"
       }`}
     >
