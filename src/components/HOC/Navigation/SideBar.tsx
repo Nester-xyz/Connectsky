@@ -37,7 +37,7 @@ const links: linksType[] = [
 // the components code begins from here
 const SideBar = ({ activePage, setActivePage }: SideBarProps) => {
   return (
-    <div className="flex flex-col items-start gap-14 py-7 px-3 h-screen w-52 border-t-2 bg-neutral-300">
+    <div className="flex flex-col items-start gap-14 py-7 px-3 h-screen w-full border-t-2 bg-neutral-300">
       {links.map((link, index) => {
         return (
           <div
@@ -45,7 +45,7 @@ const SideBar = ({ activePage, setActivePage }: SideBarProps) => {
             onClick={() => {
               setActivePage(link.linkName);
             }}
-            className="relative bg-yellow-300 w-44"
+            className="relative bg-yellow-300 w-full"
           >
             {/* since this button doesn't do anything yet I haven't added anything to the action */}
             <HoverButton
