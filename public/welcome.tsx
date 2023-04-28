@@ -19,6 +19,14 @@ const Welcome = () => {
           console.log("setSession", sess);
           if (sess != null) {
             setSession(sess!);
+            chrome.runtime.sendMessage(true, function (response) {
+              if (response) {
+                console.log("Message sent successfully!");
+              } else {
+                console.log("Error sending message.");
+              }
+            });
+            window.close();
           }
         },
       }),

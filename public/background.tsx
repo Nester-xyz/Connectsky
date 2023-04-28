@@ -1,6 +1,13 @@
 type typeValue = "popup" | "normal" | "panel";
+let responseReceived: boolean = false;
 
-chrome.action.onClicked.addListener((tab) => {
+// Define an onclick listener for the tab creation event
+function onClickedHandler(tab) {
+  // Create the new window at the center of the screen
+  chrome.tabs.create({ url: "./welcome.html" });
+}
+
+function createWindow() {
   // Define variables for the window properties
   let redirect = "../index.html";
   let type: typeValue = "popup";
@@ -44,14 +51,28 @@ chrome.action.onClicked.addListener((tab) => {
       console.error("No displays found");
     }
   });
+}
+
+// Reading message passed from Welcome.tsx to either create a window / display login page
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request === true) {
+    createWindow();
+    chrome.action.onClicked.addListener(createWindow);
+    responseReceived = true;
+    console.log("Received message with value of true");
+    sendResponse(true); // Send a response indicating that the message was received
+    chrome.action.onClicked.removeListener(onClickedHandler);
+  }
 });
+
+// Add the onclick listener to the action button
+if (responseReceived === false) {
+  chrome.action.onClicked.addListener(onClickedHandler);
+} else {
+  chrome.action.onClicked.removeListener(onClickedHandler);
+}
 
 //Login page redirect once installing the app
-chrome.runtime.onInstalled.addListener(function() {
+chrome.runtime.onInstalled.addListener(function () {
   chrome.tabs.create({ url: "./welcome.html" });
-});
-
-//To create same login welcome page while clicked on extension icon
-chrome.action.onClicked.addListener(function(tab) {
-  chrome.tabs.create({ url: chrome.runtime.getURL("./welcome.html") });
 });
