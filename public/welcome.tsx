@@ -19,14 +19,19 @@ const Welcome = () => {
           console.log("setSession", sess);
           if (sess != null) {
             setSession(sess!);
-            chrome.runtime.sendMessage(true, function (response) {
-              if (response) {
-                console.log("Message sent successfully!");
-              } else {
-                console.log("Error sending message.");
-              }
+            // Store a value in chrome storage
+            chrome.storage.sync.set({ isLoggedIn: true }, function () {
+              console.log("Value is set to " + "isLoggedIn");
+              // console.log(result);
+              chrome.runtime.sendMessage(true, function (response) {
+                if (response) {
+                  console.log("Message sent successfully!");
+                }
+              });
             });
-            window.close();
+            setTimeout(() => {
+              window.close();
+            }, 1000);
           }
         },
       }),

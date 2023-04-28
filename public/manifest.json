@@ -2,7 +2,7 @@
   "name": "My Extension",
   "manifest_version": 3,
   "version": "1.0",
-  "permissions": ["activeTab", "system.display"],
+  "permissions": ["activeTab", "system.display", "storage", "unlimitedStorage"],
   "action": {
     "default_title": "My Extension"
   },

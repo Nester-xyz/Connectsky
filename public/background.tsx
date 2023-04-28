@@ -1,12 +1,6 @@
 type typeValue = "popup" | "normal" | "panel";
 let responseReceived: boolean = false;
 
-// Define an onclick listener for the tab creation event
-function onClickedHandler(tab) {
-  // Create the new window at the center of the screen
-  chrome.tabs.create({ url: "./welcome.html" });
-}
-
 function createWindow() {
   // Define variables for the window properties
   let redirect = "../index.html";
@@ -53,24 +47,20 @@ function createWindow() {
   });
 }
 
-// Reading message passed from Welcome.tsx to either create a window / display login page
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request === true) {
-    createWindow();
-    chrome.action.onClicked.addListener(createWindow);
-    responseReceived = true;
-    console.log("Received message with value of true");
-    sendResponse(true); // Send a response indicating that the message was received
-    chrome.action.onClicked.removeListener(onClickedHandler);
-  }
-});
-
-// Add the onclick listener to the action button
-if (responseReceived === false) {
-  chrome.action.onClicked.addListener(onClickedHandler);
-} else {
-  chrome.action.onClicked.removeListener(onClickedHandler);
+//function to either create a window / display login page
+function onClickHandler() {
+  chrome.storage.sync.get("isLoggedIn", function (result) {
+    if (result.isLoggedIn) {
+      createWindow();
+      console.log(result.isLoggedIn + "yes worked");
+    } else {
+      chrome.tabs.create({ url: "./welcome.html" });
+    }
+  });
 }
+
+// Reading message passed from Welcome.tsx to either create a window / display login page
+chrome.action.onClicked.addListener(onClickHandler);
 
 //Login page redirect once installing the app
 chrome.runtime.onInstalled.addListener(function () {
