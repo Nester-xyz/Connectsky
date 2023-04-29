@@ -46,12 +46,12 @@ const PostCard = ({
         </div>
       </div>
 
-      <div>
+      {image?.length == 0 ? "" : <div>
         {/* Render the post image */}
         <div className="w-full aspect-video overflow-hidden">
           <img src={image} alt="" className="w-full h-full object-contain" />
         </div>
-      </div>
+      </div>}
 
       <div>
         {/* Render the number of likes and comments */}

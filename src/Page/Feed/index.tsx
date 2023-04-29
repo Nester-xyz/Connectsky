@@ -1,30 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { dummyData } from "./dummyData";
 import PostSection from "../../components/PageComponents/Feed/PostSection";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
+import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
 
-type Props = {};
+//  Props = {
+//   profileImg?: string;
+//   author: string;
+//   caption?: string;
+//   image?: string;
+//   likes: number;
+//   comments: number;
+// };
+interface Author {
+  displayName: string;
+  avatar: string;
+}
+
+interface Caption {
+  text: string;
+}
+
+interface Image {
+  thumb: string;
+}
+
+interface Embed {
+  images: Image[];
+}
+
+interface ImageObject {
+  embed: Embed;
+}
+
+interface Item {
+  author: Author;
+  comments: number;
+  likes: number;
+  caption: Caption;
+  image: ImageObject;
+}
 
 const differentButtonsForFeed = [
   {
     name: "Media",
     icon: undefined,
-    action: () => {},
+    action: () => { },
   },
   {
     name: "Links",
     icon: undefined,
-    action: () => {},
+    action: () => { },
   },
   {
     name: "GIF",
     icon: undefined,
-    action: () => {},
+    action: () => { },
   },
   {
     name: "Post",
     icon: undefined,
-    action: () => {},
+    action: () => { },
   },
 ];
 
@@ -41,9 +77,58 @@ const feedOptionsButtons = [
   },
 ];
 
-const Feed = (props: Props) => {
+const Feed = () => {
   const [filterVariable, setFilterVariable] = useState<string>("forYou");
+  const [cursor, setCursor] = useState<string>("");
+  const [feedData, setFeedData] = useState<Item[]>([]);
 
+  const agent = new BskyAgent({
+    service: "https://bsky.social",
+    persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
+      console.log("first");
+    },
+  });
+
+  useEffect(() => {
+    async function followingFeed() {
+      const sessData = localStorage.getItem("sess");
+      if (sessData !== null) {
+        const sessParse = JSON.parse(sessData);
+        await agent.resumeSession(sessParse);
+      }
+      const { data } = await agent.getTimeline({
+        limit: 20,
+        cursor: cursor,
+      });
+      if (data.cursor == null) return;
+      setCursor(data.cursor);
+      const mappedData: Item[] = data.feed.map((feed: any) => {
+        console.log(feed);
+        const images = feed.post.embed && 'images' in feed.post.embed ? feed.post.embed.images : [];
+        const firstImageThumb = images?.length > 0 ? images[0].thumb : '';
+
+        return {
+          author: {
+            displayName: feed.post.author.displayName,
+            avatar: feed.post.author.avatar,
+          },
+          likes: feed.post.likeCount,
+          comments: feed.post.replyCount,
+          caption: {
+            text: feed.post.record && "text" in feed.post.record ? feed.post.record.text : "",
+          },
+          image: {
+            embed: {
+              images: [{ thumb: firstImageThumb }]
+            }
+          }
+        };
+      });
+      setFeedData(mappedData);
+    }
+    followingFeed();
+  }, []);
+  console.log(feedData);
   return (
     <div className=" w-full  px-5">
       {/* create the top - post option */}
@@ -72,16 +157,16 @@ const Feed = (props: Props) => {
             {
               // here we will map the feed
 
-              dummyData.map((item, index) => {
+              feedData.map((item: Item, index) => {
                 return (
                   <div>
                     <PostCard
-                      author={item.author}
+                      author={item.author.displayName}
                       comments={item.comments}
                       likes={item.likes}
-                      caption={item.caption}
-                      image={item.image}
-                      profileImg={item.profileImg}
+                      caption={item.caption.text}
+                      image={item.image.embed.images[0].thumb}
+                      profileImg={item.author.avatar}
                     />
                   </div>
                 );
