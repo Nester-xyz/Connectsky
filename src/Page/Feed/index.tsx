@@ -14,6 +14,7 @@ import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
 // };
 interface Author {
   displayName: string;
+  avatar: string;
 }
 
 interface Caption {
@@ -24,42 +25,42 @@ interface Image {
   thumb: string;
 }
 
-interface thumbImage {
+interface Embed {
   images: Image[];
 }
 
-interface Embed {
-  embed: thumbImage;
+interface ImageObject {
+  embed: Embed;
 }
 
-interface item {
+interface Item {
   author: Author;
-  comments: string[];
-  likes: string[];
+  comments: number;
+  likes: number;
   caption: Caption;
-  image: Embed;
+  image: ImageObject;
 }
 
 const differentButtonsForFeed = [
   {
     name: "Media",
     icon: undefined,
-    action: () => {},
+    action: () => { },
   },
   {
     name: "Links",
     icon: undefined,
-    action: () => {},
+    action: () => { },
   },
   {
     name: "GIF",
     icon: undefined,
-    action: () => {},
+    action: () => { },
   },
   {
     name: "Post",
     icon: undefined,
-    action: () => {},
+    action: () => { },
   },
 ];
 
@@ -79,7 +80,7 @@ const feedOptionsButtons = [
 const Feed = () => {
   const [filterVariable, setFilterVariable] = useState<string>("forYou");
   const [cursor, setCursor] = useState<string>("");
-  const [feedData, setFeedData] = useState<object[]>([]);
+  const [feedData, setFeedData] = useState<Item[]>([]);
 
   const agent = new BskyAgent({
     service: "https://bsky.social",
@@ -101,7 +102,29 @@ const Feed = () => {
       });
       if (data.cursor == null) return;
       setCursor(data.cursor);
-      setFeedData(data.feed);
+      const mappedData: Item[] = data.feed.map((feed: any) => {
+        console.log(feed);
+        const images = feed.post.embed && 'images' in feed.post.embed ? feed.post.embed.images : [];
+        const firstImageThumb = images?.length > 0 ? images[0].thumb : '';
+
+        return {
+          author: {
+            displayName: feed.post.author.displayName,
+            avatar: feed.post.author.avatar,
+          },
+          likes: feed.post.likeCount,
+          comments: feed.post.replyCount,
+          caption: {
+            text: feed.post.record && "text" in feed.post.record ? feed.post.record.text : "",
+          },
+          image: {
+            embed: {
+              images: [{ thumb: firstImageThumb }]
+            }
+          }
+        };
+      });
+      setFeedData(mappedData);
     }
     followingFeed();
   }, []);
@@ -134,16 +157,16 @@ const Feed = () => {
             {
               // here we will map the feed
 
-              feedData.map((item: item, index) => {
+              feedData.map((item: Item, index) => {
                 return (
                   <div>
                     <PostCard
-                      author={item?.author?.displayName}
-                      comments={item.comments.length}
-                      likes={item.likes.length}
-                      caption={item?.caption?.text}
-                      image={item.embed.images[0].thumb}
-                      profileImg={item.profileImg}
+                      author={item.author.displayName}
+                      comments={item.comments}
+                      likes={item.likes}
+                      caption={item.caption.text}
+                      image={item.image.embed.images[0].thumb}
+                      profileImg={item.author.avatar}
                     />
                   </div>
                 );
