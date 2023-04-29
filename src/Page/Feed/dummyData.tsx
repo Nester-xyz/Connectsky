@@ -76,6 +76,7 @@ for (let i = 0; i < dataCount; i++) {
     Math.random() * (commentsRange.max - commentsRange.min + 1) +
       commentsRange.min
   );
+
   dummyData.push({
     author: `User ${i + 1}`,
     profileImg: randomProfiles[randomProfileIndex],

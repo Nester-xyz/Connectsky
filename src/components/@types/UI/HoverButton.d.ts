@@ -4,4 +4,5 @@ export type Props = {
   icon?: JSX.Element;
   text?: string;
   action?: () => void;
+  link?: string;
 };
