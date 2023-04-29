@@ -1,9 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { dummyData } from "./dummyData";
 import PostSection from "../../components/PageComponents/Feed/PostSection";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
+import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
 
-type Props = {};
+//  Props = {
+//   profileImg?: string;
+//   author: string;
+//   caption?: string;
+//   image?: string;
+//   likes: number;
+//   comments: number;
+// };
+interface Author {
+  displayName: string;
+}
+
+interface Caption {
+  text: string;
+}
+
+interface Image {
+  thumb: string;
+}
+
+interface thumbImage {
+  images: Image[];
+}
+
+interface Embed {
+  embed: thumbImage;
+}
+
+interface item {
+  author: Author;
+  comments: string[];
+  likes: string[];
+  caption: Caption;
+  image: Embed;
+}
 
 const differentButtonsForFeed = [
   {
@@ -41,9 +76,36 @@ const feedOptionsButtons = [
   },
 ];
 
-const Feed = (props: Props) => {
+const Feed = () => {
   const [filterVariable, setFilterVariable] = useState<string>("forYou");
+  const [cursor, setCursor] = useState<string>("");
+  const [feedData, setFeedData] = useState<object[]>([]);
 
+  const agent = new BskyAgent({
+    service: "https://bsky.social",
+    persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
+      console.log("first");
+    },
+  });
+
+  useEffect(() => {
+    async function followingFeed() {
+      const sessData = localStorage.getItem("sess");
+      if (sessData !== null) {
+        const sessParse = JSON.parse(sessData);
+        await agent.resumeSession(sessParse);
+      }
+      const { data } = await agent.getTimeline({
+        limit: 20,
+        cursor: cursor,
+      });
+      if (data.cursor == null) return;
+      setCursor(data.cursor);
+      setFeedData(data.feed);
+    }
+    followingFeed();
+  }, []);
+  console.log(feedData);
   return (
     <div className=" w-full  px-5">
       {/* create the top - post option */}
@@ -72,15 +134,15 @@ const Feed = (props: Props) => {
             {
               // here we will map the feed
 
-              dummyData.map((item, index) => {
+              feedData.map((item: item, index) => {
                 return (
                   <div>
                     <PostCard
-                      author={item.author}
-                      comments={item.comments}
-                      likes={item.likes}
-                      caption={item.caption}
-                      image={item.image}
+                      author={item?.author?.displayName}
+                      comments={item.comments.length}
+                      likes={item.likes.length}
+                      caption={item?.caption?.text}
+                      image={item.embed.images[0].thumb}
                       profileImg={item.profileImg}
                     />
                   </div>
