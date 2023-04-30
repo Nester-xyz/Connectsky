@@ -3,6 +3,7 @@ import { dummyData } from "./dummyData";
 import PostSection from "../../components/PageComponents/Feed/PostSection";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
 import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
+import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 
 //  Props = {
 //   profileImg?: string;
@@ -208,7 +209,7 @@ const Feed = () => {
                                 }
                             })
                         }
-                        {isLoading ? "Loading..." : ""}
+                        {isLoading ? <> <PostLoader /> <PostLoader /></> : ""}
                     </div>
                 </div>
                 <div className="bg-slate-50 hidden md:block col-span-1 sticky h-full top-5"></div>
