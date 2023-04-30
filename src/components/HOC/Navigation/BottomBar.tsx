@@ -12,29 +12,8 @@ import { BottomBarProps, linksType } from "../../@types/Layout/BottomBar";
 // component imports
 import HoverButtonIconOnly from "../../UI/HoverButtonIconOnly";
 
-// this contains the actual links which will be made into the buttons
-const links: linksType[] = [
-  {
-    linkName: "post",
-    links: "",
-    icon: <BsPencilSquare />,
-  },
-  {
-    linkName: "notification",
-    links: "",
-    icon: <IoNotifications />,
-  },
-  {
-    linkName: "bot",
-    links: "",
-    icon: <AiFillRobot />,
-  },
-  {
-    linkName: "settings",
-    links: "",
-    icon: <BsFillGearFill />,
-  },
-];
+// this contains the actual links which will be made into the button
+import { links } from "../../../App";
 
 // the components code begins from here
 const BottomBar = ({ activePage, setActivePage }: BottomBarProps) => {
@@ -54,6 +33,7 @@ const BottomBar = ({ activePage, setActivePage }: BottomBarProps) => {
               checkTwo={link.linkName}
               icon={link.icon}
               text={link.linkName}
+              link={link.links}
             />
           </div>
         );

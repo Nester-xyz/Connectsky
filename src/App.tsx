@@ -1,20 +1,68 @@
+// Importing required modules from React and React Router libraries
 import { useState, useContext } from "react";
 import Layout from "./components/HOC/Navigation/Layout";
-import Feed from "./Page/Feed";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 
-export type activePageCheck = "post" | "notification" | "bot" | "settings";
+// Importing components for different pages of the application
+import Feed from "./Page/Feed";
+import Notification from "./Page/Notification";
+import Search from "./Page/Search";
+import Setting from "./Page/Setting";
+import { linksType } from "./components/@types/Layout/SideBar";
+import { BsFillGearFill, BsPencilSquare } from "react-icons/bs";
+import { AiOutlineSearch } from "react-icons/ai";
+import { IoNotifications } from "react-icons/io5";
+
+// Defining type for active page check, with limited values
+export type activePageCheck = "feed" | "search" | "notification" | "setting";
+
+export // this contains the actual links which will be made into the buttons
+const links: linksType[] = [
+  {
+    linkName: "Feed",
+    links: "/",
+    icon: <BsPencilSquare />,
+  },
+  {
+    linkName: "search",
+    links: "/search",
+    icon: <AiOutlineSearch />,
+  },
+  {
+    linkName: "notification",
+    links: "/notification",
+    icon: <IoNotifications />,
+  },
+  {
+    linkName: "settings",
+    links: "/search",
+    icon: <BsFillGearFill />,
+  },
+];
 
 function App() {
-  // this activePage is passed to layout and then to bottomBar
-  const [activePage, setActivePage] = useState<activePageCheck>("post");
+  // State to manage the currently active page of the application
+  const [activePage, setActivePage] = useState<activePageCheck>("feed");
 
   return (
     <div>
-      <Layout activePage={activePage} setActivePage={setActivePage}>
-        <Feed />
-      </Layout>
+      {/* Setting up the router for the application */}
+      <Router>
+        {/* Wrapping the Layout component around the application */}
+        <Layout activePage={activePage} setActivePage={setActivePage}>
+          {/* Setting up the routes for the application */}
+          <Routes>
+            {/* Defining routes for different pages */}
+            <Route path="/" element={<Feed />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/notification" element={<Notification />} />
+            <Route path="/setting" element={<Setting />} />
+          </Routes>
+        </Layout>
+      </Router>
     </div>
   );
 }
 
+// Exporting the App component as the main component of the application
 export default App;

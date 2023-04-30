@@ -2,7 +2,7 @@
 
 import React from "react";
 // react icons imports
-import { AiFillRobot } from "react-icons/ai";
+import { AiOutlineSearch } from "react-icons/ai";
 import { BsFillGearFill, BsPencilSquare } from "react-icons/bs";
 import { IoNotifications } from "react-icons/io5";
 // type imports
@@ -10,29 +10,7 @@ import { SideBarProps, linksType } from "../../@types/Layout/SideBar";
 // component imports
 import HoverButton from "../../UI/HoverButton";
 
-// this contains the actual links which will be made into the buttons
-const links: linksType[] = [
-  {
-    linkName: "post",
-    links: "",
-    icon: <BsPencilSquare />,
-  },
-  {
-    linkName: "notification",
-    links: "",
-    icon: <IoNotifications />,
-  },
-  {
-    linkName: "bot",
-    links: "",
-    icon: <AiFillRobot />,
-  },
-  {
-    linkName: "settings",
-    links: "",
-    icon: <BsFillGearFill />,
-  },
-];
+import { links } from "../../../App";
 
 // the components code begins from here
 const SideBar = ({ activePage, setActivePage }: SideBarProps) => {
@@ -49,6 +27,7 @@ const SideBar = ({ activePage, setActivePage }: SideBarProps) => {
           >
             {/* since this button doesn't do anything yet I haven't added anything to the action */}
             <HoverButton
+              link={link.links}
               checkOne={activePage}
               checkTwo={link.linkName}
               icon={link.icon}
