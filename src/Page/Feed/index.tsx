@@ -45,22 +45,22 @@ const differentButtonsForFeed = [
   {
     name: "Media",
     icon: undefined,
-    action: () => { },
+    action: () => {},
   },
   {
     name: "Links",
     icon: undefined,
-    action: () => { },
+    action: () => {},
   },
   {
     name: "GIF",
     icon: undefined,
-    action: () => { },
+    action: () => {},
   },
   {
     name: "Post",
     icon: undefined,
-    action: () => { },
+    action: () => {},
   },
 ];
 
@@ -104,8 +104,11 @@ const Feed = () => {
       setCursor(data.cursor);
       const mappedData: Item[] = data.feed.map((feed: any) => {
         console.log(feed);
-        const images = feed.post.embed && 'images' in feed.post.embed ? feed.post.embed.images : [];
-        const firstImageThumb = images?.length > 0 ? images[0].thumb : '';
+        const images =
+          feed.post.embed && "images" in feed.post.embed
+            ? feed.post.embed.images
+            : [];
+        const firstImageThumb = images?.length > 0 ? images[0].thumb : "";
 
         return {
           author: {
@@ -115,13 +118,16 @@ const Feed = () => {
           likes: feed.post.likeCount,
           comments: feed.post.replyCount,
           caption: {
-            text: feed.post.record && "text" in feed.post.record ? feed.post.record.text : "",
+            text:
+              feed.post.record && "text" in feed.post.record
+                ? feed.post.record.text
+                : "",
           },
           image: {
             embed: {
-              images: [{ thumb: firstImageThumb }]
-            }
-          }
+              images: [{ thumb: firstImageThumb }],
+            },
+          },
         };
       });
       setFeedData(mappedData);
