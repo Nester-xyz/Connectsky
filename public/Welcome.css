@@ -42,30 +42,38 @@
   font-size: 30px;
 }
 
-.container .container .left {
+.container .input-container {
+  position: relative;
   width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.container .left .leftContainer {
+.container .input-container .input-box {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 20px;
 }
 
-.container .left h1 {
-  font-size: 5rem;
-  color: var(--left-heading-color);
-  text-align: left;
-  margin: 1rem;
-  line-height: 8rem;
+.container .input-container label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  font-size: 1.5rem;
+  color: var(--left-text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s ease;
 }
 
 .container .left p {

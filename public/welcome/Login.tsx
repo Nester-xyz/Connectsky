@@ -91,7 +91,7 @@ const Login = (props: Props) => {
     <div className="container">
       <h1>Log in to Bsky</h1>
       <form id="login" onSubmit={handleLoginSubmit}>
-        <div>
+        <div className="input-container">
           <label htmlFor="username">Username:&nbsp;</label>
           <input
             type="text"
@@ -103,7 +103,7 @@ const Login = (props: Props) => {
           />
         </div>
         <br />
-        <div>
+        <div className="input-container">
           <label htmlFor="app-password">App Password:&nbsp;</label>
           <input
             type="password"
