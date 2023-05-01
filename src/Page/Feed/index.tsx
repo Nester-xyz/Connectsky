@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { dummyData } from "./dummyData";
 import PostSection from "../../components/PageComponents/Feed/PostSection";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
 import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
+import { appContext } from "../../context/appContext";
+import { text } from "stream/consumers";
 
 //  Props = {
 //   profileImg?: string;
@@ -42,28 +44,7 @@ interface Item {
     image: ImageObject;
 }
 
-const differentButtonsForFeed = [
-    {
-        name: "Media",
-        icon: undefined,
-        action: () => { },
-    },
-    {
-        name: "Links",
-        icon: undefined,
-        action: () => { },
-    },
-    {
-        name: "GIF",
-        icon: undefined,
-        action: () => { },
-    },
-    {
-        name: "Post",
-        icon: undefined,
-        action: () => { },
-    },
-];
+
 
 const feedOptionsButtons = [
     {
@@ -84,11 +65,42 @@ const Feed = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [feedData, setFeedData] = useState<Item[]>([]);
     const lastElementRef = useRef<HTMLDivElement | null>(null);
+    const { postText, setPostText } = useContext(appContext);
+
+
+    const differentButtonsForFeed = [
+        {
+            name: "Media",
+            icon: undefined,
+            action: () => { },
+        },
+        {
+            name: "Post",
+            icon: undefined,
+            action: async () => {
+                try {
+                    const sessData = localStorage.getItem("sess");
+                    if (sessData !== null) {
+                        const sessParse = JSON.parse(sessData);
+                        await agent.resumeSession(sessParse);
+                    }
+                    const res = await agent.post({ text: postText });
+                    setPostText("");
+                    console.log(res)
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+        },
+    ];
+
 
     const agent = new BskyAgent({
         service: "https://bsky.social",
         persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
             console.log("first");
+            const sessData = JSON.stringify(sess)
+            localStorage.setItem("sess", sessData)
         },
     });
 
@@ -130,7 +142,6 @@ const Feed = () => {
     }
     const observerCallback: IntersectionObserverCallback = (entries) => {
         const firstEntry = entries[0];
-        console.log(firstEntry);
         if (firstEntry.isIntersecting) {
             followingFeed();
             setIsLoading(true);
