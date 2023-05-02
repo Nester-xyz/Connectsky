@@ -13,11 +13,13 @@
     "@atproto/api": "^0.2.8",
     "axios": "^1.3.5",
     "chrome-types": "^0.1.185",
+    "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-content-loader": "^6.2.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
-    "react-router-dom": "^6.11.0"
+    "react-router-dom": "^6.11.0",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.233",

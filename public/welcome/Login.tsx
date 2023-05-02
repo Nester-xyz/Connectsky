@@ -8,6 +8,7 @@ import React, {
 
 import * as bsky from "@atproto/api";
 import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
+
 const { BskyAgent } = bsky;
 
 type Props = {};
@@ -31,7 +32,7 @@ const Login = (props: Props) => {
           localStorage.setItem("accessJWT", sess?.accessJwt);
           localStorage.setItem("refreshJWT", sess?.refreshJwt);
           localStorage.setItem("did", sess?.did);
-          localStorage.setItem("email", sess?.email);
+          if (sess.email) localStorage.setItem("email", sess?.email);
           const sessData = JSON.stringify(sess);
           localStorage.setItem("sess", sessData);
           if (sess != null) {
@@ -89,7 +90,7 @@ const Login = (props: Props) => {
 
   return (
     <div className="container">
-      <h1>Log in to Bsky</h1>
+      <h1 className="login-heading">Log in to Bsky</h1>
       <form id="login" onSubmit={handleLoginSubmit}>
         <div className="input-container">
           <label htmlFor="username">Username:&nbsp;</label>
@@ -114,9 +115,11 @@ const Login = (props: Props) => {
             value={password}
           />
         </div>
-        <input type="submit" value="login" disabled={loggedIn} />
         <br />
         <br />
+        <button type="submit" disabled={loggedIn}>
+          Login
+        </button>
       </form>
     </div>
   );

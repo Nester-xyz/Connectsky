@@ -169,33 +169,17 @@ const Feed = () => {
     };
   }, [isLoading, observer]);
   return (
-    <div className=" w-full  px-5">
+    <div className=" w-full px-5">
       {/* create the top - post option */}
 
       <div className="grid grid-cols-4 gap-5 h-screen relative">
         <div className="col-span-4 md:col-span-3 mt-5">
-          <div className="flex gap-3 sticky top-0 pb-2 bg-white">
-            {/* {feedOptionsButtons.map((item, index) => {
-              return (
-                <div key={index}>
-                  <button
-                    className="bg-white border rounded-md border-gray-300 flex-1 md:w-48 min-w-[100px]"
-                    onClick={() => setFilterVariable(item.filter)}
-                  >
-                    {item.name}
-                  </button>
-                </div>
-              );
-            })} */}
-          </div>
-
           <PostSection differentButtonsForFeed={differentButtonsForFeed} />
 
           {/* create the feed */}
           <div className=" rounded-md  w-full flex flex-col gap-5 mt-5">
             {
               // here we will map the feed
-
               feedData.map((item: Item, index) => {
                 if (index === feedData.length - 1) {
                   return (
