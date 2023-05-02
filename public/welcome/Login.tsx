@@ -31,7 +31,7 @@ const Login = (props: Props) => {
           localStorage.setItem("accessJWT", sess?.accessJwt);
           localStorage.setItem("refreshJWT", sess?.refreshJwt);
           localStorage.setItem("did", sess?.did);
-          localStorage.setItem("email", sess?.email);
+          if (sess?.email) localStorage.setItem("email", sess?.email);
           const sessData = JSON.stringify(sess);
           localStorage.setItem("sess", sessData);
           if (sess != null) {
