@@ -1,42 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import NotificationCard from "../../components/PageComponents/Notification/NotificationCard";
 import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
+import NotificationLoader from "../../components/PageComponents/Notification/NotificationLoader";
 
-type Props = {};
-type NotificationCardProps = {
+// const MyBulletListLoader = () => <BulletList />;
+
+interface NotificationItem {
   image: string;
   title: "chat" | "follow" | "quote-reply" | "mention";
   description: string;
-};
+}
 
-type ApiResponseItem = {
-  user_image: string;
-  event_type: "chat" | "follow" | "quote-reply" | "mention";
-  description: string;
-};
-
-// const threeTotallyRandomNotifications: NotificationCardProps[] = [
-//   {
-//     description: "Random Chat",
-//     image: "https://randomuser.me/api/portraits/women/6.jpg",
-//     title: "chat",
-//   },
-//   {
-//     description: "Random Follow",
-//     image: "https://randomuser.me/api/portraits/women/6.jpg",
-//     title: "follow",
-//   },
-//   {
-//     description: "Random Quote Reply",
-//     image: "https://randomuser.me/api/portraits/women/6.jpg",
-//     title: "quote-reply",
-//   },
-// ];
-
-const Notification = (props: Props) => {
-  const [notifications, setNotifications] = useState<NotificationCardProps[]>(
-    []
-  );
+const Notification = () => {
+  const [cursor, setCursor] = useState<string>("");
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const lastElementRef = useRef<HTMLDivElement | null>(null);
   const agent = new BskyAgent({
     service: "https://bsky.social",
     persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
@@ -54,41 +33,88 @@ const Notification = (props: Props) => {
     }
     const { data } = await agent.listNotifications({
       limit: 20,
+      cursor: cursor,
     });
+    if (data.cursor == null) return;
+    setCursor(data.cursor);
     console.log(data);
-
-    // Cast the data to an array of ApiResponseItem
-    const typedData = data as unknown as ApiResponseItem[];
-
-    setNotifications(
-      typedData.map((item) => ({
-        image: item.user_image,
-        title: item.event_type, // Make sure the event types match the title types in NotificationCardProps.
-        description: item.description,
-      }))
+    // Check if data.notifications exists, otherwise use data directly.
+    const notificationsData = data.notifications || data;
+    const mappedData: NotificationItem[] = notificationsData.map(
+      (notifications: any) => {
+        return {
+          image: notifications.author.avatar,
+          title: "chat", // You should map this value from the API response too.
+          description: notifications.author.displayName,
+        };
+      }
     );
+    setNotifications((prevData) => [...prevData, ...mappedData]);
   }
+  const observerCallback: IntersectionObserverCallback = (entries) => {
+    const firstEntry = entries[0];
+    if (firstEntry.isIntersecting) {
+      listNotifications();
+      setIsLoading(true);
+    }
+  };
+  const observer = new IntersectionObserver(observerCallback, {
+    threshold: 0.5,
+  });
 
   useEffect(() => {
-    listNotifications();
-  }, []);
+    if (!isLoading) {
+      listNotifications();
+      setIsLoading(true);
+    }
+    if (lastElementRef.current) {
+      observer.observe(lastElementRef.current);
+    }
+
+    return () => {
+      if (lastElementRef.current) {
+        observer.unobserve(lastElementRef.current);
+      }
+    };
+  }, [isLoading, observer]);
 
   return (
     <div className="p-5">
-      {/* title of the page */}
       <h1 className="text-3xl border-b-2 pb-4 border-slate-300">
         Notification
       </h1>
 
-      {/* notification wraps here */}
       <div className="flex flex-col gap-3 mt-3">
-        {notifications.map((notification, index) => (
-          <NotificationCard
-            description={notification.description}
-            image={notification.image}
-            title={notification.title}
-          />
-        ))}
+        {notifications.map((item: NotificationItem, index) => {
+          if (index === notifications.length - 1) {
+            return (
+              <div ref={lastElementRef} key={index}>
+                <NotificationCard
+                  description={item.description}
+                  image={item.image}
+                  title={item.title}
+                />
+              </div>
+            );
+          } else {
+            return (
+              <div key={index}>
+                <NotificationCard
+                  description={item.description}
+                  image={item.image}
+                  title={item.title}
+                />
+              </div>
+            );
+          }
+        })}
+        {isLoading ? (
+          <>
+            <NotificationLoader /> <NotificationLoader />
+          </>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
