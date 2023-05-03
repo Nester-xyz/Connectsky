@@ -2,6 +2,8 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import { appContext } from "../../../context/appContext";
 import { BskyAgent, AtpSessionData, AtpSessionEvent, AppBskyEmbedImages, BlobRef } from "@atproto/api";
 import { readFileAsArrayBuffer } from "../../../utils";
+import TextAreaBox from "./TextAreaBox";
+
 type differentButtonsForFeedProps = {
   name: string;
   icon: JSX.Element | undefined;
@@ -72,13 +74,7 @@ const PostSection: React.FC<Props> = ({ differentButtonsForFeed = [], setImage }
     <div className="">
       <div className="w-full">
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
-          <textarea
-            name="post-textarea"
-            id="post-textarea"
-            className="w-full h-40 resize-none px-4 py-2 focus:outline-none"
-            onChange={handlePost}
-            value={postText}
-          ></textarea>
+          <TextAreaBox />
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">
           {differentButtonsForFeed.map((item, index) => {

@@ -1,9 +1,8 @@
 :root {
-  --screen-background-color: #efefef;
+  --screen-background-color: #555;
   --border-color: #515151;
-  --border-radius: 20px;
-  --left-background-color: url("https://images.unsplash.com/photo-1682299225157-2bdce55fac2f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80");
-  --right-background-color: #ffffffcc;
+  --border-radius: 10px;
+  --container-background-color: #ffffffcc;
   --left-text-color: #1da1f2;
   --left-heading-color: #1da1f2;
   --right-text-color: #1da1f2;
@@ -17,81 +16,119 @@
 }
 
 .screen {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  background: var(--screen-background-color);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: "Cabin", sans-serif;
   overflow: hidden;
-}
-
-.text {
-  width: 40vw;
-  height: 20vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
-}
-
-.text .title {
-  font-size: 5rem;
-  color: var(--left-heading-color);
-  text-align: center;
-  line-height: 8rem;
-}
-
-.text .sub-title {
-  font-size: 1.5rem;
-  color: var(--left-text-color);
-  text-align: center;
+  justify-content: center;
+  font-family: "Cabin", sans-serif;
+  background: var(--screen-background-color);
 }
 
 .container {
   width: 30vw;
-  height: 50vh;
+  min-width: 400px;
+  height: 80vh;
+  background: var(--container-background-color);
   border: var(--border-color) 2px solid;
   border-radius: var(--border-radius);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+}
+
+.container .login-heading {
+  font-size: 4rem;
+  color: var(--left-heading-color);
+  text-align: center;
+}
+
+.form-group {
+  margin: 0 auto;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+input[type="text"],
+input[type="password"] {
+  display: block;
+  width: 400px;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
+}
+
+button[type="submit"]:hover {
+  background-color: #0069d9;
+}
+
+/* .container .input-container {
+  position: relative;
+  width: 100%;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
 }
 
-.container .left,
-.container .right {
-  flex: 1;
-  height: 100%;
-}
-
-.container .left {
-  background: var(--left-background-color);
+.container .input-container .input-box {
   width: 100%;
   height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
-
-.container .left .leftContainer {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 20px;
 }
 
-.container .left h1 {
-  font-size: 5rem;
-  color: var(--left-heading-color);
-  text-align: left;
-  margin: 1rem;
-  line-height: 8rem;
+.container .input-container label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--left-text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s ease;
+}
+
+.container .input-box:active ~ label {
+  top: -20px;
 }
 
 .container .left p {
@@ -131,12 +168,6 @@
   padding-bottom: 10px;
 }
 
-.right label {
-  font-size: 1.5rem;
-  color: var(--right-text-color);
-  text-align: left;
-}
-
 .right input {
   width: 100%;
   height: 100%;
@@ -156,4 +187,4 @@
   margin: 0.5rem;
   font-size: 1.5rem;
   cursor: pointer;
-}
+} */

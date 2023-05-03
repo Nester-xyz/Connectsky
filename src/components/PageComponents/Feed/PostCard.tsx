@@ -46,16 +46,20 @@ const PostCard = ({
         </div>
       </div>
 
-      {image?.length == 0 ? "" : <div>
-        {/* Render the post image */}
-        <div className="w-full aspect-video overflow-hidden">
-          <img src={image} alt="" className="w-full h-full object-contain" />
+      {image?.length == 0 ? (
+        ""
+      ) : (
+        <div>
+          {/* Render the post image */}
+          <div className="w-full aspect-video overflow-hidden">
+            <img src={image} alt="" className="w-full h-full object-contain" />
+          </div>
         </div>
-      </div>}
+      )}
 
       <div>
         {/* Render the number of likes and comments */}
-        <div className="flex gap-5 mt-2">
+        <div className="flex gap-5 mt-2 text-lg">
           <div>
             <AiFillHeart />
             <p>{likes}</p>
