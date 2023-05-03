@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { dummyData } from "./dummyData";
 import PostSection from "../../components/PageComponents/Feed/PostSection";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
-import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
+import { BskyAgent, AtpSessionData, AtpSessionEvent, AppBskyEmbedImages, BlobRef } from "@atproto/api";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
-import { text } from "stream/consumers";
-
 //  Props = {
 //   profileImg?: string;
 //   author: string;
@@ -64,15 +62,18 @@ const Feed = () => {
     const [cursor, setCursor] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [feedData, setFeedData] = useState<Item[]>([]);
+    const [image, setImage] = useState<BlobRef | null>(null);
     const lastElementRef = useRef<HTMLDivElement | null>(null);
-    const { postText, setPostText } = useContext(appContext);
+    const { postText, setPostText, fileRef, uploadedFile } = useContext(appContext);
 
 
     const differentButtonsForFeed = [
         {
             name: "Media",
             icon: undefined,
-            action: () => { },
+            action: () => {
+                fileRef.current?.click();
+            },
         },
         {
             name: "Post",
@@ -84,7 +85,17 @@ const Feed = () => {
                         const sessParse = JSON.parse(sessData);
                         await agent.resumeSession(sessParse);
                     }
-                    const res = await agent.post({ text: postText });
+                    const res = await agent.post({
+                        text: postText, embed: {
+                            $type: "app.bsky.embed.images",
+                            images: [
+                                {
+                                    image,
+                                    alt: "UnNamed"
+                                }
+                            ]
+                        }
+                    });
                     setPostText("");
                     console.log(res)
                 } catch (error) {
@@ -185,7 +196,7 @@ const Feed = () => {
                         })}
                     </div>
 
-                    <PostSection differentButtonsForFeed={differentButtonsForFeed} />
+                    <PostSection differentButtonsForFeed={differentButtonsForFeed} setImage={setImage} />
 
                     {/* create the feed */}
                     <div className=" rounded-md  w-full flex flex-col gap-5 mt-5">

@@ -1,5 +1,5 @@
 // Importing required modules from React and React Router libraries
-import { useState, useContext } from "react";
+import { useState, useRef } from "react";
 import Layout from "./components/HOC/Navigation/Layout";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { appContext } from "./context/appContext";
@@ -45,10 +45,12 @@ function App() {
   // State to manage the currently active page of the application
   const [activePage, setActivePage] = useState<activePageCheck>("feed");
   const [postText, setPostText] = useState<string>("");
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploadedFile, setUploadedFile] = useState<Uint8Array | null>(null);
   return (
 
     <div>
-      <appContext.Provider value={{ postText, setPostText }}>
+      <appContext.Provider value={{ postText, setPostText, fileRef, setUploadedFile, uploadedFile }}>
         {/* Setting up the router for the application */}
         <Router>
           {/* Wrapping the Layout component around the application */}
