@@ -2,7 +2,13 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { dummyData } from "./dummyData";
 import PostSection from "../../components/PageComponents/Feed/PostSection";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
-import { BskyAgent, AtpSessionData, AtpSessionEvent, AppBskyEmbedImages, BlobRef } from "@atproto/api";
+import {
+  BskyAgent,
+  AtpSessionData,
+  AtpSessionEvent,
+  AppBskyEmbedImages,
+  BlobRef,
+} from "@atproto/api";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
 //  Props = {
@@ -62,8 +68,8 @@ const Feed = () => {
   const [feedData, setFeedData] = useState<Item[]>([]);
   const [image, setImage] = useState<BlobRef | null>(null);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
-  const { postText, setPostText, fileRef, uploadedFile } = useContext(appContext);
-
+  const { postText, setPostText, fileRef, uploadedFile } =
+    useContext(appContext);
 
   const differentButtonsForFeed = [
     {
@@ -84,26 +90,26 @@ const Feed = () => {
             await agent.resumeSession(sessParse);
           }
           const res = await agent.post({
-            text: postText, embed: {
+            text: postText,
+            embed: {
               $type: "app.bsky.embed.images",
               images: [
                 {
                   image,
-                  alt: "UnNamed"
-                }
-              ]
-            }
+                  alt: "UnNamed",
+                },
+              ],
+            },
           });
           setPostText("");
           setImage(null);
-          console.log(res)
+          console.log(res);
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       },
     },
   ];
-
 
   const agent = new BskyAgent({
     service: "https://bsky.social",
@@ -113,7 +119,6 @@ const Feed = () => {
       localStorage.setItem("sess", sessData);
     },
   });
-
 
   async function followingFeed() {
     const sessData = localStorage.getItem("sess");
@@ -190,7 +195,10 @@ const Feed = () => {
 
       <div className="grid grid-cols-4 gap-5 h-screen relative">
         <div className="col-span-4 md:col-span-3 mt-5">
-          <PostSection differentButtonsForFeed={differentButtonsForFeed} setImage={setImage} />
+          <PostSection
+            differentButtonsForFeed={differentButtonsForFeed}
+            setImage={setImage}
+          />
 
           {/* create the feed */}
           <div className=" rounded-md  w-full flex flex-col gap-5 mt-5">
