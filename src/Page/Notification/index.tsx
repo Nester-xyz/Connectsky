@@ -7,8 +7,10 @@ import NotificationLoader from "../../components/PageComponents/Notification/Not
 
 interface NotificationItem {
   image: string;
-  title: "chat" | "follow" | "quote-reply" | "mention";
+  title: "repost" | "follow" | "reply" | "like";
   description: string;
+  indexedAt: Date;
+  reply: string;
 }
 
 const Notification = () => {
@@ -44,8 +46,10 @@ const Notification = () => {
       (notifications: any) => {
         return {
           image: notifications.author.avatar,
-          title: "chat", // You should map this value from the API response too.
+          title: notifications.reason, // You should map this value from the API response too.
           description: notifications.author.displayName,
+          indexedAt: notifications.indexedAt,
+          reply: notifications.record?.text ? notifications.record.text : ""
         };
       }
     );
@@ -81,7 +85,7 @@ const Notification = () => {
   return (
     <div className="p-5">
       <h1 className="text-3xl border-b-2 pb-4 border-slate-300">
-        Notification
+        Notifications
       </h1>
 
       <div className="flex flex-col gap-3 mt-3">
@@ -93,6 +97,8 @@ const Notification = () => {
                   description={item.description}
                   image={item.image}
                   title={item.title}
+                  createdAt={item.indexedAt}
+                  reply={item.reply}
                 />
               </div>
             );
@@ -103,6 +109,8 @@ const Notification = () => {
                   description={item.description}
                   image={item.image}
                   title={item.title}
+                  createdAt={item.indexedAt}
+                  reply={item.reply}
                 />
               </div>
             );

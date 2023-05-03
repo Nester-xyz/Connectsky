@@ -83,20 +83,25 @@ const Feed = () => {
             const sessParse = JSON.parse(sessData);
             await agent.resumeSession(sessParse);
           }
-          const res = await agent.post({
-            text: postText, embed: {
-              $type: "app.bsky.embed.images",
-              images: [
-                {
-                  image,
-                  alt: "UnNamed"
-                }
-              ]
+          if (image !== null && postText.length > 0) {
+            const res = await agent.post({
+              text: postText, embed: {
+                $type: "app.bsky.embed.images",
+                images: [
+                  {
+                    image,
+                    alt: "UnNamed"
+                  }
+                ]
+              }
+            });
+          } else {
+            if (postText.length > 0) {
+              await agent.post({ text: postText });
             }
-          });
+          }
           setPostText("");
           setImage(null);
-          console.log(res)
         } catch (error) {
           console.log(error)
         }

@@ -6,7 +6,7 @@ const NotificationLoader: React.FC = () => (
     <ContentLoader
       speed={2}
       width={400}
-      height={150}
+      height={50}
       viewBox="0 0 400 150"
       backgroundColor="#f3f3f3"
       foregroundColor="#ecebeb"
