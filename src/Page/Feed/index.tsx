@@ -108,9 +108,9 @@ const Feed = () => {
   const agent = new BskyAgent({
     service: "https://bsky.social",
     persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-      console.log("first");
-      const sessData = JSON.stringify(sess)
-      localStorage.setItem("sess", sessData)
+      // console.log("first");
+      const sessData = JSON.stringify(sess);
+      localStorage.setItem("sess", sessData);
     },
   });
 
@@ -125,10 +125,11 @@ const Feed = () => {
       limit: 20,
       cursor: cursor,
     });
+    console.log(data);
     if (data.cursor == null) return;
     setCursor(data.cursor);
     const mappedData: Item[] = data.feed.map((feed: any) => {
-      console.log(feed);
+      // console.log(feed);
       const images =
         feed.post.embed && "images" in feed.post.embed
           ? feed.post.embed.images
