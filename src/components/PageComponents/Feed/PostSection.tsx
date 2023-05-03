@@ -30,24 +30,6 @@ const PostSection: React.FC<Props> = ({ differentButtonsForFeed = [], setImage }
       const fileUint8Array = new Uint8Array(fileArrrayBuffer);
       setUploadedFile(fileUint8Array);
     }
-
-
-
-
-    // here we should use the blob api
-    // try {
-    //   const sessData = localStorage.getItem("sess");
-    //   if (sessData !== null) {
-    //     const sessParse = JSON.parse(sessData);
-    //     await agent.resumeSession(sessParse);
-    //   }
-    //   if (uploadedFile) {
-    //     const { data } = await agent.uploadBlob(uploadedFile);
-    //     console.log(data);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   const agent = new BskyAgent({

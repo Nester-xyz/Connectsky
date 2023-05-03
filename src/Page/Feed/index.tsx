@@ -97,6 +97,7 @@ const Feed = () => {
                         }
                     });
                     setPostText("");
+                    setImage(null);
                     console.log(res)
                 } catch (error) {
                     console.log(error)
