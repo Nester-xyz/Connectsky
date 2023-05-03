@@ -47,9 +47,18 @@ function App() {
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<Uint8Array | null>(null);
+
   return (
     <div>
-      <appContext.Provider value={{ postText, setPostText, fileRef, setUploadedFile, uploadedFile }}>
+      <appContext.Provider
+        value={{
+          postText,
+          setPostText,
+          fileRef,
+          setUploadedFile,
+          uploadedFile,
+        }}
+      >
         {/* Setting up the router for the application */}
         <Router>
           {/* Wrapping the Layout component around the application */}

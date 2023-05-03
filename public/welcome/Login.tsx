@@ -4,6 +4,7 @@ import React, {
   useCallback,
   FormEvent,
   ChangeEvent,
+  useEffect,
 } from "react";
 
 import * as bsky from "@atproto/api";
@@ -11,9 +12,19 @@ import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
 
 const { BskyAgent } = bsky;
 
-type Props = {};
+type Props = {
+  attemptedLogin: boolean;
+  setAttemptedLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  loggedInSuccess: boolean;
+  setLoggedInSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-const Login = (props: Props) => {
+const Login = ({
+  attemptedLogin,
+  setAttemptedLogin,
+  loggedInSuccess,
+  setLoggedInSuccess,
+}: Props) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [session, setSession] = useState<AtpSessionData>();
@@ -37,7 +48,9 @@ const Login = (props: Props) => {
           localStorage.setItem("sess", sessData);
           if (sess != null) {
             setSession(sess!);
+            setLoggedInSuccess(true);
             // Store a value in chrome storage
+
             chrome.storage.sync.set({ isLoggedIn: true }, function () {
               console.log("Value is set to " + "isLoggedIn");
               // console.log(result);
@@ -56,9 +69,16 @@ const Login = (props: Props) => {
     []
   );
 
+  // useEffect(() => {
+  //   if (isSess != null) {
+  //     setAttemptedLogin(true);
+  //   }
+  // }, []);
+
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   const login = useCallback(async () => {
+    setAttemptedLogin(true);
     await agent!.login({
       identifier: username,
       password: password,
@@ -91,6 +111,11 @@ const Login = (props: Props) => {
   return (
     <div className="container">
       <h1 className="login-heading">Log in to Bsky</h1>
+      {attemptedLogin
+        ? loggedInSuccess
+          ? null
+          : "Incorrect credentials!"
+        : null}
       <form id="login" onSubmit={handleLoginSubmit}>
         <div className="input-container">
           <label htmlFor="username">Username:&nbsp;</label>

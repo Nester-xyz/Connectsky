@@ -47,26 +47,27 @@ const NotificationCard = ({
   }
   return (
     <div>
-      <div className="flex gap-5 py-2 px-2 items-center shadow_custom bg-white">
+      <div className="flex flex-row gap-5 py-2 px-2 items-center shadow_custom bg-white justify-between">
         {/* left side for the image */}
-        <div className="relative">
-          <div className="rounded-full w-16 h-16 overflow-hidden ">
+        <div className="flex flex-row relative">
+          <div className="rounded-full w-16 h-16 overflow-hidden">
             <img src={image} alt={title} />
           </div>
-
-          <div
+          {/* <div
             className={`absolute bottom-0 right-0 w-6 h-6  rounded-full ${color}`}
-          ></div>
-        </div>
-        {/* right side for the title and description */}
-        <div className="flex justify-between">
-          <div className="flex flex-col">
+          >
+          </div> */}
+          <div className="flex flex-col px-2 py-2">
             <p className="line-clamp-2">{description}</p>
             <p className="text-blue-800">{reason}</p>
           </div>
+          {title === "reply" ? reply : ""}
+        </div>
+
+        {/* right side for the title and description */}
+        <div className="flex justify-between">
           <span>{formatDateAgo(createdAt)}</span>
         </div>
-        {title === "reply" ? reply : ""}
       </div>
     </div>
   );
