@@ -47,7 +47,7 @@ function createWindow() {
   });
 }
 
-//function to either create a window / display login page
+// function to either create a window / display login page
 function onClickHandler() {
   chrome.storage.sync.get("isLoggedIn", function (result) {
     if (result.isLoggedIn) {

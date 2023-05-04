@@ -47,9 +47,6 @@ const Login = (props: Props) => {
                 }
               });
             });
-            // setTimeout(() => {
-            //   window.close();
-            // }, 1000);
           }
         },
       }),
@@ -91,7 +88,7 @@ const Login = (props: Props) => {
   return (
     <div className="container">
       <h1 className="login-heading">Log in to Bsky</h1>
-      <form id="login" onSubmit={handleLoginSubmit}>
+      <form className="form-group" onSubmit={handleLoginSubmit}>
         <div className="input-container">
           <label htmlFor="username">Username:&nbsp;</label>
           <input
@@ -103,7 +100,7 @@ const Login = (props: Props) => {
             value={username}
           />
         </div>
-        <br />
+        {/* <br /> */}
         <div className="input-container">
           <label htmlFor="app-password">App Password:&nbsp;</label>
           <input
@@ -115,8 +112,8 @@ const Login = (props: Props) => {
             value={password}
           />
         </div>
-        <br />
-        <br />
+        {/* <br />
+        <br /> */}
         <button type="submit" disabled={loggedIn}>
           Login
         </button>
