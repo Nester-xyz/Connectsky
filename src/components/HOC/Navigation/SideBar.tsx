@@ -15,7 +15,7 @@ import { links } from "../../../App";
 // the components code begins from here
 const SideBar = ({ activePage, setActivePage }: SideBarProps) => {
   return (
-    <div className="flex flex-col items-start gap-14 py-7 px-3 h-screen w-full border-t-2 bg-neutral-300">
+    <div className="flex flex-col items-start gap-14 py-7 px-3 h-screen w-full bg-neutral-300">
       {links.map((link, index) => {
         return (
           <div

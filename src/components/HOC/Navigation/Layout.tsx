@@ -16,7 +16,7 @@ import { LayoutProps } from "../../@types/Layout/Layout";
 const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
   return (
     <div className="flex flex-col justify-between h-screen overflow-hidden bg-gray">
-      <div className="grid grid-cols-5 h-full overflow-x-hidden">
+      <div className="grid grid-cols-5 h-full overflow-x-hidden sticky">
         {/* the side bar component only comes to view when the display is sent over 768px */}
         <div className="hidden md:block col-span-1">
           <SideBar activePage={activePage} setActivePage={setActivePage} />

@@ -2,11 +2,15 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { dummyData } from "./dummyData";
 import PostSection from "../../components/PageComponents/Feed/PostSection";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
-import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
+import {
+  BskyAgent,
+  AtpSessionData,
+  AtpSessionEvent,
+  AppBskyEmbedImages,
+  BlobRef,
+} from "@atproto/api";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
-import { text } from "stream/consumers";
-
 //  Props = {
 //   profileImg?: string;
 //   author: string;
@@ -62,14 +66,18 @@ const Feed = () => {
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<Item[]>([]);
+  const [image, setImage] = useState<BlobRef | null>(null);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
-  const { postText, setPostText } = useContext(appContext);
+  const { postText, setPostText, fileRef, uploadedFile } =
+    useContext(appContext);
 
   const differentButtonsForFeed = [
     {
       name: "Media",
       icon: undefined,
-      action: () => {},
+      action: () => {
+        fileRef.current?.click();
+      },
     },
     {
       name: "Post",
@@ -81,9 +89,25 @@ const Feed = () => {
             const sessParse = JSON.parse(sessData);
             await agent.resumeSession(sessParse);
           }
-          const res = await agent.post({ text: postText });
+          if (image !== null && postText.length > 0) {
+            const res = await agent.post({
+              text: postText, embed: {
+                $type: "app.bsky.embed.images",
+                images: [
+                  {
+                    image,
+                    alt: "UnNamed"
+                  }
+                ]
+              }
+            });
+          } else {
+            if (postText.length > 0) {
+              await agent.post({ text: postText });
+            }
+          }
           setPostText("");
-          console.log(res);
+          setImage(null);
         } catch (error) {
           console.log(error);
         }
@@ -94,7 +118,7 @@ const Feed = () => {
   const agent = new BskyAgent({
     service: "https://bsky.social",
     persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-      console.log("first");
+      // console.log("first");
       const sessData = JSON.stringify(sess);
       localStorage.setItem("sess", sessData);
     },
@@ -110,10 +134,11 @@ const Feed = () => {
       limit: 20,
       cursor: cursor,
     });
+    console.log(data);
     if (data.cursor == null) return;
     setCursor(data.cursor);
     const mappedData: Item[] = data.feed.map((feed: any) => {
-      console.log(feed);
+      // console.log(feed);
       const images =
         feed.post.embed && "images" in feed.post.embed
           ? feed.post.embed.images
@@ -174,7 +199,10 @@ const Feed = () => {
 
       <div className="grid grid-cols-4 gap-5 h-screen relative">
         <div className="col-span-4 md:col-span-3 mt-5">
-          <PostSection differentButtonsForFeed={differentButtonsForFeed} />
+          <PostSection
+            differentButtonsForFeed={differentButtonsForFeed}
+            setImage={setImage}
+          />
 
           {/* create the feed */}
           <div className=" rounded-md  w-full flex flex-col gap-5 mt-5">
