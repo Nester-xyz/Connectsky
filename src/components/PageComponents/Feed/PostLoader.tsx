@@ -7,8 +7,8 @@ const PostLoader: React.FC = () => (
       speed={2}
       height={160}
       viewBox="0 0 400 160"
-      backgroundColor="#cceeff"
-      foregroundColor="#66a3ff"
+      backgroundColor="#f3f3f3"
+      foregroundColor="#ecebeb"
       style={{ width: "100%" }}
     >
       <circle cx="40" cy="30" r="30" />

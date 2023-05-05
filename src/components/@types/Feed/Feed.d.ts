@@ -15,4 +15,13 @@ export type differentButtonsForFeedProps = {
   action: () => void;
 };
 
+export type fieldDataProps = {
+  profileImg?: string;
+  author: string;
+  caption?: string;
+  image?: string;
+  likes: number;
+  comments: number;
+};
+
 export type differentButtonsForFeed = differentButtonsForFeedProps[];

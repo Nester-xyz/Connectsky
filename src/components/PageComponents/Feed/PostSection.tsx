@@ -88,7 +88,7 @@ const PostSection: React.FC<Props> = ({
     <div className="">
       <div className="w-full">
         <button
-          className="px-5 py-1 my-4 border"
+          className="px-5 py-1 my-4 border block md:hidden "
           onClick={() => setShowAddPost(false)}
         >
           &lt; go back

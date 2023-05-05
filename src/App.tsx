@@ -13,6 +13,7 @@ import { linksType } from "./components/@types/Layout/SideBar";
 import { BsFillGearFill, BsPencilSquare } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
+import WillComeSoon from "./components/PageComponents/WillComeSoon";
 
 // Defining type for active page check, with limited values
 export type activePageCheck = "feed" | "search" | "notification" | "setting";
@@ -34,6 +35,7 @@ export const links: linksType[] = [
     links: "/notification",
     icon: <IoNotifications />,
   },
+  // replace the icon with a seperate compoenent wohich only returns an profile picure
   {
     linkName: "settings",
     links: "/search",
@@ -67,9 +69,9 @@ function App() {
             <Routes>
               {/* Defining routes for different pages */}
               <Route path="/" element={<Feed />} />
-              <Route path="/search" element={<Search />} />
+              <Route path="/search" element={<WillComeSoon />} />
               <Route path="/notification" element={<Notification />} />
-              <Route path="/setting" element={<Setting />} />
+              <Route path="/setting" element={<WillComeSoon />} />
             </Routes>
           </Layout>
         </Router>

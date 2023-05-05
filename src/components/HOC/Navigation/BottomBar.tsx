@@ -18,7 +18,7 @@ import { links } from "../../../App";
 // the components code begins from here
 const BottomBar = ({ activePage, setActivePage }: BottomBarProps) => {
   return (
-    <div className="flex justify-evenly items-center h-16 border-t-2 border-black bg-white">
+    <div className="flex justify-evenly items-center h-16 border-t border-slate-200 bg-white">
       {links.map((link, index) => {
         return (
           <div

@@ -18,7 +18,7 @@ const HoverButton = ({
     <Link to={link}>
       <button
         onClick={action}
-        className={` px-3 py-2 absolute w-full flex items-center gap-4 rounded-md transition-all duration-500 origin-center text-2xl   ${
+        className={` px-3 py-2 absolute w-full flex items-center gap-4 rounded-md transition-all duration-500 origin-center text-xl   ${
           checkOne === checkTwo ? "bg-white " : "hover:bg-slate-100"
         }`}
       >

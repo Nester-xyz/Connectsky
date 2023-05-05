@@ -48,18 +48,18 @@ interface Item {
   image: ImageObject;
 }
 
-const feedOptionsButtons = [
-  {
-    name: "For you",
-    filter: "forYou",
-    icon: undefined,
-  },
-  {
-    name: "Following",
-    filter: "following",
-    icon: undefined,
-  },
-];
+// const feedOptionsButtons = [
+//   {
+//     name: "For you",
+//     filter: "forYou",
+//     icon: undefined,
+//   },
+//   {
+//     name: "Following",
+//     filter: "following",
+//     icon: undefined,
+//   },
+// ];
 
 // the component begins here
 const Feed = () => {
@@ -206,16 +206,23 @@ const Feed = () => {
       ) : (
         <div className="w-full h-full">
           <button
-            className="z-50 fixed bottom-20 right-5 w-10 h-10 bg-blue-500 rounded-full text-xl flex items-center justify-center text-white"
+            className=":hidden z-50 fixed bottom-20 right-5 w-14 h-14 bg-blue-500 rounded-full text-2xl flex items-center justify-center text-white"
             onClick={() => setShowAddPost(true)}
           >
             +
           </button>
 
+          <div className="hidden md:block">
+            <PostSection
+              differentButtonsForFeed={differentButtonsForFeed}
+              setImage={setImage}
+              setShowAddPost={setShowAddPost}
+            />
+          </div>
           <div className="grid grid-cols-4 gap-5 h-screen relative">
             <div className="col-span-4 md:col-span-3 mt-5">
               {/* create the feed */}
-              <div className=" rounded-md  w-full flex flex-col gap-5 mt-5">
+              <div className=" rounded-md  w-full flex flex-col gap-2 mt-5">
                 {
                   // here we will map the feed
                   feedData.map((item: Item, index) => {
