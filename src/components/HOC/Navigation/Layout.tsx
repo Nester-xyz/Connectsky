@@ -33,7 +33,7 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
       <div className="grid grid-cols-5 h-full overflow-x-hidden">
         {/* the side bar component only comes to view when the display is sent over 768px */}
 
-        <div className="hidden md:block col-span-1 min-w-[200px] sticky top-0 min-w-[200px] sticky top-0">
+        <div className="hidden md:block col-span-1 top-0 min-w-[200px] sticky ">
           <SideBar
             activePage={activePage}
             setActivePage={setActivePage}

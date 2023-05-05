@@ -36,6 +36,7 @@ const BottomBar = ({
               checkOne={activePage}
               checkTwo={link.linkName}
               icon={link.icon}
+              activeIcon={link.activeIcon}
               text={link.linkName}
               link={link.links}
             />
@@ -57,6 +58,7 @@ const BottomBar = ({
               checkOne={activePage}
               checkTwo={link.linkName}
               icon={link.icon}
+              activeIcon={link.activeIcon}
               text={link.linkName}
               link={link.links}
             />

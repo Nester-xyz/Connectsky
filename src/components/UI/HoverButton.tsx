@@ -9,6 +9,7 @@ const HoverButton = ({
   checkOne,
   checkTwo,
   icon,
+  activeIcon,
   text,
   action,
   link,

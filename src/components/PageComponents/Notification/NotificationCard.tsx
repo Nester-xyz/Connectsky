@@ -50,7 +50,7 @@ const NotificationCard = ({
       <div className="flex flex-row gap-5 py-2 items-center justify-between">
         {/* left side for the image */}
         <div className="flex flex-row relative items-center">
-          <div className="rounded-full w-14 h-14 overflow-hidden">
+          <div className="rounded-full w-12 h-12 overflow-hidden">
             <img src={image} alt={title} />
           </div>
           {/* <div

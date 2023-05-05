@@ -7,45 +7,54 @@ import "./interceptors/axios";
 // Importing components for different pages of the application
 import Feed from "./Page/Feed";
 import Notification from "./Page/Notification";
-import Search from "./Page/Search";
-import Setting from "./Page/Setting";
 import { linksType } from "./components/@types/Layout/SideBar";
-import { BsFillGearFill, BsPencilSquare } from "react-icons/bs";
-import { AiOutlineSearch } from "react-icons/ai";
-import { IoNotifications } from "react-icons/io5";
+import { HiOutlinePencilSquare, HiPencilSquare } from "react-icons/hi2";
+import {
+  IoNotifications,
+  IoSearch,
+  IoSearchOutline,
+  IoSettings,
+  IoSettingsOutline,
+} from "react-icons/io5";
+import { IoMdNotifications } from "react-icons/io";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import WillComeSoon from "./components/PageComponents/WillComeSoon";
 
 // Defining type for active page check, with limited values
-export type activePageCheck = "feed" | "search" | "notification" | "setting";
+export type activePageCheck = "Feed" | "search" | "notification" | "setting";
 // this contains the actual links which will be made into the buttons
 
 export const links: linksType[] = [
   {
     linkName: "Feed",
     links: "/",
-    icon: <BsPencilSquare />,
+    icon: <HiOutlinePencilSquare />,
+    activeIcon: <HiPencilSquare />,
   },
   {
     linkName: "search",
     links: "/search",
-    icon: <AiOutlineSearch />,
+    icon: <IoSearchOutline />,
+    activeIcon: <IoSearch />,
   },
   {
     linkName: "notification",
     links: "/notification",
-    icon: <IoNotifications />,
+    icon: <IoMdNotificationsOutline />,
+    activeIcon: <IoMdNotifications />,
   },
   // replace the icon with a seperate compoenent wohich only returns an profile picure
   {
     linkName: "settings",
     links: "/search",
-    icon: <BsFillGearFill />,
+    icon: <IoSettingsOutline />,
+    activeIcon: <IoSettings />,
   },
 ];
 
 function App() {
   // State to manage the currently active page of the application
-  const [activePage, setActivePage] = useState<activePageCheck>("feed");
+  const [activePage, setActivePage] = useState<activePageCheck>("Feed");
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<Uint8Array | null>(null);

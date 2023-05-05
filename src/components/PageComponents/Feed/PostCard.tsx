@@ -4,6 +4,7 @@ import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { CiShare1 } from "react-icons/ci";
+import { BiRepost } from "react-icons/bi";
 
 // just a random Image I grabbed from the internet to show when no image is provided
 const userImage =
@@ -63,8 +64,16 @@ const PostCard = ({
 
       <div>
         {/* Render the number of likes and comments */}
-        <div className="flex mt-5 text-2xl gap-20 items-center select-none">
-          <div className="flex flex-col items-center">
+        <div className="flex mt-5 text-xl gap-16 items-center select-none">
+          <div className="flex items-center gap-1">
+            <FiMessageCircle />
+            <p className="text-sm">{comments}</p>
+          </div>
+          <div className="flex items-center text-3xl gap-1">
+            <BiRepost />
+            <p className="text-sm">0</p>
+          </div>
+          <div className="flex items-center gap-1">
             {like ? (
               <AiFillHeart
                 onClick={() => setLike(!like)}
@@ -77,14 +86,6 @@ const PostCard = ({
               />
             )}
             <p className="text-sm">{likes}</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <FiMessageCircle />
-            <p className="text-sm">{comments}</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <CiShare1 />
-            <p className="text-sm">Share</p>
           </div>
         </div>
       </div>

@@ -31,6 +31,7 @@ const SideBar = ({ activePage, setActivePage, notiCount }: SideBarProps) => {
               checkOne={activePage}
               checkTwo={link.linkName}
               icon={link.icon}
+              activeIcon={link.activeIcon}
               text={link.linkName}
             />
           </div>
@@ -55,6 +56,7 @@ const SideBar = ({ activePage, setActivePage, notiCount }: SideBarProps) => {
               checkOne={activePage}
               checkTwo={link.linkName}
               icon={link.icon}
+              activeIcon={link.activeIcon}
               text={link.linkName}
             />
           </div>
