@@ -150,18 +150,18 @@ const Feed = () => {
             +
           </button>
 
-          <div className="hidden md:block">
-            <PostSection
-              showImage={showImage}
-              setShowImage={setShowImage}
-              differentButtonsForFeed={differentButtonsForFeed}
-              setImage={setImage}
-              setShowAddPost={setShowAddPost}
-            />
-          </div>
           <div className="grid grid-cols-4 gap-5 h-screen relative">
             <div className="col-span-4 lg:col-span-3 mt-5">
               {/* create the feed */}
+              <div className="hidden md:block">
+                <PostSection
+                  showImage={showImage}
+                  setShowImage={setShowImage}
+                  differentButtonsForFeed={differentButtonsForFeed}
+                  setImage={setImage}
+                  setShowAddPost={setShowAddPost}
+                />
+              </div>
               <div className=" rounded-md  w-full flex flex-col gap-2 mt-5">
                 {
                   // here we will map the feed
