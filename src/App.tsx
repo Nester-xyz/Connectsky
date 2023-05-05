@@ -16,7 +16,7 @@ import { IoNotifications } from "react-icons/io5";
 import WillComeSoon from "./components/PageComponents/WillComeSoon";
 
 // Defining type for active page check, with limited values
-export type activePageCheck = "feed" | "search" | "notification" | "setting";
+export type activePageCheck = "Feed" | "Search" | "Notifications" | "Setting";
 // this contains the actual links which will be made into the buttons
 
 export const links: linksType[] = [
@@ -26,18 +26,18 @@ export const links: linksType[] = [
     icon: <BsPencilSquare />,
   },
   {
-    linkName: "search",
+    linkName: "Search",
     links: "/search",
     icon: <AiOutlineSearch />,
   },
   {
-    linkName: "notification",
+    linkName: "Notifications",
     links: "/notification",
     icon: <IoNotifications />,
   },
   // replace the icon with a seperate compoenent wohich only returns an profile picure
   {
-    linkName: "settings",
+    linkName: "Settings",
     links: "/search",
     icon: <BsFillGearFill />,
   },
@@ -45,7 +45,7 @@ export const links: linksType[] = [
 
 function App() {
   // State to manage the currently active page of the application
-  const [activePage, setActivePage] = useState<activePageCheck>("feed");
+  const [activePage, setActivePage] = useState<activePageCheck>("Feed");
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<Uint8Array | null>(null);

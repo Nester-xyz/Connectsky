@@ -24,7 +24,7 @@ const BottomBar = ({
   return (
     <div className="flex justify-evenly items-center h-16 border-t border-slate-200 bg-white">
       {links.map((link, index) => {
-        return link.linkName !== "notification" ? (
+        return link.linkName !== "Notifications" ? (
           <div
             key={index}
             onClick={() => {

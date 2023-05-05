@@ -26,7 +26,7 @@ const Feed = () => {
       name: "Media",
       icon: undefined,
       action: () => {
-        setShowImage((prev) => !prev);
+
         fileRef.current?.click();
       },
     },
