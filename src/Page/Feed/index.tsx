@@ -177,7 +177,7 @@ const Feed = () => {
               <div className=" rounded-md  w-full flex flex-col gap-2 mt-5">
                 {
                   // here we will map the feed
-                  feedData.map((item: Item, index) => {
+                  feedData.map((item: dataGotFromApi, index) => {
                     if (index === feedData.length - 1) {
                       return (
                         <div ref={lastElementRef} key={index}>

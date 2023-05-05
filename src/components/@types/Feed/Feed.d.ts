@@ -28,19 +28,19 @@ export type differentButtonsForFeed = differentButtonsForFeedProps[];
 
 export type dataGotFromApi = {
   author: {
-    displayName: string;
-    avatar: string;
+    displayName: any;
+    avatar: any;
   };
-  comments: number;
-  likes: number;
+  likes: any;
+  comments: any;
   caption: {
-    text: string;
+    text: any;
   };
   image: {
     embed: {
       images: {
         thumb: any;
-      };
+      }[];
     };
   };
 };
