@@ -11,62 +11,14 @@ import {
 } from "@atproto/api";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
-//  Props = {
-//   profileImg?: string;
-//   author: string;
-//   caption?: string;
-//   image?: string;
-//   likes: number;
-//   comments: number;
-// };
-interface Author {
-  displayName: string;
-  avatar: string;
-}
 
-interface Caption {
-  text: string;
-}
-
-interface Image {
-  thumb: string;
-}
-
-interface Embed {
-  images: Image[];
-}
-
-interface ImageObject {
-  embed: Embed;
-}
-
-interface Item {
-  author: Author;
-  comments: number;
-  likes: number;
-  caption: Caption;
-  image: ImageObject;
-}
-
-// const feedOptionsButtons = [
-//   {
-//     name: "For you",
-//     filter: "forYou",
-//     icon: undefined,
-//   },
-//   {
-//     name: "Following",
-//     filter: "following",
-//     icon: undefined,
-//   },
-// ];
-
+import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 // the component begins here
 const Feed = () => {
   const [showAddPost, setShowAddPost] = useState(false);
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [feedData, setFeedData] = useState<Item[]>([]);
+  const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
   const [image, setImage] = useState<BlobRef | null>(null);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
   const { postText, setPostText, fileRef, uploadedFile } =
@@ -139,7 +91,7 @@ const Feed = () => {
     console.log(data);
     if (data.cursor == null) return;
     setCursor(data.cursor);
-    const mappedData: Item[] = data.feed.map((feed: any) => {
+    const mappedData: dataGotFromApi[] = data.feed.map((feed: any) => {
       // console.log(feed);
       const images =
         feed.post.embed && "images" in feed.post.embed

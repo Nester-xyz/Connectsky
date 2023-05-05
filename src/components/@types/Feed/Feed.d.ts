@@ -25,3 +25,22 @@ export type fieldDataProps = {
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
+
+export type dataGotFromApi = {
+  author: {
+    displayName: string;
+    avatar: string;
+  };
+  comments: number;
+  likes: number;
+  caption: {
+    text: string;
+  };
+  image: {
+    embed: {
+      images: {
+        thumb: any;
+      };
+    };
+  };
+};
