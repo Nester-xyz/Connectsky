@@ -51,8 +51,12 @@ const Notification = () => {
   const observer = new IntersectionObserver(observerCallback, {
     threshold: 0.5,
   });
-
+  async function markUnread() {
+    await refreshSession();
+    await agent.updateSeenNotifications();
+  }
   useEffect(() => {
+    markUnread();
     if (!isLoading) {
       listNotifications();
       setIsLoading(true);

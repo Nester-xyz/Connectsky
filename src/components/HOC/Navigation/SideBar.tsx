@@ -43,7 +43,7 @@ const SideBar = ({ activePage, setActivePage, notiCount }: SideBarProps) => {
             className="relative bg-yellow-300 w-full"
           >
             {/* Badge */}
-            {notiCount.valueOf() > 0 && (
+            {(notiCount.valueOf() > 0 && link.linkName !== "Notifications") && (
               <span className="absolute flex items-center justify-center top-0 right-0 w-4 h-4 z-50 bg-blue-500 text-white rounded-full p-0 text-xs">
                 {notiCount.toString()}
               </span>
