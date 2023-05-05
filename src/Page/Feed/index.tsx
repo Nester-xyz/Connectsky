@@ -72,9 +72,9 @@ const Feed = () => {
       limit: 20,
       cursor: cursor,
     });
-    console.log(data);
     if (data.cursor == null) return;
     setCursor(data.cursor);
+    console.log(data);
     const mappedData: dataGotFromApi[] = data.feed.map((feed: any) => {
       // console.log(feed);
       const images =
@@ -90,6 +90,8 @@ const Feed = () => {
         },
         likes: feed.post.likeCount,
         comments: feed.post.replyCount,
+        uri: feed.post.uri,
+        cid: feed.post.cid,
         caption: {
           text:
             feed.post.record && "text" in feed.post.record
@@ -176,6 +178,8 @@ const Feed = () => {
                             caption={item.caption.text}
                             image={item.image.embed.images[0].thumb}
                             profileImg={item.author.avatar}
+                            uri={item.uri}
+                            cid={item.cid}
                           />
                         </div>
                       );
@@ -189,6 +193,8 @@ const Feed = () => {
                             caption={item.caption.text}
                             image={item.image.embed.images[0].thumb}
                             profileImg={item.author.avatar}
+                            uri={item.uri}
+                            cid={item.cid}
                           />
                         </div>
                       );

@@ -22,6 +22,8 @@ export type fieldDataProps = {
   image?: string;
   likes: number;
   comments: number;
+  uri: string;
+  cid: string;
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
@@ -36,6 +38,8 @@ export type dataGotFromApi = {
   caption: {
     text: any;
   };
+  uri: any;
+  cid: any;
   image: {
     embed: {
       images: {

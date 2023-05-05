@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { CiShare1 } from "react-icons/ci";
 import { BiRepost } from "react-icons/bi";
+import { agent, refreshSession } from "../../../utils";
 
 // just a random Image I grabbed from the internet to show when no image is provided
 const userImage =
@@ -17,9 +18,30 @@ const PostCard = ({
   caption,
   image,
   profileImg,
+  uri,
+  cid
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes);
+  async function getPostLiked() {
 
+
+    if (like) {
+      setLike(!like); setLikeCount((prev) => prev - 1)
+      await refreshSession();
+      const data = await agent.deleteLike(uri);
+      console.log(data);
+      console.log(`Unliked ${data}`)
+      //unlike
+    } else {
+      setLike(!like); setLikeCount((prev) => prev + 1)
+      await refreshSession();
+      const data = await agent.like(uri, cid);
+      console.log(data);
+      console.log(`liked ${data}`)
+      //like
+    }
+  }
   return (
     <div className="w-full bg-white p-5 rounded-sm border-b border-slate-200">
       <div className="flex">
@@ -76,16 +98,16 @@ const PostCard = ({
           <div className="flex items-center gap-1">
             {like ? (
               <AiFillHeart
-                onClick={() => setLike(!like)}
+                onClick={getPostLiked}
                 className="text-red-500 cursor-pointer"
               />
             ) : (
               <AiOutlineHeart
-                onClick={() => setLike(!like)}
+                onClick={getPostLiked}
                 className="cursor-pointer"
               />
             )}
-            <p className="text-sm">{likes}</p>
+            <p className="text-sm">{likeCount}</p>
           </div>
         </div>
       </div>
