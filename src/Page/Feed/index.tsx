@@ -145,7 +145,7 @@ const Feed = () => {
       ) : (
         <div className="w-full h-full">
           <button
-            className=":hidden z-50 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white"
+            className="md:hidden z-50 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white"
             onClick={() => setShowAddPost(true)}
           >
             +
@@ -161,7 +161,7 @@ const Feed = () => {
             />
           </div>
           <div className="grid grid-cols-4 gap-5 h-screen relative">
-            <div className="col-span-4 md:col-span-3 mt-5">
+            <div className="col-span-4 lg:col-span-3 mt-5">
               {/* create the feed */}
               <div className=" rounded-md  w-full flex flex-col gap-2 mt-5">
                 {
@@ -206,7 +206,7 @@ const Feed = () => {
                 )}
               </div>
             </div>
-            <div className="bg-slate-50 hidden md:block col-span-1 sticky h-full top-5"></div>
+            <div className="bg-slate-50 hidden lg:block col-span-1 sticky h-full top-5"></div>
           </div>
         </div>
       )}
