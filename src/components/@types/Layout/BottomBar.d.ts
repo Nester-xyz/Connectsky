@@ -7,4 +7,5 @@ export type linksType = {
 export type BottomBarProps = {
   activePage: string;
   setActivePage: React.Dispatch<React.SetStateAction<activePageCheck>>;
+  notiCount: Number;
 };

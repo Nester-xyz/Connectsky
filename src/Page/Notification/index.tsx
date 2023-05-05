@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import NotificationCard from "../../components/PageComponents/Notification/NotificationCard";
-import { BskyAgent, AtpSessionData, AtpSessionEvent } from "@atproto/api";
 import NotificationLoader from "../../components/PageComponents/Notification/NotificationLoader";
-
-// const MyBulletListLoader = () => <BulletList />;
+import { agent, refreshSession } from "../../utils";
 
 interface NotificationItem {
   image: string;
@@ -18,21 +16,9 @@ const Notification = () => {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
-  const agent = new BskyAgent({
-    service: "https://bsky.social",
-    persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-      console.log("first");
-      const sessData = JSON.stringify(sess);
-      localStorage.setItem("sess", sessData);
-    },
-  });
 
   async function listNotifications() {
-    const sessData = localStorage.getItem("sess");
-    if (sessData !== null) {
-      const sessParse = JSON.parse(sessData);
-      await agent.resumeSession(sessParse);
-    }
+    await refreshSession();
     const { data } = await agent.listNotifications({
       limit: 20,
       cursor: cursor,
