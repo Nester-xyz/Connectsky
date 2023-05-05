@@ -21,7 +21,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import WillComeSoon from "./components/PageComponents/WillComeSoon";
 
 // Defining type for active page check, with limited values
-export type activePageCheck = "Feed" | "search" | "notification" | "setting";
+export type activePageCheck = "Feed" | "Search" | "Notifications" | "Setting";
 // this contains the actual links which will be made into the buttons
 
 export const links: linksType[] = [
@@ -32,20 +32,20 @@ export const links: linksType[] = [
     activeIcon: <HiPencilSquare />,
   },
   {
-    linkName: "search",
+    linkName: "Search",
     links: "/search",
     icon: <IoSearchOutline />,
     activeIcon: <IoSearch />,
   },
   {
-    linkName: "notification",
+    linkName: "Notifications",
     links: "/notification",
     icon: <IoMdNotificationsOutline />,
     activeIcon: <IoMdNotifications />,
   },
   // replace the icon with a seperate compoenent wohich only returns an profile picure
   {
-    linkName: "settings",
+    linkName: "Settings",
     links: "/search",
     icon: <IoSettingsOutline />,
     activeIcon: <IoSettings />,

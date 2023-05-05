@@ -26,7 +26,11 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
   }
   useEffect(() => {
     getUnreadNotifications();
-  }, []);
+    if (activePage == "Notifications") {
+      setNotiCount(0);
+      console.log("count 0")
+    }
+  }, [activePage]);
 
   return (
     <div className="flex flex-col justify-between h-screen overflow-hidden bg-gray">

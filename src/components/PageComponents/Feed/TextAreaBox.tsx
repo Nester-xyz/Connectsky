@@ -5,9 +5,10 @@ import { useDebounce } from "use-debounce";
 
 type Props = {
   showImage: boolean;
+  imgUpload: string;
 };
 
-const TextAreaBox = ({ showImage }: Props) => {
+const TextAreaBox = ({ showImage, imgUpload }: Props) => {
   const { postText, setPostText } = useContext(appContext);
 
   // this is just a local declaration. It will change in the future
@@ -33,7 +34,9 @@ const TextAreaBox = ({ showImage }: Props) => {
         value={postTextLocal}
       ></textarea>
       {showImage && (
-        <div className="border w-40 h-40 overflow-x-hidden items-center"></div>
+        <div className="border w-40 h-full overflow-hidden items-center">
+          <img src={imgUpload} alt="broken" className='object-contain w-40' />
+        </div>
       )}
     </div>
   );

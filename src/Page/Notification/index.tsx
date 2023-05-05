@@ -35,7 +35,7 @@ const Notification = () => {
           title: notifications.reason, // You should map this value from the API response too.
           description: notifications.author.displayName,
           indexedAt: notifications.indexedAt,
-          reply: notifications.record?.text ? notifications.record.text : ""
+          reply: notifications.record?.text ? notifications.record.text : "",
         };
       }
     );
@@ -51,8 +51,12 @@ const Notification = () => {
   const observer = new IntersectionObserver(observerCallback, {
     threshold: 0.5,
   });
-
+  async function markUnread() {
+    await refreshSession();
+    await agent.updateSeenNotifications();
+  }
   useEffect(() => {
+    markUnread();
     if (!isLoading) {
       listNotifications();
       setIsLoading(true);
@@ -69,7 +73,7 @@ const Notification = () => {
   }, [isLoading, observer]);
 
   return (
-    <div className="p-5">
+    <div className="w-full p-5">
       <h1 className="text-3xl border-b-2 pb-4 border-slate-300">
         Notifications
       </h1>

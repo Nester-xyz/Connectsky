@@ -1,15 +1,9 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { appContext } from "../../../context/appContext";
-import {
-  BskyAgent,
-  AtpSessionData,
-  AtpSessionEvent,
-  AppBskyEmbedImages,
-  BlobRef,
-} from "@atproto/api";
+import { BlobRef } from "@atproto/api";
 import { readFileAsArrayBuffer } from "../../../utils";
 import TextAreaBox from "./TextAreaBox";
-
+import { agent, refreshSession } from "../../../utils";
 type differentButtonsForFeedProps = {
   name: string;
   icon: JSX.Element | undefined;
@@ -20,7 +14,7 @@ type Props = {
   showImage: boolean;
   setShowImage: React.Dispatch<React.SetStateAction<boolean>>;
   differentButtonsForFeed: differentButtonsForFeedProps[];
-  setImage: (param: BlobRef) => void;
+  setImage: React.Dispatch<React.SetStateAction<BlobRef | null>>;
   setShowAddPost: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -32,20 +26,19 @@ const PostSection: React.FC<Props> = ({
   setImage,
   setShowAddPost,
 }) => {
-  const { postText, setPostText, fileRef, setUploadedFile, uploadedFile } =
+  const { setPostText, fileRef, setUploadedFile, uploadedFile } =
     useContext(appContext);
+  const [imgUpload, setImgUpload] = useState<string>("");
 
-  const handlePost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPostText(e.target.value);
-  };
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
-    setShowImage((prev) => !prev);
-    console.log(files);
+    setShowImage(true);
     if (files && files.length > 0) {
       const file = files[0];
+      const localImageURL = URL.createObjectURL(file);
+      setImgUpload(localImageURL);
       console.log(file.size);
       const fileArrrayBuffer = await readFileAsArrayBuffer(file);
       const fileUint8Array = new Uint8Array(fileArrrayBuffer);
@@ -53,25 +46,12 @@ const PostSection: React.FC<Props> = ({
     }
   };
 
-  const agent = new BskyAgent({
-    service: "https://bsky.social",
-    persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-      console.log("first");
-      const sessData = JSON.stringify(sess);
-      localStorage.setItem("sess", sessData);
-    },
-  });
-
   useEffect(() => {
     const processUploadedFile = async () => {
       if (uploadedFile) {
         console.log(`Uploaded file data is ${uploadedFile}`);
         try {
-          const sessData = localStorage.getItem("sess");
-          if (sessData !== null) {
-            const sessParse = JSON.parse(sessData);
-            await agent.resumeSession(sessParse);
-          }
+          await refreshSession();
           if (uploadedFile) {
             const resp = await agent.uploadBlob(uploadedFile, {
               encoding: "image/jpeg",
@@ -94,12 +74,12 @@ const PostSection: React.FC<Props> = ({
       <div className="w-full">
         <button
           className="px-5 py-1 my-4 border block md:hidden "
-          onClick={() => setShowAddPost(false)}
+          onClick={() => { setShowAddPost(false); setShowImage(false); setImage(null); setPostText(""); setUploadedFile(null), setImgUpload("") }}
         >
-          &lt; go back
+          &lt; Go Back
         </button>
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
-          <TextAreaBox showImage={showImage} />
+          <TextAreaBox showImage={showImage} imgUpload={imgUpload} />
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">
           {differentButtonsForFeed.map((item, index) => {
