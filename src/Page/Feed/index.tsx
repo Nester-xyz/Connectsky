@@ -47,7 +47,7 @@ const Feed = () => {
                 images: [
                   {
                     image,
-                    alt: "UnNamed",
+                    alt: "Posted via Connectsy!",
                   },
                 ],
               },
@@ -144,7 +144,7 @@ const Feed = () => {
       ) : (
         <div className="w-full h-full">
           <button
-            className=":hidden z-50 fixed bottom-20 right-5 w-14 h-14 bg-blue-500 rounded-full text-2xl flex items-center justify-center text-white"
+            className=":hidden z-50 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white"
             onClick={() => setShowAddPost(true)}
           >
             +
