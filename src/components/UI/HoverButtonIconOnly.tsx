@@ -18,10 +18,8 @@ const HoverButtonIconOnly = ({
     <Link to={link}>
       <button
         onClick={action}
-        className={`absolute transition-all duration-500 origin-center text-3xl p-4 -my-2 bg-white ${
-          checkOne === checkTwo
-            ? "scale-100 -translate-y-5 rounded-full "
-            : "scale-75"
+        className={`absolute text-xl  p-2 bg-white  ${
+          checkOne === checkTwo ? "border-2 rounded-full " : "border-none"
         }`}
       >
         {icon}
@@ -30,10 +28,8 @@ const HoverButtonIconOnly = ({
   ) : (
     <button
       onClick={action}
-      className={`absolute transition-all duration-500 origin-center text-3xl p-4 -my-2 bg-white ${
-        checkOne === checkTwo
-          ? "scale-100 -translate-y-5 rounded-full "
-          : "scale-75"
+      className={`absolute text-xl  bg-white  ${
+        checkOne === checkTwo ? "border-2 rounded-full " : "border-none"
       }`}
     >
       {icon}

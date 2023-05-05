@@ -1,6 +1,12 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { appContext } from "../../../context/appContext";
-import { BskyAgent, AtpSessionData, AtpSessionEvent, AppBskyEmbedImages, BlobRef } from "@atproto/api";
+import {
+  BskyAgent,
+  AtpSessionData,
+  AtpSessionEvent,
+  AppBskyEmbedImages,
+  BlobRef,
+} from "@atproto/api";
 import { readFileAsArrayBuffer } from "../../../utils";
 import TextAreaBox from "./TextAreaBox";
 
@@ -13,18 +19,26 @@ type differentButtonsForFeedProps = {
 type Props = {
   differentButtonsForFeed: differentButtonsForFeedProps[];
   setImage: (param: BlobRef) => void;
+  setShowAddPost: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const PostSection: React.FC<Props> = ({ differentButtonsForFeed = [], setImage }) => {
-  const { postText, setPostText, fileRef, setUploadedFile, uploadedFile } = useContext(appContext);
-
+// the component begins here
+const PostSection: React.FC<Props> = ({
+  differentButtonsForFeed = [],
+  setImage,
+  setShowAddPost,
+}) => {
+  const { postText, setPostText, fileRef, setUploadedFile, uploadedFile } =
+    useContext(appContext);
 
   const handlePost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPostText(e.target.value)
-  }
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPostText(e.target.value);
+  };
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
-    console.log(files)
+    console.log(files);
     if (files && files.length > 0) {
       const file = files[0];
       console.log(file.size);
@@ -38,8 +52,8 @@ const PostSection: React.FC<Props> = ({ differentButtonsForFeed = [], setImage }
     service: "https://bsky.social",
     persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
       console.log("first");
-      const sessData = JSON.stringify(sess)
-      localStorage.setItem("sess", sessData)
+      const sessData = JSON.stringify(sess);
+      localStorage.setItem("sess", sessData);
     },
   });
 
@@ -67,12 +81,18 @@ const PostSection: React.FC<Props> = ({ differentButtonsForFeed = [], setImage }
           console.log(error);
         }
       }
-    }
+    };
     processUploadedFile();
   }, [uploadedFile]);
   return (
     <div className="">
       <div className="w-full">
+        <button
+          className="px-5 py-1 my-4 border"
+          onClick={() => setShowAddPost(false)}
+        >
+          &lt; go back
+        </button>
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
           <TextAreaBox />
         </div>
@@ -83,7 +103,12 @@ const PostSection: React.FC<Props> = ({ differentButtonsForFeed = [], setImage }
                 key={index}
                 className="bg-white border rounded-md border-gray-300 flex-1 md:w-48 min-w-[100px]"
               >
-                <input type="file" ref={fileRef} onChange={handleFileChange} hidden />
+                <input
+                  type="file"
+                  ref={fileRef}
+                  onChange={handleFileChange}
+                  hidden
+                />
                 <button
                   className="flex gap-2 items-center justify-center w-full py-2"
                   onClick={item.action}

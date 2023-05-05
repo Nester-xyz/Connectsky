@@ -61,8 +61,9 @@ const feedOptionsButtons = [
   },
 ];
 
+// the component begins here
 const Feed = () => {
-  const [filterVariable, setFilterVariable] = useState<string>("forYou");
+  const [showAddPost, setShowAddPost] = useState(false);
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<Item[]>([]);
@@ -91,15 +92,16 @@ const Feed = () => {
           }
           if (image !== null && postText.length > 0) {
             const res = await agent.post({
-              text: postText, embed: {
+              text: postText,
+              embed: {
                 $type: "app.bsky.embed.images",
                 images: [
                   {
                     image,
-                    alt: "UnNamed"
-                  }
-                ]
-              }
+                    alt: "UnNamed",
+                  },
+                ],
+              },
             });
           } else {
             if (postText.length > 0) {
@@ -195,61 +197,72 @@ const Feed = () => {
   }, [isLoading, observer]);
   return (
     <div className=" w-full px-5">
-      {/* create the top - post option */}
+      {showAddPost ? (
+        <PostSection
+          differentButtonsForFeed={differentButtonsForFeed}
+          setImage={setImage}
+          setShowAddPost={setShowAddPost}
+        />
+      ) : (
+        <div className="w-full h-full">
+          <button
+            className="z-50 fixed bottom-20 right-5 w-10 h-10 bg-blue-500 rounded-full text-xl flex items-center justify-center text-white"
+            onClick={() => setShowAddPost(true)}
+          >
+            +
+          </button>
 
-      <div className="grid grid-cols-4 gap-5 h-screen relative">
-        <div className="col-span-4 md:col-span-3 mt-5">
-          <PostSection
-            differentButtonsForFeed={differentButtonsForFeed}
-            setImage={setImage}
-          />
-
-          {/* create the feed */}
-          <div className=" rounded-md  w-full flex flex-col gap-5 mt-5">
-            {
-              // here we will map the feed
-              feedData.map((item: Item, index) => {
-                if (index === feedData.length - 1) {
-                  return (
-                    <div ref={lastElementRef} key={index}>
-                      <PostCard
-                        author={item.author.displayName}
-                        comments={item.comments}
-                        likes={item.likes}
-                        caption={item.caption.text}
-                        image={item.image.embed.images[0].thumb}
-                        profileImg={item.author.avatar}
-                      />
-                    </div>
-                  );
-                } else {
-                  return (
-                    <div key={index}>
-                      <PostCard
-                        author={item.author.displayName}
-                        comments={item.comments}
-                        likes={item.likes}
-                        caption={item.caption.text}
-                        image={item.image.embed.images[0].thumb}
-                        profileImg={item.author.avatar}
-                      />
-                    </div>
-                  );
+          <div className="grid grid-cols-4 gap-5 h-screen relative">
+            <div className="col-span-4 md:col-span-3 mt-5">
+              {/* create the feed */}
+              <div className=" rounded-md  w-full flex flex-col gap-5 mt-5">
+                {
+                  // here we will map the feed
+                  feedData.map((item: Item, index) => {
+                    if (index === feedData.length - 1) {
+                      return (
+                        <div ref={lastElementRef} key={index}>
+                          <PostCard
+                            author={item.author.displayName}
+                            comments={item.comments}
+                            likes={item.likes}
+                            caption={item.caption.text}
+                            image={item.image.embed.images[0].thumb}
+                            profileImg={item.author.avatar}
+                          />
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div key={index}>
+                          <PostCard
+                            author={item.author.displayName}
+                            comments={item.comments}
+                            likes={item.likes}
+                            caption={item.caption.text}
+                            image={item.image.embed.images[0].thumb}
+                            profileImg={item.author.avatar}
+                          />
+                        </div>
+                      );
+                    }
+                  })
                 }
-              })
-            }
-            {isLoading ? (
-              <>
-                {" "}
-                <PostLoader /> <PostLoader />
-              </>
-            ) : (
-              ""
-            )}
+                {isLoading ? (
+                  <>
+                    {" "}
+                    <PostLoader /> <PostLoader />
+                  </>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+            <div className="bg-slate-50 hidden md:block col-span-1 sticky h-full top-5"></div>
           </div>
         </div>
-        <div className="bg-slate-50 hidden md:block col-span-1 sticky h-full top-5"></div>
-      </div>
+      )}
+      {/* create the top - post option */}
     </div>
   );
 };
