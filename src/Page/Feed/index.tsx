@@ -16,6 +16,8 @@ import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 // the component begins here
 const Feed = () => {
   const [showAddPost, setShowAddPost] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+  console.log(showImage);
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
@@ -29,6 +31,7 @@ const Feed = () => {
       name: "Media",
       icon: undefined,
       action: () => {
+        setShowImage((prev) => !prev);
         fileRef.current?.click();
       },
     },
@@ -151,6 +154,8 @@ const Feed = () => {
     <div className=" w-full px-5">
       {showAddPost ? (
         <PostSection
+          showImage={showImage}
+          setShowImage={setShowImage}
           differentButtonsForFeed={differentButtonsForFeed}
           setImage={setImage}
           setShowAddPost={setShowAddPost}
@@ -166,6 +171,8 @@ const Feed = () => {
 
           <div className="hidden md:block">
             <PostSection
+              showImage={showImage}
+              setShowImage={setShowImage}
               differentButtonsForFeed={differentButtonsForFeed}
               setImage={setImage}
               setShowAddPost={setShowAddPost}

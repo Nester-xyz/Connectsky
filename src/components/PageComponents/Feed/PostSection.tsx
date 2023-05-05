@@ -17,6 +17,8 @@ type differentButtonsForFeedProps = {
 };
 
 type Props = {
+  showImage: boolean;
+  setShowImage: React.Dispatch<React.SetStateAction<boolean>>;
   differentButtonsForFeed: differentButtonsForFeedProps[];
   setImage: (param: BlobRef) => void;
   setShowAddPost: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +26,8 @@ type Props = {
 
 // the component begins here
 const PostSection: React.FC<Props> = ({
+  showImage,
+  setShowImage,
   differentButtonsForFeed = [],
   setImage,
   setShowAddPost,
@@ -38,6 +42,7 @@ const PostSection: React.FC<Props> = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
+    setShowImage((prev) => !prev);
     console.log(files);
     if (files && files.length > 0) {
       const file = files[0];
@@ -94,7 +99,7 @@ const PostSection: React.FC<Props> = ({
           &lt; go back
         </button>
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
-          <TextAreaBox />
+          <TextAreaBox showImage={showImage} />
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">
           {differentButtonsForFeed.map((item, index) => {
