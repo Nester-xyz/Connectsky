@@ -28,7 +28,7 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
     getUnreadNotifications();
     if (activePage == "Notifications") {
       setNotiCount(0);
-      console.log("count 0")
+      console.log("count 0");
     }
   }, [activePage]);
 
@@ -37,12 +37,14 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
       <div className="grid grid-cols-5 md:gap-40 lg:gap-0 h-full overflow-x-hidden">
         {/* the side bar component only comes to view when the display is sent over 768px */}
 
-        <div className="hidden md:block col-span-1 top-0 min-w-[200px] sticky ">
-          <SideBar
-            activePage={activePage}
-            setActivePage={setActivePage}
-            notiCount={notiCount}
-          />
+        <div className="hidden md:block col-span-1 h-screen top-0 min-w-[200px] sticky bg-green-400">
+          <div className="bg-blue-300 h-full">
+            <SideBar
+              activePage={activePage}
+              setActivePage={setActivePage}
+              notiCount={notiCount}
+            />
+          </div>
         </div>
         <div className="w-full col-span-5 md:col-span-4">{children}</div>
       </div>
