@@ -13,27 +13,53 @@ import HoverButton from "../../UI/HoverButton";
 import { links } from "../../../App";
 
 // the components code begins from here
-const SideBar = ({ activePage, setActivePage }: SideBarProps) => {
+const SideBar = ({ activePage, setActivePage, notiCount }: SideBarProps) => {
   return (
     <div className="flex flex-col items-start gap-14 py-7 px-3 h-screen w-full bg-neutral-300">
       {links.map((link, index) => {
         return (
-          <div
-            key={index}
-            onClick={() => {
-              setActivePage(link.linkName);
-            }}
-            className="relative bg-yellow-300 w-full"
-          >
-            {/* since this button doesn't do anything yet I haven't added anything to the action */}
-            <HoverButton
-              link={link.links}
-              checkOne={activePage}
-              checkTwo={link.linkName}
-              icon={link.icon}
-              text={link.linkName}
-            />
-          </div>
+          link.linkName !== "notification" ?
+            (<div
+              key={index}
+              onClick={() => {
+                setActivePage(link.linkName);
+              }}
+              className="relative bg-yellow-300 w-full"
+            >
+              {/* since this button doesn't do anything yet I haven't added anything to the action */}
+              <HoverButton
+                link={link.links}
+                checkOne={activePage}
+                checkTwo={link.linkName}
+                icon={link.icon}
+                text={link.linkName}
+              />
+            </div>) : (
+
+              <div
+                key={index}
+                onClick={() => {
+                  setActivePage(link.linkName);
+                }}
+                className="relative bg-yellow-300 w-full"
+              >
+                {/* Badge */}
+                {notiCount.valueOf() > 0 && (
+                  <span className="absolute top-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs">
+                    {notiCount.toString()}
+                  </span>
+                )}
+
+                {/* Button */}
+                <HoverButton
+                  link={link.links}
+                  checkOne={activePage}
+                  checkTwo={link.linkName}
+                  icon={link.icon}
+                  text={link.linkName}
+                />
+              </div>
+            )
         );
       })}
     </div>

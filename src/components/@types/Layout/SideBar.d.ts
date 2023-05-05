@@ -7,4 +7,5 @@ export type linksType = {
 export type SideBarProps = {
   activePage: string;
   setActivePage: React.Dispatch<React.SetStateAction<activePageCheck>>;
+  notiCount: Number;
 };

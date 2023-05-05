@@ -1,4 +1,5 @@
 import moment from "moment";
+import { BskyAgent, AtpSessionEvent, AtpSessionData } from "@atproto/api";
 export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -22,5 +23,22 @@ export function formatDateAgo(date: Date) {
     return `${Math.floor(diff.asMinutes())}m ago`;
   } else {
     return "just now";
+  }
+}
+
+export const agent = new BskyAgent({
+  service: "https://bsky.social",
+  persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
+    // console.log("first");
+    const sessData = JSON.stringify(sess);
+    localStorage.setItem("sess", sessData);
+  },
+});
+
+export async function refreshSession() {
+  const sessData = localStorage.getItem("sess");
+  if (sessData !== null) {
+    const sessParse = JSON.parse(sessData);
+    await agent.resumeSession(sessParse);
   }
 }

@@ -1,16 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-// import { dummyData } from "./dummyData";
 import PostSection from "../../components/PageComponents/Feed/PostSection";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
-import {
-  BskyAgent,
-  AtpSessionData,
-  AtpSessionEvent,
-  AppBskyEmbedImages,
-  BlobRef,
-} from "@atproto/api";
+import { BlobRef } from "@atproto/api";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
+import { agent, refreshSession } from "../../utils";
 //  Props = {
 //   profileImg?: string;
 //   author: string;
@@ -117,21 +111,8 @@ const Feed = () => {
     },
   ];
 
-  const agent = new BskyAgent({
-    service: "https://bsky.social",
-    persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-      // console.log("first");
-      const sessData = JSON.stringify(sess);
-      localStorage.setItem("sess", sessData);
-    },
-  });
-
   async function followingFeed() {
-    const sessData = localStorage.getItem("sess");
-    if (sessData !== null) {
-      const sessParse = JSON.parse(sessData);
-      await agent.resumeSession(sessParse);
-    }
+    await refreshSession();
     const { data } = await agent.getTimeline({
       limit: 20,
       cursor: cursor,
