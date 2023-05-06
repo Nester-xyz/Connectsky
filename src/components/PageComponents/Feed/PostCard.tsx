@@ -3,7 +3,6 @@ import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
-import { CiShare1 } from "react-icons/ci";
 import { BiRepost } from "react-icons/bi";
 import { agent, refreshSession } from "../../../utils";
 
@@ -19,29 +18,58 @@ const PostCard = ({
   image,
   profileImg,
   uri,
-  cid
+  cid,
+  repostCount
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
-  async function getPostLiked() {
-
-
-    if (like) {
-      setLike(!like); setLikeCount((prev) => prev - 1)
+  const [repostCnt, setRepostCnt] = useState(repostCount)
+  async function handleRepost() {
+    try {
       await refreshSession();
-      const data = await agent.deleteLike(uri);
-      console.log(data);
-      console.log(`Unliked ${data}`)
-      //unlike
-    } else {
-      setLike(!like); setLikeCount((prev) => prev + 1)
-      await refreshSession();
-      const data = await agent.like(uri, cid);
-      console.log(data);
-      console.log(`liked ${data}`)
-      //like
+      await agent.repost(uri, cid);
+      setRepostCnt((prev) => prev + 1);
+    } catch (error) {
+      console.log(error);
     }
   }
+  async function getPostLiked() {
+    try {
+
+      await refreshSession();
+      const did = localStorage.getItem("did");
+      if (like) {
+        setLike(!like); setLikeCount((prev) => prev - 1)
+        const res = await agent.like(uri, cid);
+        await agent.deleteLike(res.uri);
+      } else {
+        setLike(!like); setLikeCount((prev) => prev + 1)
+        await agent.like(uri, cid);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  function isAvailable(handle: string) {
+    const localHandle = localStorage.getItem("handle");
+    return handle === localHandle;
+  }
+
+  async function checkAlreadyLiked() {
+    try {
+
+      const { data } = await agent.getLikes({ uri, cid });
+      const alreadyLiked = data.likes.some((item) => isAvailable(item.actor.handle))
+      setLike(alreadyLiked);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    checkAlreadyLiked();
+  }, [cid])
+
   return (
     <div className="w-full bg-white p-5 rounded-sm border-b border-slate-200">
       <div className="flex">
@@ -92,8 +120,8 @@ const PostCard = ({
             <p className="text-sm">{comments}</p>
           </div>
           <div className="flex items-center text-3xl gap-1">
-            <BiRepost />
-            <p className="text-sm">0</p>
+            <BiRepost className="cursor-pointer" onClick={handleRepost} />
+            <p className="text-sm">{repostCnt}</p>
           </div>
           <div className="flex items-center gap-1">
             {like ? (

@@ -24,6 +24,7 @@ export type fieldDataProps = {
   comments: number;
   uri: string;
   cid: string;
+  repostCount: number;
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
@@ -40,6 +41,7 @@ export type dataGotFromApi = {
   };
   uri: any;
   cid: any;
+  repostCount: number;
   image: {
     embed: {
       images: {

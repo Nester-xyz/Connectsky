@@ -92,6 +92,7 @@ const Feed = () => {
         comments: feed.post.replyCount,
         uri: feed.post.uri,
         cid: feed.post.cid,
+        repostCount: feed.post.repostCount,
         caption: {
           text:
             feed.post.record && "text" in feed.post.record
@@ -180,6 +181,7 @@ const Feed = () => {
                             profileImg={item.author.avatar}
                             uri={item.uri}
                             cid={item.cid}
+                            repostCount={item.repostCount}
                           />
                         </div>
                       );
@@ -195,6 +197,7 @@ const Feed = () => {
                             profileImg={item.author.avatar}
                             uri={item.uri}
                             cid={item.cid}
+                            repostCount={item.repostCount}
                           />
                         </div>
                       );
