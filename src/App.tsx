@@ -8,7 +8,6 @@ import "./interceptors/axios";
 import Feed from "./Page/Feed";
 import Notification from "./Page/Notification";
 import { linksType } from "./components/@types/Layout/SideBar";
-import { HiOutlinePencilSquare, HiPencilSquare } from "react-icons/hi2";
 import {
   IoNotifications,
   IoSearch,
@@ -19,17 +18,18 @@ import {
 import { IoMdNotifications } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import WillComeSoon from "./components/PageComponents/WillComeSoon";
+import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 
 // Defining type for active page check, with limited values
-export type activePageCheck = "Feed" | "Search" | "Notifications" | "Setting";
+export type activePageCheck = "Home" | "Search" | "Notifications" | "Setting";
 // this contains the actual links which will be made into the buttons
 
 export const links: linksType[] = [
   {
-    linkName: "Feed",
+    linkName: "Home",
     links: "/",
-    icon: <HiOutlinePencilSquare />,
-    activeIcon: <HiPencilSquare />,
+    icon: <AiOutlineHome />,
+    activeIcon: <AiFillHome />,
   },
   {
     linkName: "Search",
@@ -54,7 +54,7 @@ export const links: linksType[] = [
 
 function App() {
   // State to manage the currently active page of the application
-  const [activePage, setActivePage] = useState<activePageCheck>("Feed");
+  const [activePage, setActivePage] = useState<activePageCheck>("Home");
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<Uint8Array | null>(null);
