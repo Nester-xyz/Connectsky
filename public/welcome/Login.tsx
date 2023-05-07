@@ -108,11 +108,6 @@ const Login = ({
   return (
     <div className="container">
       <h1 className="login-heading">Log in to Bsky</h1>
-      {attemptedLogin
-        ? loggedInSuccess
-          ? null
-          : "Incorrect credentials!"
-        : null}
       <form id="login" onSubmit={handleLoginSubmit}>
         <div className="input-container">
           <label htmlFor="username">Username:&nbsp;</label>
@@ -139,6 +134,11 @@ const Login = ({
         </div>
         {/* <br />
         <br /> */}
+        {attemptedLogin
+        ? loggedInSuccess
+          ? null
+          : <h5 className="login-msg">Incorrect credentials!</h5>
+        : null}
         <button type="submit" disabled={loggedIn}>
           Login
         </button>

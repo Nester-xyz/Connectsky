@@ -59,7 +59,9 @@
   padding: 10px 20px;
   border-radius: 10px;
 }
-
+#login {
+  width: 100%;
+}
 .container {
   width: 30vw;
   min-width: 400px;
@@ -67,16 +69,22 @@
   background: var(--container-background-color);
   border: var(--border-color) 2px solid;
   border-radius: var(--border-radius);
-
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 80px;
+  gap: 50px;
+}
+
+.login-msg {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 20px;
 }
 
 .container .login-heading {
-  font-size: 4rem;
+  font-size: 2.5rem;
   color: var(--left-heading-color);
   text-align: center;
 }
@@ -99,12 +107,12 @@ label {
 input[type="text"],
 input[type="password"] {
   display: block;
-  width: 400px;
-  padding: 8px;
+  width: 100%;
+  padding: 16px 10px;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 20px;
   border: 1px solid #ccc;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 
 .error {
@@ -115,8 +123,8 @@ input[type="password"] {
 button[type="submit"] {
   background-color: #007bff;
   color: white;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 20px 25px;
+  border-radius: 20px;
   font-size: 16px;
   border: none;
   cursor: pointer;
