@@ -1,5 +1,5 @@
 // Importing required modules from React and React Router libraries
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Layout from "./components/HOC/Navigation/Layout";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { appContext } from "./context/appContext";
@@ -54,10 +54,18 @@ export const links: linksType[] = [
 
 function App() {
   // State to manage the currently active page of the application
-  const [activePage, setActivePage] = useState<activePageCheck>("Feed");
+  const [activePage, setActivePage] = useState<activePageCheck>(() => {
+    const storedValue = localStorage.getItem("activePage");
+    return storedValue ? (JSON.parse(storedValue) as activePageCheck) : "Feed";
+  });
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<Uint8Array | null>(null);
+
+  useEffect(() => {
+    // Update localStorage whenever activePage changes
+    localStorage.setItem("activePage", JSON.stringify(activePage));
+  }, [activePage]);
 
   return (
     <div>
