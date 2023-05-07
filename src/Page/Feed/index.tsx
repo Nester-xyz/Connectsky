@@ -17,6 +17,7 @@ const Feed = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
   const [image, setImage] = useState<BlobRef | null>(null);
+  const [submitPost, setSubmitPost] = useState(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
   const { postText, setPostText, fileRef, uploadedFile } =
     useContext(appContext);
@@ -33,6 +34,7 @@ const Feed = () => {
       name: "Post",
       icon: undefined,
       action: async () => {
+        setSubmitPost(true);
         try {
           const sessData = localStorage.getItem("sess");
           if (sessData !== null) {
@@ -59,7 +61,11 @@ const Feed = () => {
           }
           setPostText("");
           setImage(null);
+          setSubmitPost(false);
         } catch (error) {
+          setPostText("");
+          setImage(null);
+          setSubmitPost(false);
           console.log(error);
         }
       },
@@ -143,6 +149,7 @@ const Feed = () => {
           differentButtonsForFeed={differentButtonsForFeed}
           setImage={setImage}
           setShowAddPost={setShowAddPost}
+          submitPost={submitPost}
         />
       ) : (
         <div className="w-full h-full">
@@ -163,6 +170,7 @@ const Feed = () => {
                   differentButtonsForFeed={differentButtonsForFeed}
                   setImage={setImage}
                   setShowAddPost={setShowAddPost}
+                  submitPost={submitPost}
                 />
               </div>
               <div className=" rounded-md  w-full flex flex-col gap-2 mt-5">

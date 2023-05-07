@@ -16,6 +16,7 @@ type Props = {
   differentButtonsForFeed: differentButtonsForFeedProps[];
   setImage: React.Dispatch<React.SetStateAction<BlobRef | null>>;
   setShowAddPost: React.Dispatch<React.SetStateAction<boolean>>;
+  submitPost: boolean;
 };
 
 // the component begins here
@@ -25,6 +26,7 @@ const PostSection: React.FC<Props> = ({
   differentButtonsForFeed = [],
   setImage,
   setShowAddPost,
+  submitPost
 }) => {
   const { setPostText, fileRef, setUploadedFile, uploadedFile } =
     useContext(appContext);
@@ -99,7 +101,8 @@ const PostSection: React.FC<Props> = ({
                   onClick={item.action}
                 >
                   {item.icon}
-                  <span>{item.name}</span>
+
+                  <span>{(item.name === "Post" && submitPost) ? "Loading..." : item.name}</span>
                 </button>
               </div>
             );

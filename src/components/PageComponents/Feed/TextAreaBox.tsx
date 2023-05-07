@@ -21,7 +21,7 @@ const TextAreaBox = ({ showImage, imgUpload }: Props) => {
   }, [debouncedPostText]);
 
   const handlePost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPostTextLocal(e.target.value);
+    setPostText(e.target.value);
   };
 
   return (
@@ -31,7 +31,7 @@ const TextAreaBox = ({ showImage, imgUpload }: Props) => {
         id="post-textarea"
         className="w-full h-40 resize-none px-4 py-2 focus:outline-none"
         onChange={handlePost}
-        value={postTextLocal}
+        value={postText}
       ></textarea>
       {showImage && (
         <div className="border w-40 h-full overflow-hidden items-center">
