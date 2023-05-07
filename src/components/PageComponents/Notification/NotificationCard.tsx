@@ -46,7 +46,7 @@ const NotificationCard = ({
     }
   }
   return (
-    <div className="bg-white shadow-custom px-2">
+    <div className="bg-white shadow-custom rounded-xl px-2">
       <div className="flex flex-row gap-5 py-2 items-center justify-between">
         {/* left side for the image */}
         <div className="flex flex-row relative items-center">

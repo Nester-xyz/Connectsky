@@ -162,7 +162,7 @@ const Feed = () => {
                   setShowAddPost={setShowAddPost}
                 />
               </div>
-              <div className=" rounded-md  w-full flex flex-col gap-2 mt-5">
+              <div className=" rounded-xl  w-full flex flex-col gap-5 mt-5">
                 {
                   // here we will map the feed
                   feedData.map((item: dataGotFromApi, index) => {
