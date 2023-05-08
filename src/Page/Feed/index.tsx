@@ -6,7 +6,6 @@ import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
 
 import { agent, refreshSession } from "../../utils";
-
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 // the component begins here
 const Feed = () => {
@@ -54,10 +53,15 @@ const Feed = () => {
                 ],
               },
             });
+          } else if ((postText.length > 0)) {
+            await agent.post({ text: postText });
           } else {
-            if (postText.length > 0) {
-              await agent.post({ text: postText });
-            }
+            await agent.post({
+              text: "", embed: {
+                $type: "app.bsky.embed.images",
+                images: [{ image, alt: "Posted via Connectsy!" }]
+              }
+            })
           }
           setPostText("");
           setImage(null);

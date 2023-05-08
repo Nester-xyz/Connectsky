@@ -4,7 +4,8 @@ import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { BiRepost } from "react-icons/bi";
-import { agent, refreshSession } from "../../../utils";
+import { agent, handleLinks, refreshSession } from "../../../utils";
+import PostLoader from "./PostLoader";
 
 // just a random Image I grabbed from the internet to show when no image is provided
 const userImage =
@@ -25,6 +26,7 @@ const PostCard = ({
   const [likeCount, setLikeCount] = useState(likes);
   const [repostCnt, setRepostCnt] = useState(repostCount)
   const [isReposted, setIsReposted] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   async function handleRepost() {
     try {
       await refreshSession();
@@ -36,7 +38,6 @@ const PostCard = ({
   }
   async function getPostLiked() {
     try {
-
       await refreshSession();
       const did = localStorage.getItem("did");
       if (like) {
@@ -59,7 +60,6 @@ const PostCard = ({
 
   async function checkAlreadyLiked() {
     try {
-
       const { data } = await agent.getLikes({ uri, cid });
       const alreadyLiked = data.likes.some((item) => isAvailable(item.actor.handle))
       setLike(alreadyLiked);
@@ -76,20 +76,21 @@ const PostCard = ({
       console.log(error);
     }
   }
-  function handleLinks(str: string | undefined): { __html: string } | undefined {
-    const linkRegex = /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|])/gi;
 
-    if (!str) {
-      return undefined;
-    }
-
-    return { __html: str.replace(linkRegex, (match) => `<span class="break-all"><a href="${match}" class="text-indigo-600">${match}</a></span>`) };
-  }
 
   useEffect(() => {
-    checkAlreadyLiked();
-    checkAlreadyRepost();
+    async function dataFetcher() {
+      setIsFetching(true);
+      await checkAlreadyLiked();
+      await checkAlreadyRepost();
+      setIsFetching(false);
+    }
+    dataFetcher();
   }, [cid, uri])
+
+  if (isFetching) {
+    return <><PostLoader /></>
+  }
 
   return (
     <div className="w-full bg-white p-5 rounded-sm border-b border-slate-200">
@@ -114,10 +115,10 @@ const PostCard = ({
                 />
               )}
             </div>
-            <p className="text-xl">{author}</p>
+            <p className="text-xl">{author === undefined ? "Anynomous" : author}</p>
           </div>
           <div>
-            <p className="text-lg" dangerouslySetInnerHTML={handleLinks(caption)}></p>
+            <p className="text-lg " dangerouslySetInnerHTML={handleLinks(caption)}></p>
           </div>
         </div>
       </div>
