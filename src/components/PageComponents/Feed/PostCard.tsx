@@ -39,14 +39,15 @@ const PostCard = ({
   }
   async function getPostLiked() {
     try {
-      await refreshSession();
       const did = localStorage.getItem("did");
       if (like) {
         setLike(!like); setLikeCount((prev) => prev - 1)
+        await refreshSession();
         const res = await agent.like(uri, cid);
         await agent.deleteLike(res.uri);
       } else {
         setLike(!like); setLikeCount((prev) => prev + 1)
+        await refreshSession();
         await agent.like(uri, cid);
       }
     } catch (error) {
