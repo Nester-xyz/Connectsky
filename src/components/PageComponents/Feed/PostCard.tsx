@@ -39,7 +39,6 @@ const PostCard = ({
   }
   async function getPostLiked() {
     try {
-      const did = localStorage.getItem("did");
       if (like) {
         setLike(!like); setLikeCount((prev) => prev - 1)
         await refreshSession();
