@@ -32,6 +32,7 @@ const PostCard = ({
       await refreshSession();
       await agent.repost(uri, cid);
       setRepostCnt((prev) => prev + 1);
+      setIsReposted(true);
     } catch (error) {
       console.log(error);
     }
