@@ -24,6 +24,7 @@ const PostCard = ({
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [repostCnt, setRepostCnt] = useState(repostCount)
+  const [isReposted, setIsReposted] = useState(false);
   async function handleRepost() {
     try {
       await refreshSession();
@@ -66,9 +67,29 @@ const PostCard = ({
       console.log(error);
     }
   }
+  async function checkAlreadyRepost() {
+    try {
+      const { data } = await agent.getRepostedBy({ uri, cid });
+      const alreadyReposted = data.repostedBy.some((item) => isAvailable(item.handle));
+      setIsReposted(alreadyReposted);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  function handleLinks(str: string | undefined): { __html: string } | undefined {
+    const linkRegex = /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|])/gi;
+
+    if (!str) {
+      return undefined;
+    }
+
+    return { __html: str.replace(linkRegex, (match) => `<span class="break-all"><a href="${match}" class="text-indigo-600">${match}</a></span>`) };
+  }
+
   useEffect(() => {
     checkAlreadyLiked();
-  }, [cid])
+    checkAlreadyRepost();
+  }, [cid, uri])
 
   return (
     <div className="w-full bg-white p-5 rounded-sm border-b border-slate-200">
@@ -96,7 +117,7 @@ const PostCard = ({
             <p className="text-xl">{author}</p>
           </div>
           <div>
-            <p className="text-lg">{caption}</p>
+            <p className="text-lg" dangerouslySetInnerHTML={handleLinks(caption)}></p>
           </div>
         </div>
       </div>
@@ -120,7 +141,7 @@ const PostCard = ({
             <p className="text-sm">{comments}</p>
           </div>
           <div className="flex items-center text-3xl gap-1">
-            <BiRepost className="cursor-pointer" onClick={handleRepost} />
+            <BiRepost className={`cursor-pointer ${isReposted && "text-green-500"}`} onClick={handleRepost} />
             <p className="text-sm">{repostCnt}</p>
           </div>
           <div className="flex items-center gap-1">
