@@ -6,7 +6,8 @@ import { agent, refreshSession } from "../../utils";
 interface NotificationItem {
   image: string;
   title: "repost" | "follow" | "reply" | "like";
-  description: string;
+  author: string;
+  handle: string;
   indexedAt: Date;
   reply: string;
 }
@@ -33,7 +34,8 @@ const Notification = () => {
         return {
           image: notifications.author.avatar,
           title: notifications.reason, // You should map this value from the API response too.
-          description: notifications.author.displayName,
+          author: notifications.author.displayName,
+          handle: notifications.author.handle,
           indexedAt: notifications.indexedAt,
           reply: notifications.record?.text ? notifications.record.text : "",
         };
@@ -85,11 +87,12 @@ const Notification = () => {
             return (
               <div ref={lastElementRef} key={index}>
                 <NotificationCard
-                  description={item.description}
+                  author={item.author}
                   image={item.image}
                   title={item.title}
                   createdAt={item.indexedAt}
                   reply={item.reply}
+                  handle={item.handle}
                 />
               </div>
             );
@@ -97,11 +100,12 @@ const Notification = () => {
             return (
               <div key={index}>
                 <NotificationCard
-                  description={item.description}
+                  author={item.author}
                   image={item.image}
                   title={item.title}
                   createdAt={item.indexedAt}
                   reply={item.reply}
+                  handle={item.handle}
                 />
               </div>
             );

@@ -52,15 +52,16 @@ const Feed = () => {
                 ],
               },
             });
-          } else if ((postText.length > 0)) {
+          } else if (postText.length > 0) {
             await agent.post({ text: postText });
           } else {
             await agent.post({
-              text: "", embed: {
+              text: "",
+              embed: {
                 $type: "app.bsky.embed.images",
-                images: [{ image, alt: "Posted via Connectsy!" }]
-              }
-            })
+                images: [{ image, alt: "Posted via Connectsy!" }],
+              },
+            });
           }
           setPostText("");
           setImage(null);
@@ -96,6 +97,7 @@ const Feed = () => {
         author: {
           displayName: feed.post.author.displayName,
           avatar: feed.post.author.avatar,
+          handle: feed.post.author.handle,
         },
         likes: feed.post.likeCount,
         comments: feed.post.replyCount,
@@ -185,6 +187,7 @@ const Feed = () => {
                         <div ref={lastElementRef} key={index}>
                           <PostCard
                             author={item.author.displayName}
+                            handle={item.author.handle}
                             comments={item.comments}
                             likes={item.likes}
                             caption={item.caption.text}
@@ -201,6 +204,7 @@ const Feed = () => {
                         <div key={index}>
                           <PostCard
                             author={item.author.displayName}
+                            handle={item.author.handle}
                             comments={item.comments}
                             likes={item.likes}
                             caption={item.caption.text}

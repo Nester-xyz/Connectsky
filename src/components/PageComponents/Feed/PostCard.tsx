@@ -13,6 +13,7 @@ const userImage =
 
 const PostCard = ({
   author,
+  handle,
   comments,
   likes,
   caption,
@@ -20,19 +21,20 @@ const PostCard = ({
   profileImg,
   uri,
   cid,
-  repostCount
+  repostCount,
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
-  const [repostCnt, setRepostCnt] = useState(repostCount)
+  const [repostCnt, setRepostCnt] = useState(repostCount);
   const [isReposted, setIsReposted] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [handleSplit, setHandleSplit] = useState("");
   async function handleRepost() {
     try {
-      await refreshSession();
-      await agent.repost(uri, cid);
       setRepostCnt((prev) => prev + 1);
       setIsReposted(true);
+      await refreshSession();
+      await agent.repost(uri, cid);
     } catch (error) {
       console.log(error);
     }
@@ -40,17 +42,19 @@ const PostCard = ({
   async function getPostLiked() {
     try {
       if (like) {
-        setLike(!like); setLikeCount((prev) => prev - 1)
+        setLike(!like);
+        setLikeCount((prev) => prev - 1);
         await refreshSession();
         const res = await agent.like(uri, cid);
         await agent.deleteLike(res.uri);
       } else {
-        setLike(!like); setLikeCount((prev) => prev + 1)
+        setLike(!like);
+        setLikeCount((prev) => prev + 1);
         await refreshSession();
         await agent.like(uri, cid);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -62,7 +66,9 @@ const PostCard = ({
   async function checkAlreadyLiked() {
     try {
       const { data } = await agent.getLikes({ uri, cid });
-      const alreadyLiked = data.likes.some((item) => isAvailable(item.actor.handle))
+      const alreadyLiked = data.likes.some((item) =>
+        isAvailable(item.actor.handle)
+      );
       setLike(alreadyLiked);
     } catch (error) {
       console.log(error);
@@ -71,15 +77,17 @@ const PostCard = ({
   async function checkAlreadyRepost() {
     try {
       const { data } = await agent.getRepostedBy({ uri, cid });
-      const alreadyReposted = data.repostedBy.some((item) => isAvailable(item.handle));
+      const alreadyReposted = data.repostedBy.some((item) =>
+        isAvailable(item.handle)
+      );
       setIsReposted(alreadyReposted);
     } catch (error) {
       console.log(error);
     }
   }
 
-
   useEffect(() => {
+    setHandleSplit(handle.split(".")[0]);
     async function dataFetcher() {
       setIsFetching(true);
       await checkAlreadyLiked();
@@ -87,10 +95,14 @@ const PostCard = ({
       setIsFetching(false);
     }
     dataFetcher();
-  }, [cid, uri])
+  }, [cid, uri]);
 
   if (isFetching) {
-    return <><PostLoader /></>
+    return (
+      <>
+        <PostLoader />
+      </>
+    );
   }
 
   return (
@@ -116,10 +128,15 @@ const PostCard = ({
                 />
               )}
             </div>
-            <p className="text-xl">{author === undefined ? "Anynomous" : author}</p>
+            <p className="text-xl">
+              {author === undefined ? handleSplit : author}
+            </p>
           </div>
           <div>
-            <p className="text-lg " dangerouslySetInnerHTML={handleLinks(caption)}></p>
+            <p
+              className="text-lg "
+              dangerouslySetInnerHTML={handleLinks(caption)}
+            ></p>
           </div>
         </div>
       </div>
@@ -143,7 +160,10 @@ const PostCard = ({
             <p className="text-sm">{comments}</p>
           </div>
           <div className="flex items-center text-3xl gap-1">
-            <BiRepost className={`cursor-pointer ${isReposted && "text-green-500"}`} onClick={handleRepost} />
+            <BiRepost
+              className={`cursor-pointer ${isReposted && "text-green-500"}`}
+              onClick={handleRepost}
+            />
             <p className="text-sm">{repostCnt}</p>
           </div>
           <div className="flex items-center gap-1">
