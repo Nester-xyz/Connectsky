@@ -4,6 +4,7 @@ import { BlobRef } from "@atproto/api";
 import { readFileAsArrayBuffer } from "../../../utils";
 import TextAreaBox from "./TextAreaBox";
 import { agent, refreshSession } from "../../../utils";
+import ImageCompression from "browser-image-compression";
 type differentButtonsForFeedProps = {
   name: string;
   icon: JSX.Element | undefined;
@@ -31,7 +32,7 @@ const PostSection: React.FC<Props> = ({
   const { setPostText, fileRef, setUploadedFile, uploadedFile } =
     useContext(appContext);
   const [imgUpload, setImgUpload] = useState<string>("");
-
+  const [isUploading, setIsUploading] = useState(false);
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -41,12 +42,16 @@ const PostSection: React.FC<Props> = ({
       const file = files[0];
       const localImageURL = URL.createObjectURL(file);
       setImgUpload(localImageURL);
-      console.log(file.size);
       const fileArrrayBuffer = await readFileAsArrayBuffer(file);
       const fileUint8Array = new Uint8Array(fileArrrayBuffer);
       setUploadedFile(fileUint8Array);
     }
   };
+
+  async function fileToUint8Array(file: File) {
+    return new Uint8Array(await file.arrayBuffer());
+  }
+
 
   useEffect(() => {
     const processUploadedFile = async () => {
@@ -55,22 +60,52 @@ const PostSection: React.FC<Props> = ({
         try {
           await refreshSession();
           if (uploadedFile) {
-            const resp = await agent.uploadBlob(uploadedFile, {
+            // Convert Uint8Array to Blob
+            setIsUploading(true);
+            const blob = new Blob([uploadedFile], { type: 'image/jpeg' });
+
+            // Convert Blob to File
+            const file = new File([blob], 'compressed-image.jpg', { type: 'image/jpeg' });
+
+            // Compress the image before uploading
+            const compressionOptions = {
+              maxSizeMB: 0.9, // Set the maximum size in MB
+              maxWidthOrHeight: 1920, // Set the maximum width or height in pixels
+              useWebWorker: true,
+            };
+            const compressedFile = await ImageCompression(file, compressionOptions);
+            console.log('Compressed file:', compressedFile); // Log the compressed file
+
+            // Convert compressed File to Uint8Array
+            const compressedUint8Array = await fileToUint8Array(compressedFile);
+            console.log('Compressed Uint8Array:', compressedUint8Array); // Log the compressed Uint8Array
+
+            const resp = await agent.uploadBlob(compressedUint8Array, {
               encoding: "image/jpeg",
             });
+            console.log('Response:', resp);
             const {
               data: { blob: image },
             } = resp;
             setImage(image);
-            console.log(image);
+            console.log('Uploaded image:', image); // Log the uploaded image
+            setIsUploading(false);
           }
         } catch (error) {
-          console.log(error);
+          console.log('Error:', error); // Log the error
         }
       }
     };
     processUploadedFile();
   }, [uploadedFile]);
+
+
+
+
+
+
+
+
   return (
     <div className="">
       <div className="w-full">
@@ -99,9 +134,10 @@ const PostSection: React.FC<Props> = ({
                 <button
                   className="flex gap-2 items-center justify-center w-full py-2"
                   onClick={item.action}
+                  disabled={isUploading}
                 >
                   {item.icon}
-
+                  {isUploading && item.name === "Media" ? "Uploading " : ""}
                   <span>{(item.name === "Post" && submitPost) ? "Loading..." : item.name}</span>
                 </button>
               </div>
