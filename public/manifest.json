@@ -1,10 +1,10 @@
 {
-  "name": "My Extension",
+  "name": "Connectsky - An AT Proto Client",
   "manifest_version": 3,
-  "version": "1.0",
+  "version": "0.1",
   "permissions": ["activeTab", "system.display", "storage", "unlimitedStorage"],
   "action": {
-    "default_title": "My Extension"
+    "default_title": "Connectsky - An AT Proto Client"
   },
   "background": {
     "service_worker": "background.js",
