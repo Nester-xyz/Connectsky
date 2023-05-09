@@ -11,19 +11,27 @@ import SideBar from "./SideBar";
 
 // context import
 import { LayoutProps } from "../../@types/Layout/Layout";
+import { useLocation } from "react-router-dom";
 
 // the react component begins here
 const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
   const [notiCount, setNotiCount] = useState<Number>(0);
+  const location = useLocation();
   async function getUnreadNotifications() {
     try {
+      await refreshSession();
       const { data } = await agent.countUnreadNotifications();
-      console.log(data);
       setNotiCount(data.count);
     } catch (error) {
       console.log(error);
     }
   }
+  useEffect(() => {
+    if (location.pathname == '/') {
+      setActivePage("Feed");
+    }
+  }, [activePage])
+
   useEffect(() => {
     getUnreadNotifications();
     if (activePage == "Notifications") {

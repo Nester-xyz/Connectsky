@@ -18,10 +18,14 @@ export type differentButtonsForFeedProps = {
 export type fieldDataProps = {
   profileImg?: string;
   author: string;
+  handle: string;
   caption?: string;
   image?: string;
   likes: number;
   comments: number;
+  uri: string;
+  cid: string;
+  repostCount: number;
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
@@ -30,12 +34,16 @@ export type dataGotFromApi = {
   author: {
     displayName: any;
     avatar: any;
+    handle: any;
   };
   likes: any;
   comments: any;
   caption: {
     text: any;
   };
+  uri: any;
+  cid: any;
+  repostCount: number;
   image: {
     embed: {
       images: {

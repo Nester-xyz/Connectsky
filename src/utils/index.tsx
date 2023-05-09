@@ -42,3 +42,27 @@ export async function refreshSession() {
     await agent.resumeSession(sessParse);
   }
 }
+
+function handleLongText(str: string | undefined): { __html: string } | undefined {
+  const longText = /\b\w{30,}\b/g;
+  if (!str) {
+    return undefined;
+  }
+  return {
+    __html: str.replace(longText, (match) => `
+  <div class="w-full overflow-hidden">
+    <span class="break-all">${match}</span>
+  </div>
+`)
+  };
+}
+export function handleLinks(str: string | undefined): { __html: string } | undefined {
+  const linkRegex = /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|])/gi;
+
+  if (!str) {
+    return undefined;
+  }
+  const processedLongText = handleLongText(str);
+  const stringWithLongTextHandled = processedLongText?.__html || str;
+  return { __html: stringWithLongTextHandled.replace(linkRegex, (match) => `<span class="break-all"><a href="${match}" class="text-indigo-600" target="_blank">${match}</a></span>`) };
+}

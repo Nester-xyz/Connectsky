@@ -136,6 +136,29 @@ button[type="submit"]:hover {
   background-color: #0069d9;
 }
 
+.fade-out {
+  animation: fade-out 2s forwards;
+  -webkit-animation: fade-out 2s forwards;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 /* .container .input-container {
   position: relative;
   width: 100%;

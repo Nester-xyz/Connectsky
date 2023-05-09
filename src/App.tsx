@@ -1,5 +1,5 @@
 // Importing required modules from React and React Router libraries
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Layout from "./components/HOC/Navigation/Layout";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { appContext } from "./context/appContext";
@@ -21,7 +21,7 @@ import WillComeSoon from "./components/PageComponents/WillComeSoon";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 
 // Defining type for active page check, with limited values
-export type activePageCheck = "Home" | "Search" | "Notifications" | "Setting";
+export type activePageCheck = "Feed" | "Search" | "Notifications" | "Settings";
 // this contains the actual links which will be made into the buttons
 
 export const links: linksType[] = [
@@ -39,14 +39,14 @@ export const links: linksType[] = [
   },
   {
     linkName: "Notifications",
-    links: "/notification",
+    links: "/notifications",
     icon: <IoMdNotificationsOutline />,
     activeIcon: <IoMdNotifications />,
   },
   // replace the icon with a seperate compoenent wohich only returns an profile picure
   {
     linkName: "Settings",
-    links: "/search",
+    links: "/settings",
     icon: <IoSettingsOutline />,
     activeIcon: <IoSettings />,
   },
@@ -54,11 +54,20 @@ export const links: linksType[] = [
 
 function App() {
   // State to manage the currently active page of the application
-  const [activePage, setActivePage] = useState<activePageCheck>("Home");
+  const [activePage, setActivePage] = useState<activePageCheck>(() => {
+    const storedValue = localStorage.getItem("activePage");
+    // const path = storedValue ? JSON.parse(storedValue) : "Feed";
+    return storedValue ? (JSON.parse(storedValue) as activePageCheck) : "Feed";
+  });
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<Uint8Array | null>(null);
 
+  useEffect(() => {
+    // Update localStorage whenever activePage changes
+    localStorage.setItem("activePage", JSON.stringify(activePage));
+
+  }, [activePage]);
   return (
     <div>
       <appContext.Provider
@@ -79,8 +88,8 @@ function App() {
               {/* Defining routes for different pages */}
               <Route path="/" element={<Feed />} />
               <Route path="/search" element={<WillComeSoon />} />
-              <Route path="/notification" element={<Notification />} />
-              <Route path="/setting" element={<WillComeSoon />} />
+              <Route path="/notifications" element={<Notification />} />
+              <Route path="/settings" element={<WillComeSoon />} />
             </Routes>
           </Layout>
         </Router>
