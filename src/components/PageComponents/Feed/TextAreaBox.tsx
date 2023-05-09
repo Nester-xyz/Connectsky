@@ -29,7 +29,7 @@ const TextAreaBox = ({ showImage, imgUpload }: Props) => {
       <textarea
         name="post-textarea"
         id="post-textarea"
-        className="w-full h-40 resize-none px-4 py-2 focus:outline-none"
+        className="w-full h-40 resize-none px-4 py-2 rounded-xl focus:outline-none"
         onChange={handlePost}
         value={postText}
       ></textarea>

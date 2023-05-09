@@ -149,6 +149,11 @@ const Login = ({
         </div>
         {/* <br />
         <br /> */}
+        {attemptedLogin
+        ? loggedInSuccess
+          ? null
+          : <h5 className="login-msg">Incorrect credentials!</h5>
+        : null}
         <button type="submit" disabled={loggedIn}>
           Login
         </button>

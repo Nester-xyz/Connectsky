@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { formatDateAgo } from "../../../utils";
 type NotificationCardProps = {
   image: string;
   title: "repost" | "follow" | "reply" | "like";
-  description: string;
+  author: string;
+  handle: string;
   createdAt: Date;
   reply: string;
 };
 
-
 const NotificationCard = ({
   image,
   title,
-  description,
+  author,
+  handle,
   createdAt,
   reply,
 }: NotificationCardProps) => {
+  const [handleSplit, setHandleSplit] = useState("");
+
+  useEffect(() => {
+    setHandleSplit(handle.split(".")[0]);
+  }, []);
+
   let reason = "";
   let color = "";
   const userImage =
@@ -49,7 +56,7 @@ const NotificationCard = ({
     }
   }
   return (
-    <div className="bg-white shadow-custom px-2">
+    <div className="bg-white shadow-custom rounded-xl px-2">
       <div className="flex flex-row gap-5 py-2 items-center justify-between">
         {/* left side for the image */}
         <div className="flex flex-row relative items-center">
@@ -61,7 +68,9 @@ const NotificationCard = ({
           >
           </div> */}
           <div className="flex flex-col px-2 py-2">
-            <p className="line-clamp-2">{description}</p>
+            <p className="line-clamp-2">
+              {author === undefined ? handleSplit : author}
+            </p>
             <p className="text-blue-800 line-clamp-2">{reason}</p>
           </div>
         </div>
@@ -72,8 +81,9 @@ const NotificationCard = ({
         </div>
       </div>
       <div
-        className={`${title === "reply" ? "block" : "hidden"
-          } ml-14 px-2 -mt-3 py-1`}
+        className={`${
+          title === "reply" ? "block" : "hidden"
+        } ml-14 px-2 -mt-3 py-1`}
       >
         {title === "reply" ? (
           <div className="line-clamp-2 bg-slate-200 ">{reply}</div>
