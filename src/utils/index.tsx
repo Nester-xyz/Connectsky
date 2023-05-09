@@ -64,6 +64,5 @@ export function handleLinks(str: string | undefined): { __html: string } | undef
   }
   const processedLongText = handleLongText(str);
   const stringWithLongTextHandled = processedLongText?.__html || str;
-  console.log(stringWithLongTextHandled);
   return { __html: stringWithLongTextHandled.replace(linkRegex, (match) => `<span class="break-all"><a href="${match}" class="text-indigo-600" target="_blank">${match}</a></span>`) };
 }

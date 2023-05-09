@@ -11,7 +11,6 @@ import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 const Feed = () => {
   const [showAddPost, setShowAddPost] = useState(false);
   const [showImage, setShowImage] = useState(false);
-  console.log(showImage);
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);

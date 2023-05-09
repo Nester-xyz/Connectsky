@@ -11,20 +11,37 @@ import SideBar from "./SideBar";
 
 // context import
 import { LayoutProps } from "../../@types/Layout/Layout";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // the react component begins here
 const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
   const [notiCount, setNotiCount] = useState<Number>(0);
+  const location = useLocation();
+  const navigate = useNavigate();
   async function getUnreadNotifications() {
     try {
+      await refreshSession();
       const { data } = await agent.countUnreadNotifications();
-      console.log(data);
       setNotiCount(data.count);
     } catch (error) {
       console.log(error);
     }
   }
   useEffect(() => {
+    localStorage.setItem("activePage", JSON.stringify(activePage));
+  }, [activePage])
+  useEffect(() => {
+    // for handling the previous state
+    const storedValue = localStorage.getItem("activePage");
+    const path: string = storedValue ? JSON.parse(storedValue) : "Feed";
+    const str: string = "";
+    let orgPath: string = str.concat('/', path.toLowerCase())
+    if (orgPath === '/feed') {
+      orgPath = '/';
+    }
+    navigate(orgPath);
+    console.log('orgPath', orgPath);
+
     getUnreadNotifications();
     if (activePage == "Notifications") {
       setNotiCount(0);

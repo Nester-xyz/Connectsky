@@ -57,6 +57,7 @@ const Notification = () => {
   }
   useEffect(() => {
     markUnread();
+
     if (!isLoading) {
       listNotifications();
       setIsLoading(true);
