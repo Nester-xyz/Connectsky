@@ -8,7 +8,6 @@ import "./interceptors/axios";
 import Feed from "./Page/Feed";
 import Notification from "./Page/Notification";
 import { linksType } from "./components/@types/Layout/SideBar";
-import { HiOutlinePencilSquare, HiPencilSquare } from "react-icons/hi2";
 import {
   IoNotifications,
   IoSearch,
@@ -19,6 +18,7 @@ import {
 import { IoMdNotifications } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import WillComeSoon from "./components/PageComponents/WillComeSoon";
+import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 
 // Defining type for active page check, with limited values
 export type activePageCheck = "Feed" | "Search" | "Notifications" | "Settings";
@@ -26,10 +26,10 @@ export type activePageCheck = "Feed" | "Search" | "Notifications" | "Settings";
 
 export const links: linksType[] = [
   {
-    linkName: "Feed",
+    linkName: "Home",
     links: "/",
-    icon: <HiOutlinePencilSquare />,
-    activeIcon: <HiPencilSquare />,
+    icon: <AiOutlineHome />,
+    activeIcon: <AiFillHome />,
   },
   {
     linkName: "Search",

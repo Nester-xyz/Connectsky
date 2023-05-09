@@ -75,7 +75,7 @@ const PostSection: React.FC<Props> = ({
     <div className="">
       <div className="w-full">
         <button
-          className="px-5 py-1 my-4 border block md:hidden "
+          className="px-5 py-1 my-4 rounded-md bg-white border block md:hidden "
           onClick={() => { setShowAddPost(false); setShowImage(false); setImage(null); setPostText(""); setUploadedFile(null), setImgUpload("") }}
         >
           &lt; Go Back

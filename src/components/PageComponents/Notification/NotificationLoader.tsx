@@ -2,7 +2,7 @@ import React from "react";
 import ContentLoader from "react-content-loader";
 
 const NotificationLoader: React.FC = () => (
-  <div className="w-full bg-white p-5 rounded-sm shadow_custom">
+  <div className="w-full bg-white p-5 rounded-xl shadow_custom">
     <ContentLoader
       speed={2}
       height={70}
