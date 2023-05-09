@@ -27,10 +27,10 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
     }
   }
   useEffect(() => {
-    if (location.pathname == '/') {
-      setActivePage("Feed");
+    if (location.pathname == "/") {
+      setActivePage("Home");
     }
-  }, [activePage])
+  }, [activePage]);
 
   useEffect(() => {
     getUnreadNotifications();

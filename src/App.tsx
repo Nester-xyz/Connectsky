@@ -21,7 +21,7 @@ import WillComeSoon from "./components/PageComponents/WillComeSoon";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 
 // Defining type for active page check, with limited values
-export type activePageCheck = "Feed" | "Search" | "Notifications" | "Settings";
+export type activePageCheck = "Home" | "Search" | "Notifications" | "Settings";
 // this contains the actual links which will be made into the buttons
 
 export const links: linksType[] = [
@@ -57,7 +57,7 @@ function App() {
   const [activePage, setActivePage] = useState<activePageCheck>(() => {
     const storedValue = localStorage.getItem("activePage");
     // const path = storedValue ? JSON.parse(storedValue) : "Feed";
-    return storedValue ? (JSON.parse(storedValue) as activePageCheck) : "Feed";
+    return storedValue ? (JSON.parse(storedValue) as activePageCheck) : "Home";
   });
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -66,7 +66,6 @@ function App() {
   useEffect(() => {
     // Update localStorage whenever activePage changes
     localStorage.setItem("activePage", JSON.stringify(activePage));
-
   }, [activePage]);
   return (
     <div>
