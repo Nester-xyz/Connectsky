@@ -55,7 +55,9 @@ export const links: linksType[] = [
 function App() {
   // State to manage the currently active page of the application
   const [activePage, setActivePage] = useState<activePageCheck>(() => {
-    return "Feed"
+    const storedValue = localStorage.getItem("activePage");
+    // const path = storedValue ? JSON.parse(storedValue) : "Feed";
+    return storedValue ? (JSON.parse(storedValue) as activePageCheck) : "Feed";
   });
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -63,7 +65,7 @@ function App() {
 
   useEffect(() => {
     // Update localStorage whenever activePage changes
-    // localStorage.setItem("activePage", JSON.stringify(activePage));
+    localStorage.setItem("activePage", JSON.stringify(activePage));
 
   }, [activePage]);
   return (
