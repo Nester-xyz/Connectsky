@@ -7,50 +7,8 @@ import "./interceptors/axios";
 // Importing components for different pages of the application
 import Feed from "./Page/Feed";
 import Notification from "./Page/Notification";
-import { linksType } from "./components/@types/Layout/SideBar";
-import {
-  IoNotifications,
-  IoSearch,
-  IoSearchOutline,
-  IoSettings,
-  IoSettingsOutline,
-} from "react-icons/io5";
-import { IoMdNotifications } from "react-icons/io";
-import { IoMdNotificationsOutline } from "react-icons/io";
 import WillComeSoon from "./components/PageComponents/WillComeSoon";
-import { AiFillHome, AiOutlineHome } from "react-icons/ai";
-
-// Defining type for active page check, with limited values
-export type activePageCheck = "Home" | "Search" | "Notifications" | "Settings";
-// this contains the actual links which will be made into the buttons
-
-export const links: linksType[] = [
-  {
-    linkName: "Home",
-    links: "/",
-    icon: <AiOutlineHome />,
-    activeIcon: <AiFillHome />,
-  },
-  {
-    linkName: "Search",
-    links: "/search",
-    icon: <IoSearchOutline />,
-    activeIcon: <IoSearch />,
-  },
-  {
-    linkName: "Notifications",
-    links: "/notifications",
-    icon: <IoMdNotificationsOutline />,
-    activeIcon: <IoMdNotifications />,
-  },
-  // replace the icon with a seperate compoenent wohich only returns an profile picure
-  {
-    linkName: "Settings",
-    links: "/settings",
-    icon: <IoSettingsOutline />,
-    activeIcon: <IoSettings />,
-  },
-];
+import { activePageCheck } from "./utils";
 
 function App() {
   // State to manage the currently active page of the application

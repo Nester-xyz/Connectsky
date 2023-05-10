@@ -1,5 +1,16 @@
 import moment from "moment";
 import { BskyAgent, AtpSessionEvent, AtpSessionData } from "@atproto/api";
+import { linksType } from "../components/@types/Layout/SideBar";
+import {
+  IoNotifications,
+  IoSearch,
+  IoSearchOutline,
+  IoSettings,
+  IoSettingsOutline,
+} from "react-icons/io5";
+import { IoMdNotifications } from "react-icons/io";
+import { IoMdNotificationsOutline } from "react-icons/io";
+import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -9,6 +20,38 @@ export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
   });
 }
 // Import moment.js
+
+// Defining type for active page check, with limited values
+export type activePageCheck = "Home" | "Search" | "Notifications" | "Settings";
+// this contains the actual links which will be made into the buttons
+
+export const links: linksType[] = [
+  {
+    linkName: "Home",
+    links: "/",
+    icon: <AiOutlineHome />,
+    activeIcon: <AiFillHome />,
+  },
+  {
+    linkName: "Search",
+    links: "/search",
+    icon: <IoSearchOutline />,
+    activeIcon: <IoSearch />,
+  },
+  {
+    linkName: "Notifications",
+    links: "/notifications",
+    icon: <IoMdNotificationsOutline />,
+    activeIcon: <IoMdNotifications />,
+  },
+  // replace the icon with a seperate compoenent wohich only returns an profile picure
+  {
+    linkName: "Settings",
+    links: "/settings",
+    icon: <IoSettingsOutline />,
+    activeIcon: <IoSettings />,
+  },
+];
 
 // Function to format date in desired output
 export function formatDateAgo(date: Date) {
@@ -43,26 +86,40 @@ export async function refreshSession() {
   }
 }
 
-function handleLongText(str: string | undefined): { __html: string } | undefined {
+function handleLongText(
+  str: string | undefined
+): { __html: string } | undefined {
   const longText = /\b\w{30,}\b/g;
   if (!str) {
     return undefined;
   }
   return {
-    __html: str.replace(longText, (match) => `
+    __html: str.replace(
+      longText,
+      (match) => `
   <div class="w-full overflow-hidden">
     <span class="break-all">${match}</span>
   </div>
-`)
+`
+    ),
   };
 }
-export function handleLinks(str: string | undefined): { __html: string } | undefined {
-  const linkRegex = /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|])/gi;
+export function handleLinks(
+  str: string | undefined
+): { __html: string } | undefined {
+  const linkRegex =
+    /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|])/gi;
 
   if (!str) {
     return undefined;
   }
   const processedLongText = handleLongText(str);
   const stringWithLongTextHandled = processedLongText?.__html || str;
-  return { __html: stringWithLongTextHandled.replace(linkRegex, (match) => `<span class="break-all"><a href="${match}" class="text-indigo-600" target="_blank">${match}</a></span>`) };
+  return {
+    __html: stringWithLongTextHandled.replace(
+      linkRegex,
+      (match) =>
+        `<span class="break-all"><a href="${match}" class="text-indigo-600" target="_blank">${match}</a></span>`
+    ),
+  };
 }

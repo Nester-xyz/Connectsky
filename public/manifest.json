@@ -2,7 +2,7 @@
   "name": "Connectsky - An AT Proto Client",
   "manifest_version": 3,
   "version": "0.1",
-  "permissions": ["activeTab", "system.display", "storage", "unlimitedStorage"],
+  "permissions": ["storage", "system.display"],
   "action": {
     "default_title": "Connectsky - An AT Proto Client"
   },

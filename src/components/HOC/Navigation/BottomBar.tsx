@@ -13,7 +13,7 @@ import { BottomBarProps, linksType } from "../../@types/Layout/BottomBar";
 import HoverButtonIconOnly from "../../UI/HoverButtonIconOnly";
 
 // this contains the actual links which will be made into the button
-import { links } from "../../../App";
+import { links } from "../../../utils";
 
 // the components code begins from here
 const BottomBar = ({
@@ -27,9 +27,7 @@ const BottomBar = ({
         return link.linkName !== "Notifications" ? (
           <div
             key={index}
-            onClick={() =>
-              setActivePage(link.linkName)
-            }
+            onClick={() => setActivePage(link.linkName)}
             className="w-10 h-10  relative"
           >
             <HoverButtonIconOnly
@@ -44,9 +42,7 @@ const BottomBar = ({
         ) : (
           <div
             key={index}
-            onClick={() =>
-              setActivePage(link.linkName)
-            }
+            onClick={() => setActivePage(link.linkName)}
             className="w-10 h-10  relative"
           >
             {notiCount.valueOf() > 0 && activePage !== "Notifications" ? (
