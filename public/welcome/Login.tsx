@@ -28,7 +28,7 @@ const Login = ({
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [session, setSession] = useState<AtpSessionData>();
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false);
 
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
@@ -87,42 +87,39 @@ const Login = ({
         identifier: username,
         password: password,
       });
-
     } catch (error) {
       setSubmitted(true);
       setLoggedIn(true);
-
     }
   }, [username, password, agent]);
 
   const handleLoginSubmit = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      setAttemptedLogin(true);
       await login();
     },
     [login]
   );
 
-  const handleUsernameChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setUsername(e.target.value);
-      setAttemptedLogin(true);
-    },
-    []
-  );
+  // const handleUsernameChange = useCallback(
+  //   (e: ChangeEvent<HTMLInputElement>) => {
+  //     setUsername(e.target.value);
+  //   },
+  //   []
+  // );
 
-  const handlePasswordChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
-      setAttemptedLogin(true);
-    },
-    []
-  );
+  // const handlePasswordChange = useCallback(
+  //   (e: ChangeEvent<HTMLInputElement>) => {
+  //     setAttemptedLogin(true);
+  //   },
+  //   []
+  // );
 
   return (
     <div className="container">
       <h1 className="login-heading">Log in to Bsky</h1>
-      {(attemptedLogin && loggedInSuccess) ? null : (attemptedLogin && submitted && !loggedInSuccess) && "Incorrect Credentials"}
+
       <form id="login" onSubmit={handleLoginSubmit}>
         <div className="input-container">
           <label htmlFor="username">Username:&nbsp;</label>
@@ -131,7 +128,9 @@ const Login = ({
             id="username"
             className="input-box"
             placeholder="username"
-            onChange={handleUsernameChange}
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
             value={username}
           />
         </div>
@@ -143,17 +142,23 @@ const Login = ({
             id="app-password"
             className="input-box"
             placeholder="password"
-            onChange={handlePasswordChange}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             value={password}
           />
         </div>
         {/* <br />
         <br /> */}
-        {attemptedLogin
-        ? loggedInSuccess
+
+        {attemptedLogin && loggedInSuccess
           ? null
-          : <h5 className="login-msg">Incorrect credentials!</h5>
-        : null}
+          : attemptedLogin &&
+            submitted &&
+            !loggedInSuccess && (
+              <h5 className="login-msg">Incorrect credentials!</h5>
+            )}
+
         <button type="submit" disabled={loggedIn}>
           Login
         </button>
