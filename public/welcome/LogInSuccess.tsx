@@ -1,15 +1,10 @@
 import React from "react";
 
-type Props = {};
+let isWindowCreate = true;
 
-const LogInSuccess = (props: Props) => {
-  function getExtensionIdFromUrl(url) {
-    const urlObject = new URL(url);
-    return urlObject.hostname.split('.')[0];
-  }
-  function handleExtension() {
-    window.open(`chrome-extension://${getExtensionIdFromUrl(chrome.runtime.getURL("welcome.html"))}/index.html`, 'extensionPopup', 'width=400,height=600');
-    console.log(getExtensionIdFromUrl(chrome.runtime.getURL('welcome.html')))
+const LogInSuccess = () => {
+  async function handleExtension() {
+    await chrome.runtime.sendMessage({ isWindowCreate: isWindowCreate });
     window.close();
   }
   return (
@@ -21,7 +16,9 @@ const LogInSuccess = (props: Props) => {
           Now you can just close this tab and open the extension to start your
           'work'!
         </div>
-        <button className="close" onClick={handleExtension}>Open the extension</button>
+        <button className="close" onClick={handleExtension}>
+          Open the extension
+        </button>
       </div>
     </div>
   );
