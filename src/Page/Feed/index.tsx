@@ -47,7 +47,7 @@ const Feed = () => {
                 images: [
                   {
                     image,
-                    alt: "Posted via Connectsy!",
+                    alt: "Posted via Connectsky!",
                   },
                 ],
               },
@@ -66,7 +66,9 @@ const Feed = () => {
           setPostText("");
           setImage(null);
           setSubmitPost(false);
+          setShowImage(false);
         } catch (error) {
+          setShowImage(false);
           setPostText("");
           setImage(null);
           setSubmitPost(false);
