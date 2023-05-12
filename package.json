@@ -14,6 +14,7 @@
     "axios": "^1.3.5",
     "browser-image-compression": "^2.0.2",
     "chrome-types": "^0.1.185",
+    "emoji-picker-react": "^4.4.9",
     "formik": "^2.2.9",
     "moment": "^2.29.4",
     "react": "^18.2.0",

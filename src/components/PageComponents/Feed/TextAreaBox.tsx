@@ -1,6 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
+
 import { appContext } from "../../../context/appContext";
 
+import { CiFaceSmile } from "react-icons/ci";
+import EmojiPicker from "emoji-picker-react";
 import { useDebounce } from "use-debounce";
 
 type Props = {
@@ -10,11 +13,12 @@ type Props = {
 
 const TextAreaBox = ({ showImage, imgUpload }: Props) => {
   const { postText, setPostText } = useContext(appContext);
-
   // this is just a local declaration. It will change in the future
   const [postTextLocal, setPostTextLocal] = useState("");
 
   const [debouncedPostText] = useDebounce(postTextLocal, 1000);
+
+  const [showEmoji, setShowEmoji] = useState(false);
 
   useEffect(() => {
     setPostText(debouncedPostText);
@@ -22,6 +26,11 @@ const TextAreaBox = ({ showImage, imgUpload }: Props) => {
 
   const handlePost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostText(e.target.value);
+  };
+
+  const onEmojiClick = (emojiObject: any) => {
+    setPostText(postText + emojiObject.emoji);
+    setShowEmoji(false);
   };
 
   return (
@@ -33,7 +42,15 @@ const TextAreaBox = ({ showImage, imgUpload }: Props) => {
         onChange={handlePost}
         value={postText}
       ></textarea>
-      <div className="bg-blue-300 rounded-full w-8 h-8 absolute right-2 bottom-2"></div>
+      <div>{showEmoji && <EmojiPicker onEmojiClick={onEmojiClick} />}</div>
+      <div
+        className="rounded-full w-8 h-8 absolute right-2 bottom-2"
+        onClick={() => {
+          setShowEmoji(!showEmoji);
+        }}
+      >
+        <CiFaceSmile className="w-full h-full" />
+      </div>
       <div
         className="bg-blue-300 rounded-md w-8 h-8 absolute
        left-2 bottom-2"
