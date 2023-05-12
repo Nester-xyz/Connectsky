@@ -6,18 +6,20 @@ Project Description
 
 ### Todo
 
+- [ ] create profile page  
+- [ ] write feed-new design  
 - [ ] post - add an array of placeholders that will be randomized each time  
-- [ ] notification - add the right side  
-- [ ] notification - fix the loader  
-- [ ] notification- fix the rounded and gap  
-- [ ] post - fix the loader  
-- [ ] post- fix the rounded and gap  
 
 ### In Progress
 
-- [ ] login-fix the incorrect credential problem  
 
 ### Done ✓
 
+- [x] notification - add the right side  
+- [x] notification- fix the rounded and gap  
+- [x] post- fix the rounded and gap  
+- [x] notification - fix the loader  
+- [x] post - fix the loader  
+- [x] login-fix the incorrect credential problem  
 - [x] login- remove rounded  
 

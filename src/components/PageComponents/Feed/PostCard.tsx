@@ -114,7 +114,7 @@ const PostCard = ({
   }
 
   return (
-    <div className="w-full bg-white p-5 rounded-xl border-b border-slate-200">
+    <div className="w-full bg-white p-5 rounded-md border-b border-slate-200">
       <div className="flex">
         {/* Render author's profile image, name and caption */}
         <div className="flex flex-col gap-2">

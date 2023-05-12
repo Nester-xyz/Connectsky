@@ -25,17 +25,22 @@ const TextAreaBox = ({ showImage, imgUpload }: Props) => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center relative">
       <textarea
         name="post-textarea"
         id="post-textarea"
-        className="w-full h-40 resize-none px-4 py-2 rounded-xl focus:outline-none"
+        className="w-full h-56 resize-none px-4 py-2 rounded-xl focus:outline-none"
         onChange={handlePost}
         value={postText}
       ></textarea>
+      <div className="bg-blue-300 rounded-full w-8 h-8 absolute right-2 bottom-2"></div>
+      <div
+        className="bg-blue-300 rounded-md w-8 h-8 absolute
+       left-2 bottom-2"
+      ></div>
       {showImage && (
         <div className="border w-40 h-full overflow-hidden items-center">
-          <img src={imgUpload} alt="broken" className='object-contain w-40' />
+          <img src={imgUpload} alt="broken" className="object-contain w-40" />
         </div>
       )}
     </div>
