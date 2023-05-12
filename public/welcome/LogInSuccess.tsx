@@ -1,8 +1,12 @@
 import React from "react";
 
-type Props = {};
+let isWindowCreate = true;
 
-const LogInSuccess = (props: Props) => {
+const LogInSuccess = () => {
+  async function handleExtension() {
+    await chrome.runtime.sendMessage({ isWindowCreate: isWindowCreate });
+    window.close();
+  }
   return (
     <div className="loginSuccess">
       <div className="heading">Success</div>
@@ -12,7 +16,9 @@ const LogInSuccess = (props: Props) => {
           Now you can just close this tab and open the extension to start your
           'work'!
         </div>
-        <button className="close">Open the extension</button>
+        <button className="close" onClick={handleExtension}>
+          Open the extension
+        </button>
       </div>
     </div>
   );

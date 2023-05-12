@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // type import
-import { activePageCheck } from "../../../App";
+import { activePageCheck } from "../../../utils";
 import { LoginContextType } from "../../@types/Login/Login";
 import { agent, refreshSession } from "../../../utils";
 // component import
@@ -11,19 +11,27 @@ import SideBar from "./SideBar";
 
 // context import
 import { LayoutProps } from "../../@types/Layout/Layout";
+import { useLocation } from "react-router-dom";
 
 // the react component begins here
 const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
   const [notiCount, setNotiCount] = useState<Number>(0);
+  const location = useLocation();
   async function getUnreadNotifications() {
     try {
+      await refreshSession();
       const { data } = await agent.countUnreadNotifications();
-      console.log(data);
       setNotiCount(data.count);
     } catch (error) {
       console.log(error);
     }
   }
+  useEffect(() => {
+    if (location.pathname == "/") {
+      setActivePage("Home");
+    }
+  }, [activePage]);
+
   useEffect(() => {
     getUnreadNotifications();
     if (activePage == "Notifications") {

@@ -13,7 +13,7 @@ import { BottomBarProps, linksType } from "../../@types/Layout/BottomBar";
 import HoverButtonIconOnly from "../../UI/HoverButtonIconOnly";
 
 // this contains the actual links which will be made into the button
-import { links } from "../../../App";
+import { links } from "../../../utils";
 
 // the components code begins from here
 const BottomBar = ({
@@ -24,13 +24,10 @@ const BottomBar = ({
   return (
     <div className="flex justify-evenly items-center h-16 border-t border-slate-200 bg-white">
       {links.map((link, index) => {
-
         return link.linkName !== "Notifications" ? (
           <div
             key={index}
-            onClick={() => {
-              setActivePage(link.linkName);
-            }}
+            onClick={() => setActivePage(link.linkName)}
             className="w-10 h-10  relative"
           >
             <HoverButtonIconOnly
@@ -45,16 +42,16 @@ const BottomBar = ({
         ) : (
           <div
             key={index}
-            onClick={() => {
-              setActivePage(link.linkName);
-            }}
+            onClick={() => setActivePage(link.linkName)}
             className="w-10 h-10  relative"
           >
-            {(notiCount.valueOf() > 0 && (activePage) !== "Notifications") ?
-              (<span className="absolute flex items-center justify-center top-0 right-0 w-4 h-4 z-50 bg-blue-500 text-white rounded-full p-0 text-xs">
+            {notiCount.valueOf() > 0 && activePage !== "Notifications" ? (
+              <span className="absolute flex items-center justify-center top-0 right-0 w-4 h-4 z-50 bg-blue-500 text-white rounded-full p-0 text-xs">
                 {notiCount.toString()}
-              </span>) : (<div></div>)
-            }
+              </span>
+            ) : (
+              <div></div>
+            )}
             <HoverButtonIconOnly
               checkOne={activePage}
               checkTwo={link.linkName}

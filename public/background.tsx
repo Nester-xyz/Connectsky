@@ -66,3 +66,11 @@ chrome.action.onClicked.addListener(onClickHandler);
 chrome.runtime.onInstalled.addListener(function () {
   chrome.tabs.create({ url: "./welcome.html" });
 });
+
+// Message passing from loginSuccess to create a window after logging from welcome.tsx
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.isWindowCreate !== undefined) {
+    createWindow();
+    sendResponse({ message: "createWindow has been successfully triggered!" });
+  }
+});

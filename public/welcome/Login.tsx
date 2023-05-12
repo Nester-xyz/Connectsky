@@ -28,6 +28,9 @@ const Login = ({
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [session, setSession] = useState<AtpSessionData>();
+  const [submitted, setSubmitted] = useState(false)
+
+  const [isVisible, setIsVisible] = useState<boolean>(true);
 
   const agent = useMemo(
     () =>
@@ -66,21 +69,30 @@ const Login = ({
     []
   );
 
-  // useEffect(() => {
-  //   if (isSess != null) {
-  //     setAttemptedLogin(true);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (attemptedLogin && !loggedInSuccess) {
+      setIsVisible(true);
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [attemptedLogin, submitted]);
 
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   const login = useCallback(async () => {
-    setAttemptedLogin(true);
-    await agent!.login({
-      identifier: username,
-      password: password,
-    });
-    setLoggedIn(true);
+    try {
+      await agent!.login({
+        identifier: username,
+        password: password,
+      });
+
+    } catch (error) {
+      setSubmitted(true);
+      setLoggedIn(true);
+
+    }
   }, [username, password, agent]);
 
   const handleLoginSubmit = useCallback(
@@ -94,13 +106,15 @@ const Login = ({
   const handleUsernameChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setUsername(e.target.value);
+      setAttemptedLogin(true);
     },
     [] 
   );      
 
   const handlePasswordChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value); 
+      setPassword(e.target.value);
+      setAttemptedLogin(true);
     },
     []       
   );  
@@ -111,6 +125,7 @@ const Login = ({
       <div className="container">
         <div className="formTitle">
           <h1 className="login-heading">Log in to Bsky</h1>
+
         </div>
         <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
           <div className="input-container">

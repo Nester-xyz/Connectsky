@@ -6,17 +6,16 @@ import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
 
 import { agent, refreshSession } from "../../utils";
-
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 // the component begins here
 const Feed = () => {
   const [showAddPost, setShowAddPost] = useState(false);
   const [showImage, setShowImage] = useState(false);
-  console.log(showImage);
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
   const [image, setImage] = useState<BlobRef | null>(null);
+  const [submitPost, setSubmitPost] = useState(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
   const { postText, setPostText, fileRef, uploadedFile } =
     useContext(appContext);
@@ -33,6 +32,7 @@ const Feed = () => {
       name: "Post",
       icon: undefined,
       action: async () => {
+        setSubmitPost(true);
         try {
           const sessData = localStorage.getItem("sess");
           if (sessData !== null) {
@@ -47,19 +47,31 @@ const Feed = () => {
                 images: [
                   {
                     image,
-                    alt: "UnNamed",
+                    alt: "Posted via Connectsky!",
                   },
                 ],
               },
             });
+          } else if (postText.length > 0) {
+            await agent.post({ text: postText });
           } else {
-            if (postText.length > 0) {
-              await agent.post({ text: postText });
-            }
+            await agent.post({
+              text: "",
+              embed: {
+                $type: "app.bsky.embed.images",
+                images: [{ image, alt: "Posted via Connectsy!" }],
+              },
+            });
           }
           setPostText("");
           setImage(null);
+          setSubmitPost(false);
+          setShowImage(false);
         } catch (error) {
+          setShowImage(false);
+          setPostText("");
+          setImage(null);
+          setSubmitPost(false);
           console.log(error);
         }
       },
@@ -72,9 +84,9 @@ const Feed = () => {
       limit: 20,
       cursor: cursor,
     });
-    console.log(data);
     if (data.cursor == null) return;
     setCursor(data.cursor);
+    console.log(data);
     const mappedData: dataGotFromApi[] = data.feed.map((feed: any) => {
       // console.log(feed);
       const images =
@@ -87,9 +99,13 @@ const Feed = () => {
         author: {
           displayName: feed.post.author.displayName,
           avatar: feed.post.author.avatar,
+          handle: feed.post.author.handle,
         },
         likes: feed.post.likeCount,
         comments: feed.post.replyCount,
+        uri: feed.post.uri,
+        cid: feed.post.cid,
+        repostCount: feed.post.repostCount,
         caption: {
           text:
             feed.post.record && "text" in feed.post.record
@@ -140,6 +156,7 @@ const Feed = () => {
           differentButtonsForFeed={differentButtonsForFeed}
           setImage={setImage}
           setShowAddPost={setShowAddPost}
+          submitPost={submitPost}
         />
       ) : (
         <div className="w-full h-full">
@@ -160,6 +177,7 @@ const Feed = () => {
                   differentButtonsForFeed={differentButtonsForFeed}
                   setImage={setImage}
                   setShowAddPost={setShowAddPost}
+                  submitPost={submitPost}
                 />
               </div>
               <div className=" rounded-xl  w-full flex flex-col gap-5 mt-5">
@@ -171,11 +189,15 @@ const Feed = () => {
                         <div ref={lastElementRef} key={index}>
                           <PostCard
                             author={item.author.displayName}
+                            handle={item.author.handle}
                             comments={item.comments}
                             likes={item.likes}
                             caption={item.caption.text}
                             image={item.image.embed.images[0].thumb}
                             profileImg={item.author.avatar}
+                            uri={item.uri}
+                            cid={item.cid}
+                            repostCount={item.repostCount}
                           />
                         </div>
                       );
@@ -184,11 +206,15 @@ const Feed = () => {
                         <div key={index}>
                           <PostCard
                             author={item.author.displayName}
+                            handle={item.author.handle}
                             comments={item.comments}
                             likes={item.likes}
                             caption={item.caption.text}
                             image={item.image.embed.images[0].thumb}
                             profileImg={item.author.avatar}
+                            uri={item.uri}
+                            cid={item.cid}
+                            repostCount={item.repostCount}
                           />
                         </div>
                       );
