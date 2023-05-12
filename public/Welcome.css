@@ -1,8 +1,8 @@
 :root {
-  --screen-background-color: #555;
-  --border-color: #515151;
+  --screen-background-color: rgb(249 250 251);
+  --border-color: rgb(243 244 246);
   --border-radius: 10px;
-  --container-background-color: #ffffffcc;
+  --container-background-color: rgb(249 250 251);
   --left-text-color: #1da1f2;
   --left-heading-color: #1da1f2;
   --right-text-color: #1da1f2;
@@ -62,19 +62,78 @@
 #login {
   width: 100%;
 }
+
+.background_main {
+	width: 100vw;
+	min-height: 100vh;
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	padding: 120px 24px 160px;
+	pointer-events: none;
+}
+
+.background_main::before {
+	background: radial-gradient(circle,rgba(2,0,36,0) 0,#fafafa 100%);
+	position: absolute;
+	content: "";
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	top: 0;
+}
+
+.background_content {
+	height: -moz-fit-content;
+	height: fit-content;
+	z-index: 3;
+	max-width: 640px;
+	background-image: radial-gradient(at 27% 37%,#3a8bfd 0,transparent 0),radial-gradient(at 97% 21%,#72fe7d 0,transparent 50%),radial-gradient(at 52% 99%,#fd3a4e 0,transparent 50%),radial-gradient(at 10% 29%,#855afc 0,transparent 50%),radial-gradient(at 97% 96%,#e4c795 0,transparent 50%),radial-gradient(at 33% 50%,#8ca8e8 0,transparent 50%),radial-gradient(at 79% 53%,#eea5ba 0,transparent 50%);
+	position: absolute;
+	content: "";
+	width: 100%;
+	height: 100%;
+	filter: blur(100px) saturate(150%);
+	top: 80px;
+	opacity: .15;
+}
+
 .container {
-  width: 30vw;
+  width: 24vw;
   min-width: 400px;
-  height: 80vh;
+  height: 50vh;
+  z-index: 10;
+  gap: 50px;
+}
+
+.formTitle {
+  background-color: #fff;
+  padding: 2rem 4rem;
+  border-top-left-radius:1rem;
+  border-top-right-radius:1rem;
+  border-bottom: 1px solid rgb(229 231 235);
+}
+
+.loginForm {
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);
   background: var(--container-background-color);
-  border: var(--border-color) 2px solid;
-  border-radius: var(--border-radius);
-  padding: 0 20px;
+  border: var(--border-color) 1px solid;
+  border-bottom-left-radius:1rem;
+  border-bottom-right-radius:1rem;
+  padding: 2rem 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 50px;
+  gap: 20px;
+}
+
+.signUp {
+  font-size: 14px;
+}
+
+.input-container {
+  width: 100%;
 }
 
 .login-msg {
@@ -84,9 +143,14 @@
 }
 
 .container .login-heading {
-  font-size: 2.5rem;
+  font-size: 2rem;
+  font-weight: 600;
   color: var(--left-heading-color);
   text-align: center;
+}
+
+.strong {
+  font-weight: 700;
 }
 
 .form-group {
@@ -100,19 +164,22 @@
 label {
   display: block;
   margin-bottom: 5px;
-  font-weight: bold;
-  font-size: 16px;
+  font-size: .75rem;
+  text-transform: uppercase;
+  color: rgb(75 85 99)
 }
 
 input[type="text"],
 input[type="password"] {
   display: block;
   width: 100%;
-  padding: 16px 10px;
-  font-size: 16px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  margin-bottom: 15px;
+  padding: .5rem .75rem;
+  font-size: 14px;
+  border-radius: .375rem;
+  text-transform: capitalize;
+  line-height: 1.25rem;
+  border: 1px solid rgb(209 213 219);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
 }
 
 .error {
@@ -123,11 +190,14 @@ input[type="password"] {
 button[type="submit"] {
   background-color: #007bff;
   color: white;
-  padding: 20px 25px;
-  border-radius: 20px;
-  font-size: 16px;
+  border-radius: .375rem;
+  height: 2.5rem;
+  font-size: .875rem;
+  line-height: 1.25rem;
   border: none;
   cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   transition: background-color 0.2s ease-in-out;
   width: 100%;
 }
