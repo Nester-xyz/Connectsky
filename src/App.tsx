@@ -8,6 +8,7 @@ import "./interceptors/axios";
 import Feed from "./Page/Feed";
 import Notification from "./Page/Notification";
 import WillComeSoon from "./components/PageComponents/WillComeSoon";
+import Profile from "./Page/Profile";
 import { activePageCheck } from "./utils";
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
               <Route path="/search" element={<WillComeSoon />} />
               <Route path="/notifications" element={<Notification />} />
               <Route path="/settings" element={<WillComeSoon />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </Layout>
         </Router>

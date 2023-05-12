@@ -82,7 +82,7 @@ const Notification = () => {
           Notifications
         </h1>
 
-        <div className="flex flex-col gap-5 mt-3">
+        <div className="flex flex-col gap-3 mt-3">
           {notifications.map((item: NotificationItem, index) => {
             if (index === notifications.length - 1) {
               return (
