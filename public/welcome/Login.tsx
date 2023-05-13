@@ -165,7 +165,9 @@ const Login = ({
               !loggedInSuccess && (
                 <h5 className="login-msg"> Incorrect Credentials</h5>
               )}
-          <button type="submit">Login</button>
+          <button className="submit" type="submit">
+            Login
+          </button>
           <div className="signUp">
             <p>
               Don't have an account? <span className="strong">Sign up</span> for
