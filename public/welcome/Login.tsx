@@ -9,6 +9,8 @@ import React, {
 
 import * as bsky from "@atproto/api";
 import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
+import { HiEye } from "react-icons/hi";
+import { HiEyeSlash } from "react-icons/hi2";
 
 const { BskyAgent } = bsky;
 
@@ -102,68 +104,70 @@ const Login = ({
     [login]
   );
 
-  // const handleUsernameChange = useCallback(
-  //   (e: ChangeEvent<HTMLInputElement>) => {
-  //     setUsername(e.target.value);
-  //   },
-  //   []
-  // );
-
-  // const handlePasswordChange = useCallback(
-  //   (e: ChangeEvent<HTMLInputElement>) => {
-  //     setAttemptedLogin(true);
-  //   },
-  //   []
-  // );
-
   return (
-    <div className="container">
-      <h1 className="login-heading">Log in to Bsky</h1>
-
-      <form id="login" onSubmit={handleLoginSubmit}>
-        <div className="input-container">
-          <label htmlFor="username">Username:&nbsp;</label>
-          <input
-            type="text"
-            id="username"
-            className="input-box"
-            placeholder="username"
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-            value={username}
-          />
+    <>
+      <div className="background_main">
+        <div className="background_content"></div>
+      </div>
+      <div className="container">
+        <div className="formTitle">
+          <h1 className="login-heading">Login to Connectsky</h1>
         </div>
-        {/* <br /> */}
-        <div className="input-container">
-          <label htmlFor="app-password">App Password:&nbsp;</label>
-          <input
-            type="password"
-            id="app-password"
-            className="input-box"
-            placeholder="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            value={password}
-          />
-        </div>
-        {/* <br />
-        <br /> */}
-
-        {attemptedLogin && loggedInSuccess
-          ? null
-          : attemptedLogin &&
-            submitted &&
-            !loggedInSuccess && (
-              <h5 className="login-msg">Incorrect credentials!</h5>
-            )}
-
-        <button type="submit" disabled={loggedIn}>
-          Login
-        </button>
-      </form>
-    </div>
+        <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
+          <div className="input-container">
+            <label htmlFor="username">
+              Username&nbsp;/&nbsp;Email Address:&nbsp;
+            </label>
+            <input
+              type="text"
+              id="username"
+              className="input-box"
+              placeholder="example.bsky.social"
+              onChange={(e) => {
+                setAttemptedLogin(false);
+                setUsername(e.target.value);
+              }}
+              value={username}
+            />
+          </div>
+          {/* <br /> */}
+          <div className="input-container">
+            <label htmlFor="app-password">App Password:&nbsp;</label>
+            <input
+              type="password"
+              id="app-password"
+              className="input-box"
+              placeholder="Password"
+              onChange={(e) => {
+                setAttemptedLogin(false);
+                setPassword(e.target.value);
+              }}
+              value={password}
+            />
+            <div className="text-2xl absolute">
+              <HiEye />
+              <HiEyeSlash />
+            </div>
+          </div>
+          {/* <br />
+          <br /> */}
+          {attemptedLogin && loggedInSuccess
+            ? null
+            : attemptedLogin &&
+              submitted &&
+              !loggedInSuccess && (
+                <h5 className="login-msg"> Incorrect Credentials</h5>
+              )}
+          <button type="submit">Login</button>
+          <div className="signUp">
+            <p>
+              Don't have an account? <span className="strong">Sign up</span> for
+              free.
+            </p>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 
