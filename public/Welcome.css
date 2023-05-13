@@ -227,6 +227,10 @@ button[type="submit"]:hover {
   background-color: #0069d9;
 }
 
+button[type="submit"]::selection {
+  display: none;
+}
+
 .fade-out {
   animation: fade-out 2s forwards;
   -webkit-animation: fade-out 2s forwards;

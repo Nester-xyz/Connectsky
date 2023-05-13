@@ -2,6 +2,12 @@
   "name": "Connectsky - An AT Proto Client",
   "manifest_version": 3,
   "version": "0.1.1",
+  "icons": {
+    "16": "./favicons/16.png",
+    "32": "./favicons/32.png",
+    "48": "./favicons/48.png",
+    "128": "./favicons/128.png"
+  },
   "permissions": ["storage", "system.display"],
   "action": {
     "default_title": "Connectsky - An AT Proto Client"
