@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useCallback, FormEvent } from "react";
-
 import * as bsky from "@atproto/api";
 import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
 import { HiEye } from "react-icons/hi";
 import { HiEyeSlash } from "react-icons/hi2";
+import { BsFillInfoCircleFill } from "react-icons/bs";
 
 const { BskyAgent } = bsky;
 
@@ -99,6 +99,17 @@ const Login = ({
     [login]
   );
 
+  function appPassword(): React.MouseEventHandler<HTMLDivElement> {
+    return (event) => {
+      window.open(
+        "https://github.com/bluesky-social/atproto-ecosystem/blob/main/app-passwords.md",
+        "_blank"
+      );
+    };
+  }
+
+  const handleAppPassword = appPassword();
+
   return (
     <>
       <div className="background_main">
@@ -127,14 +138,19 @@ const Login = ({
             />
           </div>
           {/* <br /> */}
-          <div className="input-container ">
-            <label htmlFor="app-password">App Password:&nbsp;</label>
+          <div className="input-container">
+            <label htmlFor="app-password">
+              App Password:&nbsp;{" "}
+              <div className="info-icon" onClick={handleAppPassword}>
+                <BsFillInfoCircleFill />
+              </div>
+            </label>
             <div className="password-box">
               <input
                 type={showPassword ? "text" : "password"}
                 id="app-password"
                 className="input-box "
-                placeholder="Password"
+                placeholder="password"
                 onChange={(e) => {
                   setAttemptedLogin(false);
                   setSubmitted(false);
@@ -158,7 +174,7 @@ const Login = ({
             : attemptedLogin &&
               submitted &&
               !loggedInSuccess && (
-                <h5 className="login-msg"> Incorrect Credentials</h5>
+                <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
               )}
           <button className="submit" type="submit">
             Login

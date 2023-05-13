@@ -110,6 +110,12 @@
   width: 100%;
 }
 
+.info-icon {
+  align-items: center;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
 .login-msg {
   text-align: center;
   font-size: 1rem;
@@ -127,11 +133,13 @@
 }
 
 label {
-  display: block;
+  display: flex;
   margin-bottom: 5px;
   font-size: 0.75rem;
   text-transform: uppercase;
   color: rgb(75 85 99);
+  gap: 2px;
+  align-items: center;
 }
 
 input[type="text"],
