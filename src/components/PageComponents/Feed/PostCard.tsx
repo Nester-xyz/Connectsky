@@ -4,7 +4,7 @@ import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { BiRepost } from "react-icons/bi";
-import { agent, handleLinks, refreshSession } from "../../../utils";
+import { agent, handleLongText, refreshSession } from "../../../utils";
 import PostLoader from "./PostLoader";
 
 // just a random Image I grabbed from the internet to show when no image is provided
@@ -102,6 +102,7 @@ const PostCard = ({
       await checkAlreadyRepost();
       setIsFetching(false);
     }
+    console.log(caption);
     dataFetcher();
   }, [cid, uri]);
 
@@ -143,11 +144,12 @@ const PostCard = ({
           <div>
             <p
               className="text-lg "
-              dangerouslySetInnerHTML={handleLinks(caption)}
+              dangerouslySetInnerHTML={handleLongText(caption)}
             ></p>
           </div>
         </div>
       </div>
+
 
       {image?.length == 0 ? (
         ""

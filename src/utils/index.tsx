@@ -86,40 +86,34 @@ export async function refreshSession() {
   }
 }
 
-function handleLongText(
-  str: string | undefined
-): { __html: string } | undefined {
-  const longText = /\b\w{30,}\b/g;
+
+export function handleLongText(str: string | undefined): { __html: string } | undefined {
+  const longText = /^(?!\/).{31,}$/;
   if (!str) {
     return undefined;
   }
+  const processedLinks = handleLinks(str);
+  const stringWithLinksHandled = processedLinks?.__html || str;
+  return {
+    __html: stringWithLinksHandled.replace(
+      longText,
+      (match) => `<div class="w-full overflow-hidden"><span class="break-all">${match}</span></div>`
+    ),
+  };
+}
+
+function handleLinks(str: string | undefined): { __html: string } | undefined {
+  const linkRegex = /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|.]*)\S*/gi;
+  if (!str) {
+    return undefined;
+  }
+  console.log(str);
   return {
     __html: str.replace(
-      longText,
-      (match) => `
-  <div class="w-full overflow-hidden">
-    <span class="break-all">${match}</span>
-  </div>
-`
-    ),
-  };
-}
-export function handleLinks(
-  str: string | undefined
-): { __html: string } | undefined {
-  const linkRegex =
-    /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|])/gi;
-
-  if (!str) {
-    return undefined;
-  }
-  const processedLongText = handleLongText(str);
-  const stringWithLongTextHandled = processedLongText?.__html || str;
-  return {
-    __html: stringWithLongTextHandled.replace(
       linkRegex,
-      (match) =>
-        `<span class="break-all"><a href="${match}" class="text-indigo-600" target="_blank">${match}</a></span>`
+      (match) => `<span class="break-all"><a href="${match}" class="text-indigo-600" target="_blank">${match}</a></span>`
     ),
   };
 }
+
+
