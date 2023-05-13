@@ -11,6 +11,13 @@ type Props = {
   setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const arrayOfRandomPlaceholders = [
+  "Adarsh is the best there is",
+  "Pay Adarsh more",
+  "You can't beat Adarsh",
+  "Adarsh is the best",
+];
+
 const TextAreaBox = ({
   showImage,
   imgUpload,
@@ -26,6 +33,10 @@ const TextAreaBox = ({
   const [debouncedPostText] = useDebounce(postTextLocal, 1000);
   const [cursorPosition, setCursorPosition] = useState(0);
 
+  const randomPlacholder =
+    arrayOfRandomPlaceholders[
+      Math.floor(Math.random() * arrayOfRandomPlaceholders.length)
+    ];
   useEffect(() => {
     setPostText(debouncedPostText);
   }, [debouncedPostText]);
@@ -60,6 +71,7 @@ const TextAreaBox = ({
           ref={textBox}
           name="post-textarea"
           id="post-textarea"
+          placeholder={randomPlacholder}
           className="w-full h-40 resize-none px-4 py-2 rounded-xl focus:outline-none"
           onChange={handlePost}
           value={postText}
