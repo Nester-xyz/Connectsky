@@ -24,6 +24,7 @@ const PostCard = ({
   repostCount,
   reply,
   reason,
+  embed
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
   const [repost, setRepost] = useState(false);
@@ -164,6 +165,26 @@ const PostCard = ({
           </div>
         </div>
       )}
+      {embed.$type === "app.bsky.embed.record#view" &&
+        <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
+          <div className="flex flex-row justify-between items-center">
+            {/* section of the profileImage,handle,time, */}
+            <div className="flex flex-row w-10 h-10 items-center">
+              <img className="w-10 h-10 object-cover rounded-full" src={embed.data.author.avatar} alt="" />
+              <div className="text-lg flex flex-col pl-2">{embed.data.author.displayName}</div>
+            </div>
+            <div>3m</div>
+          </div>
+          {/* section for text */}
+          <div className="text-base">
+            {embed.data.value.text}
+          </div>
+          <div>
+            {/* section for image if available; */}
+            <img src={embed.data.embeds[0].images[0].thumb} alt="" />
+          </div>
+        </div>
+      }
 
       <div>
         {/* Render the number of likes and comments */}

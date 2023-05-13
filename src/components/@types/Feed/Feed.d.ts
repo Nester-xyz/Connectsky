@@ -28,6 +28,7 @@ export type fieldDataProps = {
   repostCount: number;
   reply: any;
   reason: any;
+  embed: any;
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
@@ -53,6 +54,10 @@ export type dataGotFromApi = {
   uri: any;
   cid: any;
   repostCount: number;
+  embed: {
+    $type: any;
+    data: any;
+  };
   image: {
     embed: {
       images: {

@@ -119,6 +119,10 @@ const Feed = () => {
               ? feed.post.record.text
               : "",
         },
+        embed: {
+          $type: feed.post?.embed?.$type,
+          data: feed.post?.embed?.record,
+        },
         image: {
           embed: {
             images: [{ thumb: firstImageThumb }],
@@ -207,6 +211,7 @@ const Feed = () => {
                             repostCount={item.repostCount}
                             reply={item.reply}
                             reason={item.reason}
+                            embed={item.embed}
                           />
                         </div>
                       );
@@ -226,6 +231,7 @@ const Feed = () => {
                             repostCount={item.repostCount}
                             reply={item.reply}
                             reason={item.reason}
+                            embed={item.embed}
                           />
                         </div>
                       );
