@@ -9,6 +9,8 @@ import React, {
 
 import * as bsky from "@atproto/api";
 import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
+import { HiEye } from "react-icons/hi";
+import { HiEyeSlash } from "react-icons/hi2";
 
 const { BskyAgent } = bsky;
 
@@ -28,7 +30,7 @@ const Login = ({
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [session, setSession] = useState<AtpSessionData>();
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false);
 
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
@@ -87,55 +89,44 @@ const Login = ({
         identifier: username,
         password: password,
       });
-
     } catch (error) {
       setSubmitted(true);
       setLoggedIn(true);
-
     }
   }, [username, password, agent]);
 
   const handleLoginSubmit = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      setAttemptedLogin(true);
       await login();
     },
     [login]
   );
 
-  const handleUsernameChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setUsername(e.target.value);
-      setAttemptedLogin(true);
-    },
-    [] 
-  );      
-
-  const handlePasswordChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
-      setAttemptedLogin(true);
-    },
-    []       
-  );  
-
   return (
-    <>  
-      <div className="background_main"><div className="background_content"></div></div>
+    <>
+      <div className="background_main">
+        <div className="background_content"></div>
+      </div>
       <div className="container">
         <div className="formTitle">
-          <h1 className="login-heading">Log in to Bsky</h1>
-
+          <h1 className="login-heading">Login to Connectsky</h1>
         </div>
         <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
           <div className="input-container">
-            <label htmlFor="username">Username&nbsp;/&nbsp;Email Address:&nbsp;</label>
+            <label htmlFor="username">
+              Username&nbsp;/&nbsp;Email Address:&nbsp;
+            </label>
             <input
               type="text"
               id="username"
               className="input-box"
-              placeholder="Username"
-              onChange={handleUsernameChange}
+              placeholder="example.bsky.social"
+              onChange={(e) => {
+                setAttemptedLogin(false);
+                setUsername(e.target.value);
+              }}
               value={username}
             />
           </div>
@@ -145,27 +136,37 @@ const Login = ({
             <input
               type="password"
               id="app-password"
-              className="input-box" 
+              className="input-box"
               placeholder="Password"
-              onChange={handlePasswordChange}
+              onChange={(e) => {
+                setAttemptedLogin(false);
+                setPassword(e.target.value);
+              }}
               value={password}
             />
+            <div className="text-2xl absolute">
+              <HiEye />
+              <HiEyeSlash />
+            </div>
           </div>
           {/* <br />
-          <br /> */}  
-          {attemptedLogin
-          ? loggedInSuccess
+          <br /> */}
+          {attemptedLogin && loggedInSuccess
             ? null
-            : <h5 className="login-msg">Incorrect credentials!</h5>
-          : null}
-          <button type="submit" disabled={loggedIn}>
-            Login
-          </button>
-          <div className="signUp"> 
-            <p>Don't have an account? <span className="strong">Sign up</span> for free.</p>
-          </div> 
+            : attemptedLogin &&
+              submitted &&
+              !loggedInSuccess && (
+                <h5 className="login-msg"> Incorrect Credentials</h5>
+              )}
+          <button type="submit">Login</button>
+          <div className="signUp">
+            <p>
+              Don't have an account? <span className="strong">Sign up</span> for
+              free.
+            </p>
+          </div>
         </form>
-      </div>     
+      </div>
     </>
   );
 };
