@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useMemo,
-  useCallback,
-  FormEvent,
-  ChangeEvent,
-  useEffect,
-} from "react";
+import React, { useState, useMemo, useCallback, FormEvent } from "react";
 
 import * as bsky from "@atproto/api";
 import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
@@ -21,18 +14,32 @@ type Props = {
   setLoggedInSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const calculateLoginIdentifier = (identifier: string) => {
+  // If the identifier is a valid email address, use it as the identifier
+  if (
+    /^(([^\s"(),.:;<>@[\\\]]+(\.[^\s"(),.:;<>@[\\\]]+)*)|(".+"))@((\[(?:\d{1,3}\.){3}\d{1,3}])|(([\dA-Za-z\-]+\.)+[A-Za-z]{2,}))$/.test(
+      identifier
+    )
+  ) {
+    return identifier;
+  }
+  // If user only gives identifier without .bsky.social, append it
+  if (!identifier.endsWith(".bsky.social")) {
+    return `${identifier}.bsky.social`;
+  }
+  return identifier;
+};
+
 const Login = ({
   attemptedLogin,
   setAttemptedLogin,
   loggedInSuccess,
   setLoggedInSuccess,
 }: Props) => {
-  const [username, setUsername] = useState<string>("");
+  const [identifier, setIdentifier] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [session, setSession] = useState<AtpSessionData>();
   const [submitted, setSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(true);
 
   const agent = useMemo(
     () =>
@@ -52,7 +59,7 @@ const Login = ({
           const sessData = JSON.stringify(sess);
           localStorage.setItem("sess", sessData);
           if (sess != null) {
-            setSession(sess!);
+            // setSession(sess!);
             setLoggedInSuccess(true);
             // Store a value in chrome storage
 
@@ -71,29 +78,17 @@ const Login = ({
     []
   );
 
-  useEffect(() => {
-    if (attemptedLogin && !loggedInSuccess) {
-      setIsVisible(true);
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [attemptedLogin, submitted]);
-
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-
   const login = useCallback(async () => {
     try {
+      const parsedIdentifier = calculateLoginIdentifier(identifier);
       await agent!.login({
-        identifier: username,
+        identifier: parsedIdentifier,
         password: password,
       });
     } catch (error) {
       setSubmitted(true);
-      setLoggedIn(true);
     }
-  }, [username, password, agent]);
+  }, [identifier, password, agent]);
 
   const handleLoginSubmit = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
@@ -115,20 +110,20 @@ const Login = ({
         </div>
         <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
           <div className="input-container">
-            <label htmlFor="username">
+            <label htmlFor="identifier">
               Username&nbsp;/&nbsp;Email Address:&nbsp;
             </label>
             <input
               type="text"
-              id="username"
+              id="identifier"
               className="input-box"
               placeholder="example.bsky.social"
               onChange={(e) => {
                 setSubmitted(false);
                 setAttemptedLogin(false);
-                setUsername(e.target.value);
+                setIdentifier(e.target.value);
               }}
-              value={username}
+              value={identifier}
             />
           </div>
           {/* <br /> */}
