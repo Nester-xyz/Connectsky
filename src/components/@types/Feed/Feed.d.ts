@@ -30,6 +30,7 @@ export type fieldDataProps = {
   reason: any;
   embed: any;
   indexedAt: any;
+  replyParent: any;
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
@@ -67,4 +68,5 @@ export type dataGotFromApi = {
     };
   };
   indexedAt: any;
+  replyParent: any;
 };

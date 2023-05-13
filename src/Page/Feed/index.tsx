@@ -129,6 +129,7 @@ const Feed = () => {
           },
         },
         indexedAt: feed.post?.indexedAt,
+        replyParent: feed?.reply?.parent,
       };
     });
     setFeedData((prevData) => [...prevData, ...mappedData]);
@@ -213,7 +214,9 @@ const Feed = () => {
                             reply={item.reply}
                             reason={item.reason}
                             embed={item.embed}
-                            indexedAt={item.indexedAt} />
+                            indexedAt={item.indexedAt}
+                            replyParent={item.replyParent}
+                          />
                         </div>
                       );
                     } else {
@@ -234,6 +237,7 @@ const Feed = () => {
                             reason={item.reason}
                             embed={item.embed}
                             indexedAt={item.indexedAt}
+                            replyParent={item.replyParent}
                           />
                         </div>
                       );
