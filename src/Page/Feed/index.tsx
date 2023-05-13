@@ -47,7 +47,7 @@ const Feed = () => {
                 images: [
                   {
                     image,
-                    alt: "Posted via Connectsy!",
+                    alt: "Posted via Connectsky!",
                   },
                 ],
               },
