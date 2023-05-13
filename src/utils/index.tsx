@@ -59,11 +59,11 @@ export function formatDateAgo(date: Date) {
   const diff = moment.duration(now.diff(date));
 
   if (diff.asDays() >= 1) {
-    return `${Math.floor(diff.asDays())}d ago`;
+    return `${Math.floor(diff.asDays())}d `;
   } else if (diff.asHours() >= 1) {
-    return `${Math.floor(diff.asHours())}h ago`;
+    return `${Math.floor(diff.asHours())}h `;
   } else if (diff.asMinutes() >= 1) {
-    return `${Math.floor(diff.asMinutes())}m ago`;
+    return `${Math.floor(diff.asMinutes())}m `;
   } else {
     return "just now";
   }

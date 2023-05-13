@@ -185,7 +185,7 @@ const PostCard = ({
           </div>
           <div>
             {/* section for image if available; */}
-            <img src={embed.data.embeds[0].images[0].thumb} alt="" />
+            <img src={embed.data?.embeds[0]?.images[0]?.thumb} alt="" />
           </div>
         </div>
       }
