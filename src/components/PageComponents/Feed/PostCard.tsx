@@ -4,7 +4,7 @@ import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { BiShare, BiRepost } from "react-icons/bi";
-import { agent, handleLongText, refreshSession } from "../../../utils";
+import { agent, formatDateAgo, handleLongText, refreshSession } from "../../../utils";
 import PostLoader from "./PostLoader";
 
 // just a random Image I grabbed from the internet to show when no image is provided
@@ -24,7 +24,8 @@ const PostCard = ({
   repostCount,
   reply,
   reason,
-  embed
+  embed,
+  indexedAt
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
   const [repost, setRepost] = useState(false);
@@ -121,29 +122,32 @@ const PostCard = ({
       <div className="flex">
         {/* Render author's profile image, name and caption */}
         <div className="flex flex-col gap-2">
-          <div className="flex gap-4 items-center">
-            <div className="w-10 h-10 rounded-full overflow-hidden">
-              {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
+          {reason.by !== undefined && <p className="text-sm text-slate-500 flex flex-row"><BiRepost size={20} /> {` Reposted by ${reason?.by}`}</p>}
+          <div className="flex justify-between">
+            <div className="flex gap-4 items-center">
+              <div className="w-10 h-10 rounded-full overflow-hidden">
+                {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
 
-              {profileImg ? (
-                <img
-                  src={profileImg}
-                  alt=""
-                  className="w-10 h-10 object-cover"
-                />
-              ) : (
-                <img
-                  src={userImage}
-                  alt=""
-                  className="w-10 h-10 object-cover"
-                />
-              )}
+                {profileImg ? (
+                  <img
+                    src={profileImg}
+                    alt=""
+                    className="w-10 h-10 object-cover"
+                  />
+                ) : (
+                  <img
+                    src={userImage}
+                    alt=""
+                    className="w-10 h-10 object-cover"
+                  />
+                )}
+              </div>
+              <div className="text-xl flex flex-col">
+                <p>{author === undefined ? handleSplit : author}</p>
+                {reply.by !== undefined && <p className="text-sm text-slate-500 flex flex-row"><BiShare /> {` Replied to ${reply?.by}`}</p>}
+              </div>
             </div>
-            <div className="text-xl flex flex-col">
-              <p>{author === undefined ? handleSplit : author}</p>
-              {reason.by !== undefined && <p className="text-sm text-slate-500 flex flex-row"><BiShare /> {` Reposted by ${reason?.by}`}</p>}
-              {reply.by !== undefined && <p className="text-sm text-slate-500 flex flex-row"><BiShare /> {` Replied to ${reply?.by}`}</p>}
-            </div>
+            <div className="flex items-center">{formatDateAgo(indexedAt)}</div>
           </div>
           <div>
             <p
@@ -173,7 +177,7 @@ const PostCard = ({
               <img className="w-10 h-10 object-cover rounded-full" src={embed.data.author.avatar} alt="" />
               <div className="text-lg flex flex-col pl-2">{embed.data.author.displayName}</div>
             </div>
-            <div>3m</div>
+            <div>{formatDateAgo(embed.data.indexedAt)}</div>
           </div>
           {/* section for text */}
           <div className="text-base">

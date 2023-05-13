@@ -128,6 +128,7 @@ const Feed = () => {
             images: [{ thumb: firstImageThumb }],
           },
         },
+        indexedAt: feed.post?.indexedAt,
       };
     });
     setFeedData((prevData) => [...prevData, ...mappedData]);
@@ -212,7 +213,7 @@ const Feed = () => {
                             reply={item.reply}
                             reason={item.reason}
                             embed={item.embed}
-                          />
+                            indexedAt={item.indexedAt} />
                         </div>
                       );
                     } else {
@@ -232,6 +233,7 @@ const Feed = () => {
                             reply={item.reply}
                             reason={item.reason}
                             embed={item.embed}
+                            indexedAt={item.indexedAt}
                           />
                         </div>
                       );
