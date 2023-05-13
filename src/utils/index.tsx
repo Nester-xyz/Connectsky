@@ -107,7 +107,6 @@ function handleLinks(str: string | undefined): { __html: string } | undefined {
   if (!str) {
     return undefined;
   }
-  console.log(str);
   return {
     __html: str.replace(
       linkRegex,

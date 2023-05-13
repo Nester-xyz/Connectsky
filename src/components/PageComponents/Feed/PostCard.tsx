@@ -3,7 +3,7 @@ import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
-import { BiRepost } from "react-icons/bi";
+import { BiShare, BiRepost } from "react-icons/bi";
 import { agent, handleLongText, refreshSession } from "../../../utils";
 import PostLoader from "./PostLoader";
 
@@ -22,6 +22,8 @@ const PostCard = ({
   uri,
   cid,
   repostCount,
+  reply,
+  reason,
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
   const [repost, setRepost] = useState(false);
@@ -102,7 +104,6 @@ const PostCard = ({
       await checkAlreadyRepost();
       setIsFetching(false);
     }
-    console.log(caption);
     dataFetcher();
   }, [cid, uri]);
 
@@ -137,9 +138,11 @@ const PostCard = ({
                 />
               )}
             </div>
-            <p className="text-xl">
-              {author === undefined ? handleSplit : author}
-            </p>
+            <div className="text-xl flex flex-col">
+              <p>{author === undefined ? handleSplit : author}</p>
+              {reason.by !== undefined && <p className="text-sm text-slate-500 flex flex-row"><BiShare /> {` Reposted by ${reason?.by}`}</p>}
+              {reply.by !== undefined && <p className="text-sm text-slate-500 flex flex-row"><BiShare /> {` Replied to ${reply?.by}`}</p>}
+            </div>
           </div>
           <div>
             <p

@@ -96,6 +96,13 @@ const Feed = () => {
       const firstImageThumb = images?.length > 0 ? images[0].thumb : "";
 
       return {
+        reason: {
+          by: feed.reason?.by?.displayName,
+        },
+        reply: {
+          text: feed.reply?.parent?.record?.text,
+          by: feed.reply?.parent?.author?.displayName,
+        },
         author: {
           displayName: feed.post.author.displayName,
           avatar: feed.post.author.avatar,
@@ -198,6 +205,8 @@ const Feed = () => {
                             uri={item.uri}
                             cid={item.cid}
                             repostCount={item.repostCount}
+                            reply={item.reply}
+                            reason={item.reason}
                           />
                         </div>
                       );
@@ -215,6 +224,8 @@ const Feed = () => {
                             uri={item.uri}
                             cid={item.cid}
                             repostCount={item.repostCount}
+                            reply={item.reply}
+                            reason={item.reason}
                           />
                         </div>
                       );

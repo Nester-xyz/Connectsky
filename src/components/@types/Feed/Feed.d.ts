@@ -26,11 +26,20 @@ export type fieldDataProps = {
   uri: string;
   cid: string;
   repostCount: number;
+  reply: any;
+  reason: any;
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
 
 export type dataGotFromApi = {
+  reply: {
+    text: any;
+    by: any;
+  };
+  reason: {
+    by: any;
+  };
   author: {
     displayName: any;
     avatar: any;
