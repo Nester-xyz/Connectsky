@@ -110,6 +110,24 @@
   width: 100%;
 }
 
+.password-container {
+  position: relative;
+  margin-top: 10px;
+}
+
+.tooltip-container {
+  width: 300px;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #000000aa;
+  color: #fff;
+  top: 0px;
+  border-radius: 9999px;
+  margin-top: -20px;
+  padding: 3px 10px;
+}
 .info-icon {
   align-items: center;
   margin-top: 3px;

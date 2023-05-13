@@ -40,6 +40,7 @@ const Login = ({
   const [password, setPassword] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   const agent = useMemo(
     () =>
@@ -138,10 +139,23 @@ const Login = ({
             />
           </div>
           {/* <br /> */}
-          <div className="input-container">
+
+          <div className="input-container password-container">
+            <div className="tooltip-container">
+              {showTooltip && (
+                <div className="tooltip">
+                  This prevents the password from being misused
+                </div>
+              )}
+            </div>
             <label htmlFor="app-password">
               App Password:&nbsp;{" "}
-              <div className="info-icon" onClick={handleAppPassword}>
+              <div
+                className="info-icon"
+                onClick={handleAppPassword}
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              >
                 <BsFillInfoCircleFill />
               </div>
             </label>
