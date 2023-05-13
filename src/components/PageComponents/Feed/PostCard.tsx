@@ -139,7 +139,7 @@ const PostCard = ({
           repostCount={replyParent?.repostCount}
           reply={replyParent?.reply}
           reason={replyParent?.reason}
-          embed={replyParent?.embed}
+          embed={{ $type: replyParent?.embed?.$type, data: replyParent?.embed?.record }}
           indexedAt={replyParent?.indexedAt}
           replyParent={replyParent?.replyParent}
         />
