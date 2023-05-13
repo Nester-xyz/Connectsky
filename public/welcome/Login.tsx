@@ -31,7 +31,7 @@ const Login = ({
   const [password, setPassword] = useState<string>("");
   const [session, setSession] = useState<AtpSessionData>();
   const [submitted, setSubmitted] = useState(false);
-
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
   const agent = useMemo(
@@ -124,6 +124,7 @@ const Login = ({
               className="input-box"
               placeholder="example.bsky.social"
               onChange={(e) => {
+                setSubmitted(false);
                 setAttemptedLogin(false);
                 setUsername(e.target.value);
               }}
@@ -131,22 +132,28 @@ const Login = ({
             />
           </div>
           {/* <br /> */}
-          <div className="input-container">
+          <div className="input-container ">
             <label htmlFor="app-password">App Password:&nbsp;</label>
-            <input
-              type="password"
-              id="app-password"
-              className="input-box"
-              placeholder="Password"
-              onChange={(e) => {
-                setAttemptedLogin(false);
-                setPassword(e.target.value);
-              }}
-              value={password}
-            />
-            <div className="text-2xl absolute">
-              <HiEye />
-              <HiEyeSlash />
+            <div className="password-box">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="app-password"
+                className="input-box "
+                placeholder="Password"
+                onChange={(e) => {
+                  setAttemptedLogin(false);
+                  setSubmitted(false);
+                  setPassword(e.target.value);
+                }}
+                value={password}
+              />
+              <div className="password-icons">
+                {showPassword ? (
+                  <HiEyeSlash onClick={() => setShowPassword(false)} />
+                ) : (
+                  <HiEye onClick={() => setShowPassword(true)} />
+                )}
+              </div>
             </div>
           </div>
           {/* <br />
