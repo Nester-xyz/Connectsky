@@ -4,7 +4,7 @@ import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { BiRepost } from "react-icons/bi";
-import { agent, handleLinks, refreshSession } from "../../../utils";
+import { agent, handleLongText, refreshSession } from "../../../utils";
 import PostLoader from "./PostLoader";
 
 // just a random Image I grabbed from the internet to show when no image is provided
@@ -24,17 +24,25 @@ const PostCard = ({
   repostCount,
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
+  const [repost, setRepost] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [repostCnt, setRepostCnt] = useState(repostCount);
-  const [isReposted, setIsReposted] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
   const [handleSplit, setHandleSplit] = useState("");
   async function handleRepost() {
     try {
-      setRepostCnt((prev) => prev + 1);
-      setIsReposted(true);
-      await refreshSession();
-      await agent.repost(uri, cid);
+      if (repost) {
+        setRepost(!repost);
+        setRepostCnt((prev) => prev - 1);
+        await refreshSession();
+        const res = await agent.repost(uri, cid);
+        await agent.deleteRepost(res.uri);
+      } else {
+        setRepost(!repost);
+        setRepostCnt((prev) => prev + 1);
+        await refreshSession();
+        await agent.repost(uri, cid);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +88,7 @@ const PostCard = ({
       const alreadyReposted = data.repostedBy.some((item) =>
         isAvailable(item.handle)
       );
-      setIsReposted(alreadyReposted);
+      setRepost(alreadyReposted);
     } catch (error) {
       console.log(error);
     }
@@ -94,6 +102,7 @@ const PostCard = ({
       await checkAlreadyRepost();
       setIsFetching(false);
     }
+    console.log(caption);
     dataFetcher();
   }, [cid, uri]);
 
@@ -135,11 +144,12 @@ const PostCard = ({
           <div>
             <p
               className="text-lg "
-              dangerouslySetInnerHTML={handleLinks(caption)}
+              dangerouslySetInnerHTML={handleLongText(caption)}
             ></p>
           </div>
         </div>
       </div>
+
 
       {image?.length == 0 ? (
         ""
@@ -161,7 +171,7 @@ const PostCard = ({
           </div>
           <div className="flex items-center text-3xl gap-1">
             <BiRepost
-              className={`cursor-pointer ${isReposted && "text-green-500"}`}
+              className={`cursor-pointer ${repost ? "text-green-500" : ""}`}
               onClick={handleRepost}
             />
             <p className="text-sm">{repostCnt}</p>

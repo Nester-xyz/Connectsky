@@ -10,7 +10,7 @@ import { SideBarProps, linksType } from "../../@types/Layout/SideBar";
 // component imports
 import HoverButton from "../../UI/HoverButton";
 
-import { links } from "../../../App";
+import { links } from "../../../utils";
 
 // the components code begins from here
 const SideBar = ({ activePage, setActivePage, notiCount }: SideBarProps) => {

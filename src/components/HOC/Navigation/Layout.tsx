@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // type import
-import { activePageCheck } from "../../../App";
+import { activePageCheck } from "../../../utils";
 import { LoginContextType } from "../../@types/Login/Login";
 import { agent, refreshSession } from "../../../utils";
 // component import
