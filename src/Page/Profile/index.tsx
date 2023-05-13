@@ -10,7 +10,7 @@ const index = (props: Props) => {
 
       <div className="bg-slate-50 w-full h-56 relative">
         {/* <img src="" alt="" /> //cover image */}
-        <div className="px-5 py-1 border rounded-md absolute right-5 top-5">
+        <div className="px-5 py-1 border first-letter:rounded-md absolute right-5 top-5">
           Follow
         </div>
         {/* profile */}
