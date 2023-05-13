@@ -66,7 +66,9 @@ const Feed = () => {
           setPostText("");
           setImage(null);
           setSubmitPost(false);
+          setShowImage(false);
         } catch (error) {
+          setShowImage(false);
           setPostText("");
           setImage(null);
           setSubmitPost(false);

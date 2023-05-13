@@ -108,57 +108,65 @@ const Login = ({
       setUsername(e.target.value);
       setAttemptedLogin(true);
     },
-    []
-  );
+    [] 
+  );      
 
   const handlePasswordChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setPassword(e.target.value);
       setAttemptedLogin(true);
     },
-    []
-  );
+    []       
+  );  
 
   return (
-    <div className="container">
-      <h1 className="login-heading">Log in to Bsky</h1>
-      {(attemptedLogin && loggedInSuccess) ? null : (attemptedLogin && submitted && !loggedInSuccess) && "Incorrect Credentials"}
-      <form id="login" onSubmit={handleLoginSubmit}>
-        <div className="input-container">
-          <label htmlFor="username">Username:&nbsp;</label>
-          <input
-            type="text"
-            id="username"
-            className="input-box"
-            placeholder="username"
-            onChange={handleUsernameChange}
-            value={username}
-          />
+    <>  
+      <div className="background_main"><div className="background_content"></div></div>
+      <div className="container">
+        <div className="formTitle">
+          <h1 className="login-heading">Log in to Bsky</h1>
+
         </div>
-        {/* <br /> */}
-        <div className="input-container">
-          <label htmlFor="app-password">App Password:&nbsp;</label>
-          <input
-            type="password"
-            id="app-password"
-            className="input-box"
-            placeholder="password"
-            onChange={handlePasswordChange}
-            value={password}
-          />
-        </div>
-        {/* <br />
-        <br /> */}
-        {attemptedLogin
-        ? loggedInSuccess
-          ? null
-          : <h5 className="login-msg">Incorrect credentials!</h5>
-        : null}
-        <button type="submit" disabled={loggedIn}>
-          Login
-        </button>
-      </form>
-    </div>
+        <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
+          <div className="input-container">
+            <label htmlFor="username">Username&nbsp;/&nbsp;Email Address:&nbsp;</label>
+            <input
+              type="text"
+              id="username"
+              className="input-box"
+              placeholder="Username"
+              onChange={handleUsernameChange}
+              value={username}
+            />
+          </div>
+          {/* <br /> */}
+          <div className="input-container">
+            <label htmlFor="app-password">App Password:&nbsp;</label>
+            <input
+              type="password"
+              id="app-password"
+              className="input-box" 
+              placeholder="Password"
+              onChange={handlePasswordChange}
+              value={password}
+            />
+          </div>
+          {/* <br />
+          <br /> */}  
+          {attemptedLogin
+          ? loggedInSuccess
+            ? null
+            : <h5 className="login-msg">Incorrect credentials!</h5>
+          : null}
+          <button type="submit" disabled={loggedIn}>
+            Login
+          </button>
+          <div className="signUp"> 
+            <p>Don't have an account? <span className="strong">Sign up</span> for free.</p>
+          </div> 
+        </form>
+      </div>     
+    </>
   );
 };
 
