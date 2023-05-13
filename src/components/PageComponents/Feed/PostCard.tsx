@@ -119,10 +119,10 @@ const PostCard = ({
 
   return (
     <div className="w-full bg-white p-5 rounded-xl border-b border-slate-200">
-      <div className="flex">
+      <div className="flex flex-col">
         {/* Render author's profile image, name and caption */}
+        {reason.by !== undefined && <p className="text-sm text-slate-500 flex flex-row"><BiRepost size={20} /> {` Reposted by ${reason?.by}`}</p>}
         <div className="flex flex-col gap-2">
-          {reason.by !== undefined && <p className="text-sm text-slate-500 flex flex-row"><BiRepost size={20} /> {` Reposted by ${reason?.by}`}</p>}
           <div className="flex justify-between">
             <div className="flex gap-4 items-center">
               <div className="w-10 h-10 rounded-full overflow-hidden">
