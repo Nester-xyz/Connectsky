@@ -27,6 +27,7 @@ const Login = ({
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const [signUpClick, setSignUpClick] = useState<boolean>(false);
+  const [isSignedUp, setIsSignedUp] = useState<boolean>(false);
 
   const agent = useMemo(
     () =>
@@ -113,13 +114,20 @@ const Login = ({
           setLoggedInSuccess={setLoggedInSuccess}
           setSignUpClick={setSignUpClick}
           agent={agent}
+          setIsSignedUp={setIsSignedUp}
         />
       ) : (
         <div className="container">
           <div className="formTitle">
             <h1 className="login-heading">Login to Connectsky</h1>
           </div>
+
           <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
+            {isSignedUp && (
+              <h5 className="login-msg text-primary">
+                Successfully signed up to Bluesky Social. Login to continue.
+              </h5>
+            )}
             <div className="input-container">
               <label htmlFor="identifier">
                 Username&nbsp;/&nbsp;Email Address:&nbsp;

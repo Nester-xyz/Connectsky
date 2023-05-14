@@ -11,6 +11,7 @@ type Props = {
   setLoggedInSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setSignUpClick: (value: boolean) => void;
   agent: BskyAgent;
+  setIsSignedUp: (value: boolean) => void;
 };
 
 interface IFormValues extends AtpAgentCreateAccountOpts {
@@ -50,7 +51,6 @@ const Signup: React.FC<Props> = (props) => {
   const handleAccountCreate = async (event) => {
     try {
       event.preventDefault();
-      console.log("Account Create click");
       if (formValues?.password !== formValues?.confirmPassword) {
         setErrorMessage("Password do not match. Please try again.");
         return;
@@ -61,6 +61,8 @@ const Signup: React.FC<Props> = (props) => {
         handle: formValues.handle,
         inviteCode: formValues.inviteCode,
       });
+      props.setIsSignedUp(true);
+      props.setSignUpClick(false);
     } catch (error) {
       setErrorMessage(error?.message);
     }

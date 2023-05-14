@@ -205,6 +205,10 @@ input[type="email"] {
   font-size: 14px;
 }
 
+.text-primary {
+  color: #007bff;
+}
+
 .submit {
   background-color: #007bff;
   color: white;
