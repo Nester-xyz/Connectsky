@@ -74,6 +74,7 @@
 .container {
   width: 24vw;
   min-width: 400px;
+  max-width: 600px;
   height: 50vh;
   z-index: 10;
   gap: 50px;
