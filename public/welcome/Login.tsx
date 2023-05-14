@@ -136,7 +136,7 @@ const Login = ({
                 type="text"
                 id="identifier"
                 className="input-box"
-                placeholder="example.bsky.social"
+                placeholder="john.bsky.social"
                 onChange={(e) => {
                   setSubmitted(false);
                   setAttemptedLogin(false);
