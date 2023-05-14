@@ -23,7 +23,7 @@ const HoverButton = ({
           checkOne === checkTwo ? "bg-white " : "hover:bg-slate-100"
         }`}
       >
-        {icon}
+        <div className="w-7 h-7">{icon}</div>
         {text}
       </button>
     </Link>

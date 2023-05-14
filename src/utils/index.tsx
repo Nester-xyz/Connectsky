@@ -11,6 +11,7 @@ import {
 import { IoMdNotifications } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
+import DefaultUserImage from "../components/UI/DefaultUserImage";
 export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -22,7 +23,12 @@ export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
 // Import moment.js
 
 // Defining type for active page check, with limited values
-export type activePageCheck = "Home" | "Search" | "Notifications" | "Settings";
+export type activePageCheck =
+  | "Home"
+  | "Search"
+  | "Notifications"
+  | "Settings"
+  | "Profile";
 // this contains the actual links which will be made into the buttons
 
 export const links: linksType[] = [
@@ -45,11 +51,17 @@ export const links: linksType[] = [
     activeIcon: <IoMdNotifications />,
   },
   // replace the icon with a seperate compoenent wohich only returns an profile picure
+  // {
+  //   linkName: "Settings",
+  //   links: "/settings",
+  //   icon: <IoSettingsOutline />,
+  //   activeIcon: <IoSettings />,
+  // },
   {
-    linkName: "Settings",
-    links: "/settings",
-    icon: <IoSettingsOutline />,
-    activeIcon: <IoSettings />,
+    linkName: "Profile",
+    links: "/profile",
+    icon: <DefaultUserImage />,
+    activeIcon: <DefaultUserImage />,
   },
 ];
 

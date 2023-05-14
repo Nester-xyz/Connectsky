@@ -76,49 +76,52 @@ const Notification = () => {
   }, [isLoading, observer]);
 
   return (
-    <div className="w-full p-5">
-      <h1 className="text-3xl border-b-2 pb-4 border-slate-300">
-        Notifications
-      </h1>
+    <div className="w-full h-full grid grid-cols-4 gap-5 relative">
+      <div className="col-span-4 lg:col-span-3  p-5 lg:pr-0">
+        <h1 className="text-3xl border-b-2 pb-4 border-slate-300">
+          Notifications
+        </h1>
 
-      <div className="flex flex-col gap-5 mt-3">
-        {notifications.map((item: NotificationItem, index) => {
-          if (index === notifications.length - 1) {
-            return (
-              <div ref={lastElementRef} key={index}>
-                <NotificationCard
-                  author={item.author}
-                  image={item.image}
-                  title={item.title}
-                  createdAt={item.indexedAt}
-                  reply={item.reply}
-                  handle={item.handle}
-                />
-              </div>
-            );
-          } else {
-            return (
-              <div key={index}>
-                <NotificationCard
-                  author={item.author}
-                  image={item.image}
-                  title={item.title}
-                  createdAt={item.indexedAt}
-                  reply={item.reply}
-                  handle={item.handle}
-                />
-              </div>
-            );
-          }
-        })}
-        {isLoading ? (
-          <>
-            <NotificationLoader /> <NotificationLoader />
-          </>
-        ) : (
-          ""
-        )}
+        <div className="flex flex-col gap-3 mt-3">
+          {notifications.map((item: NotificationItem, index) => {
+            if (index === notifications.length - 1) {
+              return (
+                <div ref={lastElementRef} key={index}>
+                  <NotificationCard
+                    author={item.author}
+                    image={item.image}
+                    title={item.title}
+                    createdAt={item.indexedAt}
+                    reply={item.reply}
+                    handle={item.handle}
+                  />
+                </div>
+              );
+            } else {
+              return (
+                <div key={index}>
+                  <NotificationCard
+                    author={item.author}
+                    image={item.image}
+                    title={item.title}
+                    createdAt={item.indexedAt}
+                    reply={item.reply}
+                    handle={item.handle}
+                  />
+                </div>
+              );
+            }
+          })}
+          {isLoading ? (
+            <>
+              <NotificationLoader /> <NotificationLoader />
+            </>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
+      <div className="bg-white col-span-1 hidden lg:block sticky h-full top-5"></div>
     </div>
   );
 };
