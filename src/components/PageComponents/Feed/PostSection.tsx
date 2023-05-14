@@ -134,6 +134,7 @@ const PostSection: React.FC<Props> = ({
             imgUpload={imgUpload}
             showEmoji={showEmoji}
             setShowEmoji={setShowEmoji}
+            handleFileChange={handleFileChange}
           />
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">

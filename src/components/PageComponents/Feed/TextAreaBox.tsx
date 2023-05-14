@@ -10,6 +10,9 @@ type Props = {
   showEmoji: boolean;
   setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>;
   ref: React.RefObject<HTMLInputElement>;
+  handleFileChange: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => Promise<void>;
 };
 
 const arrayOfRandomPlaceholders = [
@@ -25,6 +28,7 @@ const TextAreaBox = ({
   imgUpload,
   showEmoji,
   setShowEmoji,
+  handleFileChange,
 }: Props) => {
   console.log(ref);
 
@@ -51,6 +55,8 @@ const TextAreaBox = ({
     console.log(e.target.selectionStart);
   };
 
+  const fileRef = useRef(null) as React.RefObject<HTMLInputElement>;
+
   return (
     <>
       <div className="flex flex-col items-center relative">
@@ -76,10 +82,11 @@ const TextAreaBox = ({
         >
           <CiFaceSmile className="w-full h-full" />
         </div>
+        <input type="file" ref={fileRef} onChange={handleFileChange} hidden />
         <div
           className="bg-blue-300 rounded-md w-8 h-8 absolute left-2 bottom-2"
           onClick={() => {
-            ref.current?.click();
+            fileRef.current?.click();
             console.log("clicked");
           }}
         ></div>
