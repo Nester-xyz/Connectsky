@@ -203,7 +203,7 @@ const Signup: React.FC<Props> = (props) => {
             </div>
           </div>
 
-          {errorMessage?.length >= 0 && (
+          {errorMessage?.length > 0 && (
             <h5 className="login-msg"> {errorMessage}</h5>
           )}
 
