@@ -77,8 +77,7 @@ const Signup: React.FC<Props> = (props) => {
             <div className="tooltip-container">
               {showTooltip && (
                 <div className="tooltip">
-                  Bluesky Social is current invite only. Please enter your
-                  invite code.
+                  Bluesky Social is currently invite only.
                 </div>
               )}
             </div>
