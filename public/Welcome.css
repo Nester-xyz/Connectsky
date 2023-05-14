@@ -17,8 +17,10 @@
 
 .screen {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 50px 0px;
   overflow: hidden;
+  overflow-y: scroll;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,7 +76,7 @@
 .container {
   width: 24vw;
   min-width: 400px;
-  height: 50vh;
+  max-width: 600px;
   z-index: 10;
   gap: 50px;
 }
@@ -104,10 +106,17 @@
 
 .signUp {
   font-size: 14px;
+  display: flex;
+}
+
+.signUp span:hover {
+  cursor: pointer;
+  color: #007bff;
 }
 
 .input-container {
   width: 100%;
+  position: relative;
 }
 
 .password-container {
@@ -148,6 +157,11 @@
 
 .strong {
   font-weight: 700;
+  cursor: pointer;
+}
+
+.strong:hover {
+  color: var(--left-heading-color);
 }
 
 label {
@@ -161,7 +175,8 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"] {
   display: block;
   width: 100%;
   padding: 0.5rem 0.75rem;
@@ -188,6 +203,10 @@ input[type="password"] {
 .error {
   color: red;
   font-size: 14px;
+}
+
+.text-primary {
+  color: #007bff;
 }
 
 .submit {
@@ -234,4 +253,8 @@ button[type="submit"]::selection {
   100% {
     opacity: 0;
   }
+}
+
+.back-icon {
+  font-size: 40px;
 }
