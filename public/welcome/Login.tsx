@@ -103,7 +103,7 @@ const Login = ({
   );
 
   function appPassword(): React.MouseEventHandler<HTMLDivElement> {
-    return (event) => {
+    return () => {
       window.open(
         "https://github.com/bluesky-social/atproto-ecosystem/blob/main/app-passwords.md",
         "_blank"
@@ -115,112 +115,115 @@ const Login = ({
 
   function handleSignUpClick() {
     setSignUpClick(true);
-    console.log(signUpClick);
   }
 
   return (
     <>
+      <div className="background_main">
+        <div className="background_content"></div>
+      </div>
       {signUpClick ? (
         <Signup
           attemptedLogin={attemptedLogin}
           setAttemptedLogin={setAttemptedLogin}
           loggedInSuccess={loggedInSuccess}
           setLoggedInSuccess={setLoggedInSuccess}
+          setSignUpClick={setSignUpClick}
+          agent={agent}
         />
       ) : (
-        <>
-          <div className="background_main">
-            <div className="background_content"></div>
+        <div className="container">
+          <div className="formTitle">
+            <h1 className="login-heading">Login to Connectsky</h1>
           </div>
-          <div className="container">
-            <div className="formTitle">
-              <h1 className="login-heading">Login to Connectsky</h1>
+          <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
+            <div className="input-container">
+              <label htmlFor="identifier">
+                Username&nbsp;/&nbsp;Email Address:&nbsp;
+              </label>
+              <input
+                type="text"
+                id="identifier"
+                className="input-box"
+                placeholder="example.bsky.social"
+                onChange={(e) => {
+                  setSubmitted(false);
+                  setAttemptedLogin(false);
+                  setIdentifier(e.target.value);
+                }}
+                value={identifier}
+              />
             </div>
-            <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
-              <div className="input-container">
-                <label htmlFor="identifier">
-                  Username&nbsp;/&nbsp;Email Address:&nbsp;
-                </label>
-                <input
-                  type="text"
-                  id="identifier"
-                  className="input-box"
-                  placeholder="example.bsky.social"
-                  onChange={(e) => {
-                    setSubmitted(false);
-                    setAttemptedLogin(false);
-                    setIdentifier(e.target.value);
-                  }}
-                  value={identifier}
-                />
-              </div>
-              {/* <br /> */}
+            {/* <br /> */}
 
-              <div className="input-container password-container">
-                <div className="tooltip-container">
-                  {showTooltip && (
-                    <div className="tooltip">
-                      Temporary password for third party applications!
-                    </div>
+            <div className="input-container password-container">
+              <div className="tooltip-container">
+                {showTooltip && (
+                  <div className="tooltip">
+                    Temporary password for third party applications!
+                  </div>
+                )}
+              </div>
+              <label htmlFor="app-password">
+                App Password:&nbsp;{" "}
+                <div
+                  className="info-icon"
+                  onClick={handleAppPassword}
+                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseLeave={() => setShowTooltip(false)}
+                >
+                  <BsFillInfoCircleFill />
+                </div>
+              </label>
+              <div className="password-box">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="app-password"
+                  className="input-box "
+                  placeholder="password"
+                  onChange={(e) => {
+                    setAttemptedLogin(false);
+                    setSubmitted(false);
+                    setPassword(e.target.value);
+                  }}
+                  value={password}
+                />
+                <div className="password-icons">
+                  {showPassword ? (
+                    <HiEyeSlash onClick={() => setShowPassword(false)} />
+                  ) : (
+                    <HiEye onClick={() => setShowPassword(true)} />
                   )}
                 </div>
-                <label htmlFor="app-password">
-                  App Password:&nbsp;{" "}
-                  <div
-                    className="info-icon"
-                    onClick={handleAppPassword}
-                    onMouseEnter={() => setShowTooltip(true)}
-                    onMouseLeave={() => setShowTooltip(false)}
-                  >
-                    <BsFillInfoCircleFill />
-                  </div>
-                </label>
-                <div className="password-box">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="app-password"
-                    className="input-box "
-                    placeholder="password"
-                    onChange={(e) => {
-                      setAttemptedLogin(false);
-                      setSubmitted(false);
-                      setPassword(e.target.value);
-                    }}
-                    value={password}
-                  />
-                  <div className="password-icons">
-                    {showPassword ? (
-                      <HiEyeSlash onClick={() => setShowPassword(false)} />
-                    ) : (
-                      <HiEye onClick={() => setShowPassword(true)} />
-                    )}
-                  </div>
-                </div>
               </div>
-              {/* <br />
+            </div>
+            {/* <br />
           <br /> */}
-              {attemptedLogin && loggedInSuccess
-                ? null
-                : attemptedLogin &&
-                  submitted &&
-                  !loggedInSuccess && (
-                    <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
-                  )}
-              <button className="submit" type="submit">
-                Login
-              </button>
-              <div className="signUp">
-                <p>
-                  Don't have an account?{" "}
-                  <span className="strong" onClick={handleSignUpClick}>
-                    Sign up
-                  </span>{" "}
-                  for free.
-                </p>
-              </div>
-            </form>
-          </div>
-        </>
+            {attemptedLogin && loggedInSuccess
+              ? null
+              : attemptedLogin &&
+                submitted &&
+                !loggedInSuccess && (
+                  <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
+                )}
+            <button className="submit" type="submit">
+              Login
+            </button>
+            <div className="signUp">
+              <p>
+                Don't have an account?{" "}
+                <span
+                  className="strong"
+                  onClick={handleSignUpClick}
+                  style={{ cursor: "pointer" }}
+                >
+                  Sign up
+                </span>{" "}
+                for free.
+              </p>
+            </div>
+          </form>
+        </div>
       )}
     </>
   );

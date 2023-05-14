@@ -107,8 +107,14 @@
   display: flex;
 }
 
+.signUp span:hover {
+  cursor: pointer;
+  color: #007bff;
+}
+
 .input-container {
   width: 100%;
+  position: relative;
 }
 
 .password-container {
@@ -167,7 +173,8 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"] {
   display: block;
   width: 100%;
   padding: 0.5rem 0.75rem;
