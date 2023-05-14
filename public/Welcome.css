@@ -145,10 +145,33 @@
   width: 100%;
 }
 
+.password-container {
+  position: relative;
+  margin-top: 10px;
+}
+
+.tooltip-container {
+  width: 300px;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #000000aa;
+  color: #fff;
+  top: 0px;
+  border-radius: 9999px;
+  margin-top: -20px;
+  padding: 3px 10px;
+}
+.info-icon {
+  align-items: center;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
 .login-msg {
   text-align: center;
   font-size: 1rem;
-  margin-bottom: 20px;
 }
 
 .container .login-heading {
@@ -162,20 +185,14 @@
   font-weight: 700;
 }
 
-.form-group {
-  margin: 0 auto;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
 label {
-  display: block;
+  display: flex;
   margin-bottom: 5px;
   font-size: 0.75rem;
   text-transform: uppercase;
   color: rgb(75 85 99);
+  gap: 2px;
+  align-items: center;
 }
 
 input[type="text"],
@@ -208,7 +225,7 @@ input[type="password"] {
   font-size: 14px;
 }
 
-button[type="submit"] {
+.submit {
   background-color: #007bff;
   color: white;
   border-radius: 0.375rem;
@@ -253,98 +270,3 @@ button[type="submit"]::selection {
     opacity: 0;
   }
 }
-
-/* .container .input-container {
-  position: relative;
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.container .input-container .input-box {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.container .input-container label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  color: var(--left-text-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.5s ease;
-}
-
-.container .input-box:active ~ label {
-  top: -20px;
-}
-
-.container .left p {
-  font-size: 1.5rem;
-  color: var(--left-text-color);
-  text-align: left;
-  margin: 1rem;
-}
-
-.container .left .text .button-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-}
-
-.left .button-group .btn {
-  background: #515151;
-  color: var(--left-text-color);
-  border: 1px solid var(--left-text-color);
-  padding: 0.5rem 1rem;
-  margin: 0.5rem;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.container .right {
-  background: var(--right-background-color);
-  padding: 20px;
-  border-radius: var(--border-radius);
-}
-
-.right #login {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding-bottom: 10px;
-}
-
-.right input {
-  width: 100%;
-  height: 100%;
-  background: var(--left-background-color);
-  color: var(--right-text-color);
-  border: none;
-  font-size: 1rem;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.container .right .btn {
-  background: var(--right-background-color);
-  color: var(--right-text-color);
-  border: 1px solid var(--right-text-color);
-  padding: 0.5rem 1rem;
-  margin: 0.5rem;
-  font-size: 1.5rem;
-  cursor: pointer;
-} */

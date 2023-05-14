@@ -8,19 +8,19 @@ const LogInSuccess = () => {
     window.close();
   }
   return (
-    <div className="loginSuccess">
-      <div className="heading">Success</div>
-      <div className="login-message">
-        <div className="sub-heading">You logged in.</div>
-        <div className="message">
-          Now you can just close this tab and open the extension to start your
-          'work'!
+    <>
+      <div className="background_main">
+        <div className="background_content"></div>
+      </div>
+      <div className="container formTitle loginForm">
+        <div className="login-heading">
+          <div>Logged In Successfully!</div>
         </div>
-        <button className="close" onClick={handleExtension}>
-          Open the extension
+        <button className="submit" onClick={handleExtension}>
+          OPEN APP
         </button>
       </div>
-    </div>
+    </>
   );
 };
 
