@@ -75,7 +75,7 @@
   width: 24vw;
   min-width: 400px;
   max-width: 600px;
-  height: 50vh;
+  min-height: 50vh;
   z-index: 10;
   gap: 50px;
 }
@@ -124,7 +124,7 @@
 }
 
 .tooltip-container {
-  width: 300px;
+  width: 500px;
 }
 
 .tooltip {
@@ -133,7 +133,7 @@
   color: #fff;
   top: 0px;
   border-radius: 9999px;
-  margin-top: -20px;
+  margin-top: -26px;
   padding: 3px 10px;
 }
 .info-icon {

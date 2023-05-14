@@ -11,7 +11,7 @@ type Props = {
   setLoggedInSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setSignUpClick: (value: boolean) => void;
   agent: BskyAgent;
-};
+}; 
 
 interface IFormValues extends AtpAgentCreateAccountOpts {
   confirmPassword: "";
@@ -72,7 +72,7 @@ const Signup: React.FC<Props> = (props) => {
         <form id="login" className="loginForm" onSubmit={handleAccountCreate}>
           <div className="input-container">
             <div className="tooltip-container">
-              {showTooltip && (
+              {showTooltip && (  
                 <div className="tooltip">
                   Bluesky Social is current invite only. Please enter your
                   invite code.
@@ -203,7 +203,7 @@ const Signup: React.FC<Props> = (props) => {
             </div>
           </div>
 
-          {errorMessage?.length >= 0 && (
+          {errorMessage?.length > 0 && (
             <h5 className="login-msg"> {errorMessage}</h5>
           )}
 
