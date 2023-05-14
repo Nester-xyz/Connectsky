@@ -38,6 +38,9 @@ const Signup: React.FC<Props> = (props) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleValueChange = (event) => {
+    if (errorMessage.length > 0) {
+      setErrorMessage("");
+    }
     setFormValues((previous) => ({
       ...previous,
       [event.target.name]: event.target.value,
