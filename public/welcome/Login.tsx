@@ -14,22 +14,6 @@ type Props = {
   setLoggedInSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const calculateLoginIdentifier = (identifier: string) => {
-  // If the identifier is a valid email address, use it as the identifier
-  if (
-    /^(([^\s"(),.:;<>@[\\\]]+(\.[^\s"(),.:;<>@[\\\]]+)*)|(".+"))@((\[(?:\d{1,3}\.){3}\d{1,3}])|(([\dA-Za-z\-]+\.)+[A-Za-z]{2,}))$/.test(
-      identifier
-    )
-  ) {
-    return identifier;
-  }
-  // If user only gives identifier without .bsky.social, append it
-  if (!identifier.endsWith(".bsky.social")) {
-    return `${identifier}.bsky.social`;
-  }
-  return identifier;
-};
-
 const Login = ({
   attemptedLogin,
   setAttemptedLogin,
@@ -81,10 +65,9 @@ const Login = ({
 
   const login = useCallback(async () => {
     try {
-      const parsedIdentifier = calculateLoginIdentifier(identifier);
       await agent!.login({
-        identifier: parsedIdentifier,
-        password: password,
+        identifier,
+        password,
       });
     } catch (error) {
       setSubmitted(true);
@@ -136,6 +119,7 @@ const Login = ({
                 setIdentifier(e.target.value);
               }}
               value={identifier}
+              required
             />
           </div>
           {/* <br /> */}
@@ -171,6 +155,7 @@ const Login = ({
                   setPassword(e.target.value);
                 }}
                 value={password}
+                required
               />
               <div className="password-icons">
                 {showPassword ? (
