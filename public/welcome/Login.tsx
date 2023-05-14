@@ -4,6 +4,7 @@ import type { AtpSessionEvent, AtpSessionData } from "@atproto/api";
 import { HiEye } from "react-icons/hi";
 import { HiEyeSlash } from "react-icons/hi2";
 import { BsFillInfoCircleFill } from "react-icons/bs";
+import Signup from "./Signup";
 
 const { BskyAgent } = bsky;
 
@@ -41,6 +42,7 @@ const Login = ({
   const [submitted, setSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const [signUpClick, setSignUpClick] = useState<boolean>(false);
 
   const agent = useMemo(
     () =>
@@ -111,96 +113,115 @@ const Login = ({
 
   const handleAppPassword = appPassword();
 
+  function handleSignUpClick() {
+    setSignUpClick(true);
+    console.log(signUpClick);
+  }
+
   return (
     <>
-      <div className="background_main">
-        <div className="background_content"></div>
-      </div>
-      <div className="container">
-        <div className="formTitle">
-          <h1 className="login-heading">Login to Connectsky</h1>
-        </div>
-        <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
-          <div className="input-container">
-            <label htmlFor="identifier">
-              Username&nbsp;/&nbsp;Email Address:&nbsp;
-            </label>
-            <input
-              type="text"
-              id="identifier"
-              className="input-box"
-              placeholder="example.bsky.social"
-              onChange={(e) => {
-                setSubmitted(false);
-                setAttemptedLogin(false);
-                setIdentifier(e.target.value);
-              }}
-              value={identifier}
-            />
+      {signUpClick ? (
+        <Signup
+          attemptedLogin={attemptedLogin}
+          setAttemptedLogin={setAttemptedLogin}
+          loggedInSuccess={loggedInSuccess}
+          setLoggedInSuccess={setLoggedInSuccess}
+        />
+      ) : (
+        <>
+          <div className="background_main">
+            <div className="background_content"></div>
           </div>
-          {/* <br /> */}
+          <div className="container">
+            <div className="formTitle">
+              <h1 className="login-heading">Login to Connectsky</h1>
+            </div>
+            <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
+              <div className="input-container">
+                <label htmlFor="identifier">
+                  Username&nbsp;/&nbsp;Email Address:&nbsp;
+                </label>
+                <input
+                  type="text"
+                  id="identifier"
+                  className="input-box"
+                  placeholder="example.bsky.social"
+                  onChange={(e) => {
+                    setSubmitted(false);
+                    setAttemptedLogin(false);
+                    setIdentifier(e.target.value);
+                  }}
+                  value={identifier}
+                />
+              </div>
+              {/* <br /> */}
 
-          <div className="input-container password-container">
-            <div className="tooltip-container">
-              {showTooltip && (
-                <div className="tooltip">
-                  This prevents the password from being misused
+              <div className="input-container password-container">
+                <div className="tooltip-container">
+                  {showTooltip && (
+                    <div className="tooltip">
+                      Temporary password for third party applications!
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <label htmlFor="app-password">
-              App Password:&nbsp;{" "}
-              <div
-                className="info-icon"
-                onClick={handleAppPassword}
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-              >
-                <BsFillInfoCircleFill />
+                <label htmlFor="app-password">
+                  App Password:&nbsp;{" "}
+                  <div
+                    className="info-icon"
+                    onClick={handleAppPassword}
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                  >
+                    <BsFillInfoCircleFill />
+                  </div>
+                </label>
+                <div className="password-box">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="app-password"
+                    className="input-box "
+                    placeholder="password"
+                    onChange={(e) => {
+                      setAttemptedLogin(false);
+                      setSubmitted(false);
+                      setPassword(e.target.value);
+                    }}
+                    value={password}
+                  />
+                  <div className="password-icons">
+                    {showPassword ? (
+                      <HiEyeSlash onClick={() => setShowPassword(false)} />
+                    ) : (
+                      <HiEye onClick={() => setShowPassword(true)} />
+                    )}
+                  </div>
+                </div>
               </div>
-            </label>
-            <div className="password-box">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="app-password"
-                className="input-box "
-                placeholder="password"
-                onChange={(e) => {
-                  setAttemptedLogin(false);
-                  setSubmitted(false);
-                  setPassword(e.target.value);
-                }}
-                value={password}
-              />
-              <div className="password-icons">
-                {showPassword ? (
-                  <HiEyeSlash onClick={() => setShowPassword(false)} />
-                ) : (
-                  <HiEye onClick={() => setShowPassword(true)} />
-                )}
-              </div>
-            </div>
-          </div>
-          {/* <br />
+              {/* <br />
           <br /> */}
-          {attemptedLogin && loggedInSuccess
-            ? null
-            : attemptedLogin &&
-              submitted &&
-              !loggedInSuccess && (
-                <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
-              )}
-          <button className="submit" type="submit">
-            Login
-          </button>
-          <div className="signUp">
-            <p>
-              Don't have an account? <span className="strong">Sign up</span> for
-              free.
-            </p>
+              {attemptedLogin && loggedInSuccess
+                ? null
+                : attemptedLogin &&
+                  submitted &&
+                  !loggedInSuccess && (
+                    <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
+                  )}
+              <button className="submit" type="submit">
+                Login
+              </button>
+              <div className="signUp">
+                <p>
+                  Don't have an account?{" "}
+                  <span className="strong" onClick={handleSignUpClick}>
+                    Sign up
+                  </span>{" "}
+                  for free.
+                </p>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
+        </>
+      )}
     </>
   );
 };

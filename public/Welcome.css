@@ -104,6 +104,7 @@
 
 .signUp {
   font-size: 14px;
+  display: flex;
 }
 
 .input-container {
@@ -148,6 +149,11 @@
 
 .strong {
   font-weight: 700;
+  cursor: pointer;
+}
+
+.strong:hover {
+  color: var(--left-heading-color);
 }
 
 label {
@@ -234,4 +240,8 @@ button[type="submit"]::selection {
   100% {
     opacity: 0;
   }
+}
+
+.back-icon {
+  font-size: 40px;
 }
