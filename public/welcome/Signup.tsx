@@ -94,7 +94,7 @@ const Signup: React.FC<Props> = (props) => {
               id="inviteCode"
               name="inviteCode"
               className="input-box"
-              placeholder=""
+              placeholder="bsky-social-xxxxx-xxxxx"
               onChange={handleValueChange}
               value={formValues.inviteCode}
               required

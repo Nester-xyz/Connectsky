@@ -17,8 +17,10 @@
 
 .screen {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 50px 0px;
   overflow: hidden;
+  overflow-y: scroll;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,7 +77,6 @@
   width: 24vw;
   min-width: 400px;
   max-width: 600px;
-  height: 50vh;
   z-index: 10;
   gap: 50px;
 }
