@@ -177,8 +177,11 @@ const PostCard = ({
                     />
                   )}
                 </div>
-                <div className="text-xl flex flex-col pb-3">
-                  <p>{author === undefined ? handleSplit : author}</p>
+                <div className="text-xl flex flex-col pb-3 ">
+                  <p className="overflow-hidden line-clamp-1">
+                    {author === undefined ? handleSplit : author}
+                  </p>
+
                   {reply?.by !== undefined && (
                     <div className="text-sm text-slate-500 flex flex-row pb-4">
                       <BiShare /> {` Replied to ${reply?.by}`}
@@ -202,17 +205,17 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-              <div>
-                {/* Render the post image */}
-                <div className="w-full aspect-video overflow-hidden">
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+            <div>
+              {/* Render the post image */}
+              <div className="w-full aspect-video overflow-hidden">
+                <img
+                  src={image}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
               </div>
-            )}
+            </div>
+          )}
         {embed?.$type === "app.bsky.embed.record#view" && (
           <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
             <div className="flex flex-row justify-between items-center">
