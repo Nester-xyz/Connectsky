@@ -9,6 +9,7 @@ type Props = {
   imgUpload: string;
   showEmoji: boolean;
   setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>;
+  ref: React.RefObject<HTMLInputElement>;
 };
 
 const arrayOfRandomPlaceholders = [
@@ -19,11 +20,14 @@ const arrayOfRandomPlaceholders = [
 ];
 
 const TextAreaBox = ({
+  ref,
   showImage,
   imgUpload,
   showEmoji,
   setShowEmoji,
 }: Props) => {
+  console.log(ref);
+
   const { postText, setPostText } = useContext(appContext);
 
   const textBox = useRef<HTMLTextAreaElement>(null);
@@ -46,23 +50,6 @@ const TextAreaBox = ({
     setCursorPosition(e.target.selectionStart);
     console.log(e.target.selectionStart);
   };
-
-  useEffect(() => {
-    const textBoxReact = textBox.current?.selectionStart;
-    console.log(textBoxReact + "textBox");
-    if (showEmoji && textBox.current && emoji.current) {
-      const textBoxRect = textBox.current.getBoundingClientRect();
-      const { style } = emoji.current;
-
-      // console.log(textBoxRect.left, textBoxRect.top, textBoxRect.height);
-
-      // style.position = "absolute";
-      // style.left = `${textBoxReact}`;
-      // style.top = `${
-      //   textBoxRect.top + textBoxRect.height + textBox.current.clientTop
-      // }px`;
-    }
-  }, [showEmoji, cursorPosition]);
 
   return (
     <>
@@ -89,7 +76,13 @@ const TextAreaBox = ({
         >
           <CiFaceSmile className="w-full h-full" />
         </div>
-        <div className="bg-blue-300 rounded-md w-8 h-8 absolute left-2 bottom-2"></div>
+        <div
+          className="bg-blue-300 rounded-md w-8 h-8 absolute left-2 bottom-2"
+          onClick={() => {
+            ref.current?.click();
+            console.log("clicked");
+          }}
+        ></div>
         {showImage && (
           <div className="border w-40 h-full overflow-hidden items-center">
             <img src={imgUpload} alt="broken" className="object-contain w-40" />

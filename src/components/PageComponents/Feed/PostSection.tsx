@@ -129,6 +129,7 @@ const PostSection: React.FC<Props> = ({
         </button>
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
           <TextAreaBox
+            ref={fileRef}
             showImage={showImage}
             imgUpload={imgUpload}
             showEmoji={showEmoji}
@@ -165,7 +166,7 @@ const PostSection: React.FC<Props> = ({
             );
           })}
         </div>
-        <div className="absolute right-5">
+        <div className="absolute right-0">
           {showEmoji && <EmojiPicker onEmojiClick={onEmojiClick} />}
         </div>
       </div>
