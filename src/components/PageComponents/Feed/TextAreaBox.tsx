@@ -30,7 +30,6 @@ const TextAreaBox = ({
   setShowEmoji,
   handleFileChange,
 }: Props) => {
-  console.log(ref);
 
   const { postText, setPostText } = useContext(appContext);
 
@@ -43,7 +42,7 @@ const TextAreaBox = ({
 
   const randomPlacholder =
     arrayOfRandomPlaceholders[
-      Math.floor(Math.random() * arrayOfRandomPlaceholders.length)
+    Math.floor(Math.random() * arrayOfRandomPlaceholders.length)
     ];
   useEffect(() => {
     setPostText(debouncedPostText);

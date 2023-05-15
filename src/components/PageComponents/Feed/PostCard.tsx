@@ -236,7 +236,7 @@ const PostCard = ({
             <div className="text-base">{embed?.data?.value?.text}</div>
             <div>
               {/* section for image if available; */}
-              <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
+              {embed?.data?.embed && <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />}
             </div>
           </div>
         )}
