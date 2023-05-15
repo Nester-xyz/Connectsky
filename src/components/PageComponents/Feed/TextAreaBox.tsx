@@ -1,14 +1,11 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { appContext } from "../../../context/appContext";
 import { CiFaceSmile } from "react-icons/ci";
-import EmojiPicker from "emoji-picker-react";
 import { useDebounce } from "use-debounce";
 
 type Props = {
   showImage: boolean;
   imgUpload: string;
-  showEmoji: boolean;
-  setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>;
   ref: React.RefObject<HTMLInputElement>;
   handleFileChange: (
     event: React.ChangeEvent<HTMLInputElement>
@@ -26,8 +23,6 @@ const TextAreaBox = ({
   ref,
   showImage,
   imgUpload,
-  showEmoji,
-  setShowEmoji,
   handleFileChange,
 }: Props) => {
   console.log(ref);
@@ -35,8 +30,6 @@ const TextAreaBox = ({
   const { postText, setPostText } = useContext(appContext);
 
   const textBox = useRef<HTMLTextAreaElement>(null);
-  const emoji = useRef<HTMLDivElement>(null);
-
   const [postTextLocal, setPostTextLocal] = useState("");
   const [debouncedPostText] = useDebounce(postTextLocal, 1000);
   const [cursorPosition, setCursorPosition] = useState(0);
@@ -74,20 +67,11 @@ const TextAreaBox = ({
           }}
         ></textarea>
 
-        <div
-          className="rounded-full w-8 h-8 absolute right-2 bottom-2"
-          onClick={() => {
-            setShowEmoji(!showEmoji);
-          }}
-        >
-          <CiFaceSmile className="w-full h-full" />
-        </div>
         <input type="file" ref={fileRef} onChange={handleFileChange} hidden />
         <div
           className="bg-blue-300 rounded-md w-8 h-8 absolute left-2 bottom-2"
           onClick={() => {
             fileRef.current?.click();
-            console.log("clicked");
           }}
         ></div>
         {showImage && (

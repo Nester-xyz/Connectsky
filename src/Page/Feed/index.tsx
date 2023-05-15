@@ -86,7 +86,7 @@ const Feed = () => {
     });
     if (data.cursor == null) return;
     setCursor(data.cursor);
-    console.log(data);
+    // console.log(data);
     const mappedData: dataGotFromApi[] = data.feed.map((feed: any) => {
       // console.log(feed);
       const images =
