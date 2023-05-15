@@ -12,6 +12,7 @@ import { IoMdNotifications } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import DefaultUserImage from "../components/UI/DefaultUserImage";
+import { FaRegUserCircle, FaUserCircle } from "react-icons/fa"
 export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -60,8 +61,8 @@ export const links: linksType[] = [
   {
     linkName: "Profile",
     links: "/profile",
-    icon: <DefaultUserImage />,
-    activeIcon: <DefaultUserImage />,
+    icon: <FaRegUserCircle />,
+    activeIcon: <FaUserCircle />,
   },
 ];
 
