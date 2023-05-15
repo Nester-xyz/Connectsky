@@ -15,6 +15,7 @@ interface NotificationItem {
 const Notification = () => {
   const [cursor, setCursor] = useState<string>("");
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,6 +42,7 @@ const Notification = () => {
         };
       }
     );
+    setFetchedDataLength(mappedData.length);
     setNotifications((prevData) => [...prevData, ...mappedData]);
   }
   const observerCallback: IntersectionObserverCallback = (entries) => {
@@ -112,7 +114,7 @@ const Notification = () => {
               );
             }
           })}
-          {isLoading ? (
+          {isLoading && !(fetchedDataLength < 20) ? (
             <>
               <NotificationLoader /> <NotificationLoader />
             </>

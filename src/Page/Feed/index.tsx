@@ -14,6 +14,7 @@ const Feed = () => {
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
+  const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const [image, setImage] = useState<BlobRef | null>(null);
   const [submitPost, setSubmitPost] = useState(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
@@ -86,7 +87,7 @@ const Feed = () => {
     });
     if (data.cursor == null) return;
     setCursor(data.cursor);
-    // console.log(data);
+    console.log(data);
     const mappedData: dataGotFromApi[] = data.feed.map((feed: any) => {
       // console.log(feed);
       const images =
@@ -132,6 +133,7 @@ const Feed = () => {
         replyParent: feed?.reply?.parent,
       };
     });
+    setFetchedDataLength(mappedData.length);
     setFeedData((prevData) => [...prevData, ...mappedData]);
   }
   const observerCallback: IntersectionObserverCallback = (entries) => {
@@ -244,7 +246,7 @@ const Feed = () => {
                     }
                   })
                 }
-                {isLoading ? (
+                {isLoading && !(fetchedDataLength < 20) ? (
                   <>
                     {" "}
                     <PostLoader /> <PostLoader />

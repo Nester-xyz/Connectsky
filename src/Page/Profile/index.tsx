@@ -17,6 +17,7 @@ const index = (props: Props) => {
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
+  const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
 
 
@@ -103,6 +104,7 @@ const index = (props: Props) => {
           replyParent: feed?.reply?.parent,
         };
       });
+      setFetchedDataLength(mappedData.length);
       setFeedData((prevData) => [...prevData, ...mappedData]);
 
     } catch (error) {
@@ -228,7 +230,7 @@ const index = (props: Props) => {
             }
           })
         }
-        {isLoading ? (
+        {isLoading && !(fetchedDataLength < 20) ? (
           <>
             {" "}
             <PostLoader /> <PostLoader />
