@@ -5,7 +5,7 @@ import { readFileAsArrayBuffer } from "../../../utils";
 import TextAreaBox from "./TextAreaBox";
 import { agent, refreshSession } from "../../../utils";
 import ImageCompression from "browser-image-compression";
-import EmojiPicker from "emoji-picker-react";
+
 type differentButtonsForFeedProps = {
   name: string;
   icon: JSX.Element | undefined;
@@ -55,11 +55,6 @@ const PostSection: React.FC<Props> = ({
   async function fileToUint8Array(file: File) {
     return new Uint8Array(await file.arrayBuffer());
   }
-
-  const onEmojiClick = (emojiObject: any) => {
-    setPostText(postText + emojiObject.emoji);
-    setShowEmoji(false);
-  };
 
   useEffect(() => {
     const processUploadedFile = async () => {
@@ -132,8 +127,6 @@ const PostSection: React.FC<Props> = ({
             ref={fileRef}
             showImage={showImage}
             imgUpload={imgUpload}
-            showEmoji={showEmoji}
-            setShowEmoji={setShowEmoji}
             handleFileChange={handleFileChange}
           />
         </div>
@@ -166,9 +159,6 @@ const PostSection: React.FC<Props> = ({
               </div>
             );
           })}
-        </div>
-        <div className="absolute right-0">
-          {showEmoji && <EmojiPicker onEmojiClick={onEmojiClick} />}
         </div>
       </div>
     </div>

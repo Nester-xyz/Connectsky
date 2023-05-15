@@ -52,7 +52,6 @@ const Login = ({
             // Store a value in chrome storage
 
             chrome.storage.sync.set({ isLoggedIn: true }, function () {
-              console.log("Value is set to " + "isLoggedIn");
               // console.log(result);
               chrome.runtime.sendMessage(true, function (response) {
                 if (response) {
@@ -125,7 +124,8 @@ const Login = ({
           <form id="login" className="loginForm" onSubmit={handleLoginSubmit}>
             {isSignedUp && (
               <h5 className="login-msg text-primary">
-                Successfully signed up to Bluesky Social. Login to continue.
+                Successfully signed up!
+                <br /> Login to continue.
               </h5>
             )}
             <div className="input-container">
