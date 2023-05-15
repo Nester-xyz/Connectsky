@@ -128,3 +128,8 @@ function handleLinks(str: string | undefined): { __html: string } | undefined {
 }
 
 
+export function handleSplit(handle: string | undefined) {
+  if (!handle)
+    return "";
+  return handle.split(".")[0]
+}

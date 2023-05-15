@@ -8,6 +8,7 @@ import {
   agent,
   formatDateAgo,
   handleLongText,
+  handleSplit,
   refreshSession,
 } from "../../../utils";
 import PostLoader from "./PostLoader";
@@ -36,7 +37,7 @@ const PostCard = ({
   const [likeCount, setLikeCount] = useState(likes);
   const [repostCnt, setRepostCnt] = useState(repostCount);
   const [isFetching, setIsFetching] = useState(true);
-  const [handleSplit, setHandleSplit] = useState<string | undefined>("");
+  // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
   async function handleRepost() {
     try {
       if (repost) {
@@ -111,7 +112,8 @@ const PostCard = ({
     }
     dataFetcher();
     if (handle === undefined) return undefined;
-    setHandleSplit(handle.split(".")[0]);
+
+    // setHandleSplit(handle.split(".")[0]);
   }, [cid, uri]);
 
   if (isFetching) {
@@ -179,7 +181,7 @@ const PostCard = ({
                 </div>
                 <div className="text-xl flex flex-col pb-3 ">
                   <p className="overflow-hidden line-clamp-1">
-                    {author === undefined ? handleSplit : author}
+                    {author === undefined ? handleSplit(handle) : author}
                   </p>
 
                   {reply?.by !== undefined && (
@@ -205,29 +207,33 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-              <div>
-                {/* Render the post image */}
-                <div className="w-full aspect-video overflow-hidden">
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+            <div>
+              {/* Render the post image */}
+              <div className="w-full aspect-video overflow-hidden">
+                <img
+                  src={image}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
               </div>
-            )}
+            </div>
+          )}
         {embed?.$type === "app.bsky.embed.record#view" && (
           <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
             <div className="flex flex-row justify-between items-center">
               {/* section of the profileImage,handle,time, */}
               <div className="flex flex-row w-10 h-10 items-center">
-                <img
+                {embed?.data?.author?.avatar ? <img
                   className="w-10 h-10 object-cover rounded-full"
                   src={embed?.data?.author?.avatar}
                   alt=""
-                />
+                /> : <img
+                  src={userImage}
+                  alt=""
+                  className="w-10 h-10 object-cover rounded-full"
+                />}
                 <div className="text-lg flex flex-col pl-2">
-                  {embed?.data?.author?.displayName}
+                  {embed?.data?.author?.displayName === undefined ? handleSplit(embed?.data?.author?.handle) : embed?.data?.author?.displayName}
                 </div>
               </div>
               <div>{formatDateAgo(embed?.data?.indexedAt)}</div>
