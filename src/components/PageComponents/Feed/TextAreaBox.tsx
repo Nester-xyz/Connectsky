@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { appContext } from "../../../context/appContext";
 
+
 type Props = {
   showImage: boolean;
   imgUpload: string;
@@ -16,24 +17,22 @@ const arrayOfRandomPlaceholders = [
   "Believe you can, and you're halfway there.",
 ];
 
+
 const TextAreaBox = ({ showImage, imgUpload }: Props) => {
   const { postText, setPostText } = useContext(appContext);
 
   const textBox = useRef<HTMLTextAreaElement>(null);
 
+
   const randomPlacholder =
     arrayOfRandomPlaceholders[
-      Math.floor(Math.random() * arrayOfRandomPlaceholders.length)
+    Math.floor(Math.random() * arrayOfRandomPlaceholders.length)
     ];
 
   const handlePost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostText(e.target.value);
   };
 
-  useEffect(() => {
-    const textBoxReact = textBox.current?.selectionStart;
-    console.log(textBoxReact + "textBox");
-  }, []);
 
   return (
     <>

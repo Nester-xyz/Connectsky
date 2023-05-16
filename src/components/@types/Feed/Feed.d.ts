@@ -26,11 +26,23 @@ export type fieldDataProps = {
   uri: string;
   cid: string;
   repostCount: number;
+  reply: any;
+  reason: any;
+  embed: any;
+  indexedAt: any;
+  replyParent: any;
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
 
 export type dataGotFromApi = {
+  reply: {
+    text: any;
+    by: any;
+  };
+  reason: {
+    by: any;
+  };
   author: {
     displayName: any;
     avatar: any;
@@ -44,6 +56,10 @@ export type dataGotFromApi = {
   uri: any;
   cid: any;
   repostCount: number;
+  embed: {
+    $type: any;
+    data: any;
+  };
   image: {
     embed: {
       images: {
@@ -51,4 +67,6 @@ export type dataGotFromApi = {
       }[];
     };
   };
+  indexedAt: any;
+  replyParent: any;
 };

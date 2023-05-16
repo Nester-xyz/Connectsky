@@ -14,6 +14,7 @@ const Feed = () => {
   const [cursor, setCursor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
+  const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const [image, setImage] = useState<BlobRef | null>(null);
   const [submitPost, setSubmitPost] = useState(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
@@ -96,6 +97,13 @@ const Feed = () => {
       const firstImageThumb = images?.length > 0 ? images[0].thumb : "";
 
       return {
+        reason: {
+          by: feed.reason?.by?.displayName,
+        },
+        reply: {
+          text: feed.reply?.parent?.record?.text,
+          by: feed.reply?.parent?.author?.displayName,
+        },
         author: {
           displayName: feed.post.author.displayName,
           avatar: feed.post.author.avatar,
@@ -112,13 +120,20 @@ const Feed = () => {
               ? feed.post.record.text
               : "",
         },
+        embed: {
+          $type: feed.post?.embed?.$type,
+          data: feed.post?.embed?.record,
+        },
         image: {
           embed: {
             images: [{ thumb: firstImageThumb }],
           },
         },
+        indexedAt: feed.post?.indexedAt,
+        replyParent: feed?.reply?.parent,
       };
     });
+    setFetchedDataLength(mappedData.length);
     setFeedData((prevData) => [...prevData, ...mappedData]);
   }
   const observerCallback: IntersectionObserverCallback = (entries) => {
@@ -198,6 +213,11 @@ const Feed = () => {
                             uri={item.uri}
                             cid={item.cid}
                             repostCount={item.repostCount}
+                            reply={item.reply}
+                            reason={item.reason}
+                            embed={item.embed}
+                            indexedAt={item.indexedAt}
+                            replyParent={item.replyParent}
                           />
                         </div>
                       );
@@ -215,13 +235,18 @@ const Feed = () => {
                             uri={item.uri}
                             cid={item.cid}
                             repostCount={item.repostCount}
+                            reply={item.reply}
+                            reason={item.reason}
+                            embed={item.embed}
+                            indexedAt={item.indexedAt}
+                            replyParent={item.replyParent}
                           />
                         </div>
                       );
                     }
                   })
                 }
-                {isLoading ? (
+                {isLoading && !(fetchedDataLength < 20) ? (
                   <>
                     {" "}
                     <PostLoader /> <PostLoader />

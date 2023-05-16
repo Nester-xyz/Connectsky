@@ -81,12 +81,11 @@ const NotificationCard = ({
         </div>
       </div>
       <div
-        className={`${
-          title === "reply" ? "block" : "hidden"
-        } ml-14 px-2 -mt-3 py-1`}
+        className={`${title === "reply" ? "block" : "hidden"
+          } ml-14 px-2 -mt-3 py-1`}
       >
         {title === "reply" ? (
-          <div className="line-clamp-2 bg-slate-200 ">{reply}</div>
+          <div className="line-clamp-2 bg-slate-200 rounded-md p-1">{reply}</div>
         ) : (
           ""
         )}

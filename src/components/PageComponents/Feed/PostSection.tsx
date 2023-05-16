@@ -5,6 +5,7 @@ import { readFileAsArrayBuffer } from "../../../utils";
 import TextAreaBox from "./TextAreaBox";
 import { agent, refreshSession } from "../../../utils";
 import ImageCompression from "browser-image-compression";
+
 type differentButtonsForFeedProps = {
   name: string;
   icon: JSX.Element | undefined;
@@ -120,7 +121,13 @@ const PostSection: React.FC<Props> = ({
           &lt; Go Back
         </button>
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
-          <TextAreaBox showImage={showImage} imgUpload={imgUpload} />
+
+          <TextAreaBox
+            ref={fileRef}
+            showImage={showImage}
+            imgUpload={imgUpload}
+            handleFileChange={handleFileChange}
+          />
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">
           {differentButtonsForFeed.map((item, index) => {

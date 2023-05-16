@@ -48,7 +48,7 @@ function App() {
               <Route path="/search" element={<WillComeSoon />} />
               <Route path="/notifications" element={<Notification />} />
               <Route path="/settings" element={<WillComeSoon />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile" element={<WillComeSoon />} />
             </Routes>
           </Layout>
         </Router>
