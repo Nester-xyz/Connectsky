@@ -35,8 +35,6 @@ const PostSection: React.FC<Props> = ({
   const [imgUpload, setImgUpload] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
 
-  const [showEmoji, setShowEmoji] = useState(false);
-
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -123,6 +121,7 @@ const PostSection: React.FC<Props> = ({
           &lt; Go Back
         </button>
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
+
           <TextAreaBox
             ref={fileRef}
             showImage={showImage}
