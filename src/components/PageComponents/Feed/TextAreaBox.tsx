@@ -1,33 +1,26 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { appContext } from "../../../context/appContext";
-import { CiFaceSmile } from "react-icons/ci";
-import EmojiPicker from "emoji-picker-react";
 import { useDebounce } from "use-debounce";
 
 type Props = {
   showImage: boolean;
   imgUpload: string;
-  showEmoji: boolean;
-  setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const arrayOfRandomPlaceholders = [
-  "Adarsh is the best there is",
-  "Pay Adarsh more",
-  "You can't beat Adarsh",
-  "Adarsh is the best",
+  "What's on your mind?",
+  "If you build it, they will come.",
+  "The stuff that dreams are made of.",
+  "Made it, Ma! Top of the world.",
+  "Don't wait for opportunity. Create it.",
+  "Keep calm and carry on.",
+  "Believe you can, and you're halfway there.",
 ];
 
-const TextAreaBox = ({
-  showImage,
-  imgUpload,
-  showEmoji,
-  setShowEmoji,
-}: Props) => {
+const TextAreaBox = ({ showImage, imgUpload }: Props) => {
   const { postText, setPostText } = useContext(appContext);
 
   const textBox = useRef<HTMLTextAreaElement>(null);
-  const emoji = useRef<HTMLDivElement>(null);
 
   const [postTextLocal, setPostTextLocal] = useState("");
   const [debouncedPostText] = useDebounce(postTextLocal, 1000);
@@ -50,19 +43,15 @@ const TextAreaBox = ({
   useEffect(() => {
     const textBoxReact = textBox.current?.selectionStart;
     console.log(textBoxReact + "textBox");
-    if (showEmoji && textBox.current && emoji.current) {
-      const textBoxRect = textBox.current.getBoundingClientRect();
-      const { style } = emoji.current;
 
-      // console.log(textBoxRect.left, textBoxRect.top, textBoxRect.height);
+    // console.log(textBoxRect.left, textBoxRect.top, textBoxRect.height);
 
-      // style.position = "absolute";
-      // style.left = `${textBoxReact}`;
-      // style.top = `${
-      //   textBoxRect.top + textBoxRect.height + textBox.current.clientTop
-      // }px`;
-    }
-  }, [showEmoji, cursorPosition]);
+    // style.position = "absolute";
+    // style.left = `${textBoxReact}`;
+    // style.top = `${
+    //   textBoxRect.top + textBoxRect.height + textBox.current.clientTop
+    // }px`;
+  }, []);
 
   return (
     <>
@@ -81,15 +70,6 @@ const TextAreaBox = ({
           }}
         ></textarea>
 
-        <div
-          className="rounded-full w-8 h-8 absolute right-2 bottom-2"
-          onClick={() => {
-            setShowEmoji(!showEmoji);
-          }}
-        >
-          <CiFaceSmile className="w-full h-full" />
-        </div>
-        <div className="bg-blue-300 rounded-md w-8 h-8 absolute left-2 bottom-2"></div>
         {showImage && (
           <div className="border w-40 h-full overflow-hidden items-center">
             <img src={imgUpload} alt="broken" className="object-contain w-40" />

@@ -5,7 +5,6 @@ import { readFileAsArrayBuffer } from "../../../utils";
 import TextAreaBox from "./TextAreaBox";
 import { agent, refreshSession } from "../../../utils";
 import ImageCompression from "browser-image-compression";
-import EmojiPicker from "emoji-picker-react";
 type differentButtonsForFeedProps = {
   name: string;
   icon: JSX.Element | undefined;
@@ -35,8 +34,6 @@ const PostSection: React.FC<Props> = ({
   const [imgUpload, setImgUpload] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
 
-  const [showEmoji, setShowEmoji] = useState(false);
-
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -55,11 +52,6 @@ const PostSection: React.FC<Props> = ({
   async function fileToUint8Array(file: File) {
     return new Uint8Array(await file.arrayBuffer());
   }
-
-  const onEmojiClick = (emojiObject: any) => {
-    setPostText(postText + emojiObject.emoji);
-    setShowEmoji(false);
-  };
 
   useEffect(() => {
     const processUploadedFile = async () => {
@@ -128,12 +120,7 @@ const PostSection: React.FC<Props> = ({
           &lt; Go Back
         </button>
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
-          <TextAreaBox
-            showImage={showImage}
-            imgUpload={imgUpload}
-            showEmoji={showEmoji}
-            setShowEmoji={setShowEmoji}
-          />
+          <TextAreaBox showImage={showImage} imgUpload={imgUpload} />
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">
           {differentButtonsForFeed.map((item, index) => {
@@ -164,9 +151,6 @@ const PostSection: React.FC<Props> = ({
               </div>
             );
           })}
-        </div>
-        <div className="absolute right-5">
-          {showEmoji && <EmojiPicker onEmojiClick={onEmojiClick} />}
         </div>
       </div>
     </div>
