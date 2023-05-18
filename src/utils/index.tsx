@@ -1,18 +1,11 @@
 import moment from "moment";
 import { BskyAgent, AtpSessionEvent, AtpSessionData } from "@atproto/api";
 import { linksType } from "../components/@types/Layout/SideBar";
-import {
-  IoNotifications,
-  IoSearch,
-  IoSearchOutline,
-  IoSettings,
-  IoSettingsOutline,
-} from "react-icons/io5";
+import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { IoMdNotifications } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
-import DefaultUserImage from "../components/UI/DefaultUserImage";
-import { FaRegUserCircle, FaUserCircle } from "react-icons/fa"
+import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
 export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -78,7 +71,7 @@ export function formatDateAgo(date: Date) {
   } else if (diff.asMinutes() >= 1) {
     return `${Math.floor(diff.asMinutes())}m `;
   } else {
-    return "just now";
+    return "now";
   }
 }
 
@@ -99,8 +92,9 @@ export async function refreshSession() {
   }
 }
 
-
-export function handleLongText(str: string | undefined): { __html: string } | undefined {
+export function handleLongText(
+  str: string | undefined
+): { __html: string } | undefined {
   const longText = /^(?!\/).{31,}$/;
   if (!str) {
     return undefined;
@@ -110,27 +104,28 @@ export function handleLongText(str: string | undefined): { __html: string } | un
   return {
     __html: stringWithLinksHandled.replace(
       longText,
-      (match) => `<div class="w-full overflow-hidden"><span class="break-all">${match}</span></div>`
+      (match) =>
+        `<div class="w-full overflow-hidden"><span class="break-words">${match}</span></div>`
     ),
   };
 }
 
 function handleLinks(str: string | undefined): { __html: string } | undefined {
-  const linkRegex = /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|.]*)\S*/gi;
+  const linkRegex =
+    /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|.]*)\S*/gi;
   if (!str) {
     return undefined;
   }
   return {
     __html: str.replace(
       linkRegex,
-      (match) => `<span class="break-all"><a href="${match}" class="text-indigo-600" target="_blank">${match}</a></span>`
+      (match) =>
+        `<span class="break-all"><a href="${match}" class="text-indigo-600" target="_blank">${match}</a></span>`
     ),
   };
 }
 
-
 export function handleSplit(handle: string | undefined) {
-  if (!handle)
-    return "";
-  return handle.split(".")[0]
+  if (!handle) return "";
+  return handle.split(".")[0];
 }

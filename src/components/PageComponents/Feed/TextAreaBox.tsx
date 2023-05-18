@@ -13,10 +13,13 @@ type Props = {
 };
 
 const arrayOfRandomPlaceholders = [
-  "Adarsh is the best there is",
-  "Pay Adarsh more",
-  "You can't beat Adarsh",
-  "Adarsh is the best",
+  "What's on your mind?",
+  "If you build it, they will come.",
+  "The stuff that dreams are made of.",
+  "Made it, Ma! Top of the world.",
+  "Don't wait for opportunity. Create it.",
+  "Keep calm and carry on.",
+  "Believe you can, and you're halfway there.",
 ];
 
 const TextAreaBox = ({
@@ -25,7 +28,6 @@ const TextAreaBox = ({
   imgUpload,
   handleFileChange,
 }: Props) => {
-
   const { postText, setPostText } = useContext(appContext);
 
   const textBox = useRef<HTMLTextAreaElement>(null);
@@ -35,7 +37,7 @@ const TextAreaBox = ({
 
   const randomPlacholder =
     arrayOfRandomPlaceholders[
-    Math.floor(Math.random() * arrayOfRandomPlaceholders.length)
+      Math.floor(Math.random() * arrayOfRandomPlaceholders.length)
     ];
   useEffect(() => {
     setPostText(debouncedPostText);

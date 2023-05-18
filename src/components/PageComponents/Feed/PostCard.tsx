@@ -180,9 +180,17 @@ const PostCard = ({
                   )}
                 </div>
                 <div className="text-xl flex flex-col pb-3 ">
-                  <p className="overflow-hidden line-clamp-1">
-                    {author === undefined ? handleSplit(handle) : author}
-                  </p>
+                  <div className="flex items-center">
+                    <p className="overflow-hidden text-md">
+                      {author === undefined ? handleSplit(handle) : author}
+                    </p>
+                    &nbsp;
+                    <p className="text-sm text-slate-500">@{handle}</p>
+                    &nbsp; · &nbsp;
+                    <p className="text-sm text-slate-600">
+                      {formatDateAgo(indexedAt)}
+                    </p>
+                  </div>
 
                   {reply?.by !== undefined && (
                     <div className="text-sm text-slate-500 flex flex-row pb-4">
@@ -190,9 +198,6 @@ const PostCard = ({
                     </div>
                   )}
                 </div>
-              </div>
-              <div className="flex items-center">
-                {formatDateAgo(indexedAt)}
               </div>
             </div>
             <div>
@@ -207,33 +212,39 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-            <div>
-              {/* Render the post image */}
-              <div className="w-full aspect-video overflow-hidden">
-                <img
-                  src={image}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
+              <div>
+                {/* Render the post image */}
+                <div className="w-full aspect-video overflow-hidden">
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         {embed?.$type === "app.bsky.embed.record#view" && (
           <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
             <div className="flex flex-row justify-between items-center">
               {/* section of the profileImage,handle,time, */}
               <div className="flex flex-row w-10 h-10 items-center">
-                {embed?.data?.author?.avatar ? <img
-                  className="w-10 h-10 object-cover rounded-full"
-                  src={embed?.data?.author?.avatar}
-                  alt=""
-                /> : <img
-                  src={userImage}
-                  alt=""
-                  className="w-10 h-10 object-cover rounded-full"
-                />}
+                {embed?.data?.author?.avatar ? (
+                  <img
+                    className="w-10 h-10 object-cover rounded-full"
+                    src={embed?.data?.author?.avatar}
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    src={userImage}
+                    alt=""
+                    className="w-10 h-10 object-cover rounded-full"
+                  />
+                )}
                 <div className="text-lg flex flex-col pl-2">
-                  {embed?.data?.author?.displayName === undefined ? handleSplit(embed?.data?.author?.handle) : embed?.data?.author?.displayName}
+                  {embed?.data?.author?.displayName === undefined
+                    ? handleSplit(embed?.data?.author?.handle)
+                    : embed?.data?.author?.displayName}
                 </div>
               </div>
               <div>{formatDateAgo(embed?.data?.indexedAt)}</div>
@@ -242,7 +253,9 @@ const PostCard = ({
             <div className="text-base">{embed?.data?.value?.text}</div>
             <div>
               {/* section for image if available; */}
-              {embed.data?.embeds[0]?.images && <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />}
+              {embed.data?.embeds[0]?.images && (
+                <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
+              )}
             </div>
           </div>
         )}
