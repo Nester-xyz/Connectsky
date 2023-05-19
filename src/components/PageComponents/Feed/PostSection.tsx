@@ -121,13 +121,7 @@ const PostSection: React.FC<Props> = ({
           &lt; Go Back
         </button>
         <div className="bg-gray-300 border rounded-md border-gray-300 w-full">
-
-          <TextAreaBox
-            ref={fileRef}
-            showImage={showImage}
-            imgUpload={imgUpload}
-            handleFileChange={handleFileChange}
-          />
+          <TextAreaBox showImage={showImage} imgUpload={imgUpload} />
         </div>
         <div className="flex gap-3 mt-4 flex-wrap">
           {differentButtonsForFeed.map((item, index) => {

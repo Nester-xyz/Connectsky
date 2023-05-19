@@ -180,12 +180,14 @@ const PostCard = ({
                   )}
                 </div>
                 <div className="text-xl flex flex-col pb-3 ">
-                  <div className="flex items-center">
-                    <p className="overflow-hidden text-md">
+                  <div className="flex items-center flex-nowrap">
+                    <p className="overflow-visible text-md whitespace-nowrap">
                       {author === undefined ? handleSplit(handle) : author}
                     </p>
                     &nbsp;
-                    <p className="text-sm text-slate-500">@{handle}</p>
+                    <p className="text-sm text-slate-500 break-all line-clamp-1">
+                      @{handle}
+                    </p>
                     &nbsp; · &nbsp;
                     <p className="text-sm text-slate-600">
                       {formatDateAgo(indexedAt)}
