@@ -126,7 +126,7 @@ const PostCard = ({
 
   return (
     <>
-      <div className="w-full bg-white p-5 rounded-xl ">
+      <div className="w-full bg-white px-8 py-3 rounded-xl ">
         {/* if replies available then this runs */}
         {replyParent && (
           <div className="-mx-5 border-b border-slate-200">
@@ -162,7 +162,7 @@ const PostCard = ({
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <div className="flex gap-4 items-center">
-                <div className="w-10 h-10 rounded-full overflow-hidden">
+                <div className="w-10 h-10 rounded-full overflow-hidden min-w-fit">
                   {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
 
                   {profileImg ? (
@@ -227,23 +227,25 @@ const PostCard = ({
             )}
         {embed?.$type === "app.bsky.embed.record#view" && (
           <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
-            <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-row justify-between items-center ">
               {/* section of the profileImage,handle,time, */}
-              <div className="flex flex-row w-10 h-10 items-center">
-                {embed?.data?.author?.avatar ? (
-                  <img
-                    className="w-10 h-10 object-cover rounded-full"
-                    src={embed?.data?.author?.avatar}
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    src={userImage}
-                    alt=""
-                    className="w-10 h-10 object-cover rounded-full"
-                  />
-                )}
-                <div className="text-lg flex flex-col pl-2 whitespace-nowrap break-all line-clamp-1">
+              <div className="flex flex-row items-center w-full">
+                <div className="w-10 h-10 min-w-fit">
+                  {embed?.data?.author?.avatar ? (
+                    <img
+                      className="w-10 h-10 object-cover rounded-full"
+                      src={embed?.data?.author?.avatar}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      src={userImage}
+                      alt=""
+                      className="w-10 h-10 object-cover rounded-full"
+                    />
+                  )}
+                </div>
+                <div className=" w-full text-lg pl-2 break-all line-clamp-1 ">
                   {embed?.data?.author?.displayName === undefined
                     ? handleSplit(embed?.data?.author?.handle)
                     : embed?.data?.author?.displayName}
