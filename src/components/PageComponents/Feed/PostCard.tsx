@@ -243,7 +243,7 @@ const PostCard = ({
                     className="w-10 h-10 object-cover rounded-full"
                   />
                 )}
-                <div className="text-lg flex flex-col pl-2">
+                <div className="text-lg flex flex-col pl-2 whitespace-nowrap break-all line-clamp-1">
                   {embed?.data?.author?.displayName === undefined
                     ? handleSplit(embed?.data?.author?.handle)
                     : embed?.data?.author?.displayName}
