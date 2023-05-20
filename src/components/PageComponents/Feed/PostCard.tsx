@@ -152,7 +152,7 @@ const PostCard = ({
             />
           </div>
         )}
-        <div className="flex flex-col mt-3">
+        <div className="flex flex-col mt-3 w-full ">
           {/* Render author's profile image, name and caption */}
           {reason?.by !== undefined && (
             <p className="text-sm text-slate-500 flex flex-row pb-2">
@@ -179,19 +179,41 @@ const PostCard = ({
                     />
                   )}
                 </div>
-                <div className="text-xl flex flex-col pb-3 ">
-                  <div className="flex items-center flex-nowrap">
-                    <p className="overflow-visible text-md whitespace-nowrap">
-                      {author === undefined ? handleSplit(handle) : author}
-                    </p>
-                    &nbsp;
-                    <p className="text-sm text-slate-500 break-all line-clamp-1">
-                      @{handle}
-                    </p>
-                    &nbsp; · &nbsp;
-                    <p className="text-sm text-slate-600">
-                      {formatDateAgo(indexedAt)}
-                    </p>
+                <div className="text-xl flex flex-col pb-3 w-full">
+                  <div className="flex flex-row-reverse items-center gap-2 bg--300 h-10 flex-nowrap">
+                    {/* time stamp */}
+                    <div className="flex items-center gap-2">
+                      <div>·</div>
+                      <div className="text-sm text-slate-500">
+                        {formatDateAgo(indexedAt)}
+                      </div>
+                    </div>
+
+                    {/* handle and username */}
+                    <div className="flex items-center gap-2">
+                      <div className="text-md whitespace-nowrap">
+                        {author === undefined ? handleSplit(handle) : author}
+                      </div>
+                      <div className="text-sm text-slate-500 break-all line-clamp-1">
+                        @{handle}
+                      </div>
+                    </div>
+
+                    {/* <div className="flex items-center">
+                      <p className="overflow-visible text-md whitespace-nowrap">
+                        {author === undefined ? handleSplit(handle) : author}
+                      </p>
+                      &nbsp;
+                      <p className="text-sm text-slate-500 break-all line-clamp-1 ">
+                        @{handle}
+                      </p>
+                    </div>
+                    <div className="flex items-center">
+                      <div>&nbsp; · &nbsp;</div>
+                      <div className="text-sm text-slate-500">
+                        {formatDateAgo(indexedAt)}
+                      </div>
+                    </div> */}
                   </div>
 
                   {reply?.by !== undefined && (
