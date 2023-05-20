@@ -15,6 +15,7 @@ import PostLoader from "./PostLoader";
 import { userImage } from "../../UI/DefaultUserImage";
 // just a random Image I grabbed from the internet to show when no image is provided
 
+const MAX_WORDS = 20; // Maximum number of words to display initially
 const PostCard = ({
   author,
   handle,
@@ -37,6 +38,7 @@ const PostCard = ({
   const [likeCount, setLikeCount] = useState(likes);
   const [repostCnt, setRepostCnt] = useState(repostCount);
   const [isFetching, setIsFetching] = useState(true);
+  const [showFullText, setShowFullText] = useState(false);
   // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
   async function handleRepost() {
     try {
@@ -124,6 +126,29 @@ const PostCard = ({
     );
   }
 
+  const handleToggleText = () => {
+    setShowFullText(!showFullText);
+  };
+
+  const handleLongText = (text: string | undefined) => {
+    const words = text?.split(" ");
+    // Check if the number of words exceeds the maximum limit
+    if (words?.length) {
+      if (words?.length > MAX_WORDS && !showFullText) {
+        return (
+          words.slice(0, MAX_WORDS).join(" ") +
+          "..." +
+          <button>See More</button>
+        );
+      }
+    }
+    if (typeof text === "undefined") {
+      return "";
+    }
+
+    return text;
+  };
+
   return (
     <>
       <div className="w-full bg-white px-8 py-3 rounded-xl ">
@@ -202,11 +227,16 @@ const PostCard = ({
                 </div>
               </div>
             </div>
-            <div>
+            <div className="flex">
               <p
-                className="text-lg "
-                dangerouslySetInnerHTML={handleLongText(caption)}
+                className="text-lg"
+                dangerouslySetInnerHTML={{ __html: handleLongText(caption) }}
               ></p>
+              {caption && caption.split(" ").length > MAX_WORDS && (
+                <button onClick={handleToggleText}>
+                  {showFullText ? "See Less" : "See More"}
+                </button>
+              )}
             </div>
           </div>
         </div>
