@@ -132,21 +132,37 @@ const PostCard = ({
 
   const handleLongText = (text: string | undefined) => {
     const words = text?.split(" ");
-    // Check if the number of words exceeds the maximum limit
+    // const [showFullText, setShowFullText] = useState(false);
+
+    const handleToggleText = () => {
+      setShowFullText(!showFullText);
+    };
+
     if (words?.length) {
-      if (words?.length > MAX_WORDS && !showFullText) {
-        return (
-          words.slice(0, MAX_WORDS).join(" ") +
-          "..." +
-          <button>See More</button>
-        );
+      if (words.length > MAX_WORDS) {
+        if (showFullText) {
+          return (
+            <>
+              <p>
+                {words.join(" ")}...
+                <button onClick={handleToggleText}>Show less</button>
+              </p>
+            </>
+          );
+        } else {
+          return (
+            <>
+              <p>
+                {words.slice(0, MAX_WORDS).join(" ")}...
+                <button onClick={handleToggleText}>Show more</button>
+              </p>
+            </>
+          );
+        }
       }
     }
-    if (typeof text === "undefined") {
-      return "";
-    }
 
-    return text;
+    return <p>{text}</p>;
   };
 
   return (
@@ -186,79 +202,67 @@ const PostCard = ({
           )}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <div className="flex gap-4 items-center">
-                <div className="w-10 h-10 rounded-full overflow-hidden min-w-fit">
-                  {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
+              <div className="flex flex-col">
+                <div className="flex gap-4 items-center">
+                  <div className="w-10 h-10 rounded-full overflow-hidden min-w-fit">
+                    {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
 
-                  {profileImg ? (
-                    <img
-                      src={profileImg}
-                      alt=""
-                      className="w-10 h-10 object-cover"
-                    />
-                  ) : (
-                    <img
-                      src={userImage}
-                      alt=""
-                      className="w-10 h-10 object-cover"
-                    />
-                  )}
-                </div>
-                <div className="text-xl flex flex-col pb-3 w-full">
-                  <div className="flex flex-row-reverse items-center gap-2 bg--300 h-10 flex-nowrap">
-                    {/* time stamp */}
-                    <div className="flex items-center gap-2">
-                      <div>·</div>
-                      <div className="text-sm text-slate-500">
-                        {formatDateAgo(indexedAt)}
-                      </div>
-                    </div>
-
-                    {/* handle and username */}
-                    <div className="flex items-center gap-2">
-                      <div className="text-md whitespace-nowrap">
-                        {author === undefined ? handleSplit(handle) : author}
-                      </div>
-                      <div className="text-sm text-slate-500 break-all line-clamp-1">
-                        @{handle}
-                      </div>
-                    </div>
-
-                    {/* <div className="flex items-center">
-                      <p className="overflow-visible text-md whitespace-nowrap">
-                        {author === undefined ? handleSplit(handle) : author}
-                      </p>
-                      &nbsp;
-                      <p className="text-sm text-slate-500 break-all line-clamp-1 ">
-                        @{handle}
-                      </p>
-                    </div>
-                    <div className="flex items-center">
-                      <div>&nbsp; · &nbsp;</div>
-                      <div className="text-sm text-slate-500">
-                        {formatDateAgo(indexedAt)}
-                      </div>
-                    </div> */}
+                    {profileImg ? (
+                      <img
+                        src={profileImg}
+                        alt=""
+                        className="w-10 h-10 object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={userImage}
+                        alt=""
+                        className="w-10 h-10 object-cover"
+                      />
+                    )}
                   </div>
+                  <div className="text-xl flex flex-col  w-full">
+                    <div className="flex flex-row-reverse items-center gap-2 bg--300 h-10 flex-nowrap">
+                      {/* time stamp */}
+                      <div className="flex items-center gap-2">
+                        <div>·</div>
+                        <div className="text-sm text-slate-500">
+                          {formatDateAgo(indexedAt)}
+                        </div>
+                      </div>
 
+                      {/* handle and username */}
+                      <div className="flex items-center gap-2">
+                        <div className="text-md whitespace-nowrap">
+                          {author === undefined ? handleSplit(handle) : author}
+                        </div>
+                        <div className="text-sm text-slate-500 break-all line-clamp-1">
+                          @{handle}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="ml-10">
                   {reply?.by !== undefined && (
-                    <div className="text-sm text-slate-500 flex flex-row pb-4">
-                      <BiShare /> {` Replied to ${reply?.by}`}
+                    <div className="text-sm text-slate-500 flex flex-row items-center ">
+                      <BiShare /> &nbsp;{" "}
+                      <div className="break-all line-clamp-1">{` Replied to ${reply?.by}`}</div>
                     </div>
                   )}
                 </div>
               </div>
             </div>
             <div className="flex">
-              <p
-                className="text-lg"
-                dangerouslySetInnerHTML={{ __html: handleLongText(caption) }}
-              ></p>
-              {caption && caption.split(" ").length > MAX_WORDS && (
-                <button onClick={handleToggleText}>
-                  {showFullText ? "See Less" : "See More"}
-                </button>
-              )}
+              <p className="text-lg">
+                <span
+                // dangerouslySetInnerHTML={{
+                //   __html: handleLongText(caption),
+                // }}
+                >
+                  {handleLongText(caption)}
+                </span>
+              </p>
             </div>
           </div>
         </div>
