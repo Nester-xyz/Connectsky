@@ -7,7 +7,6 @@ import { BiShare, BiRepost } from "react-icons/bi";
 import {
   agent,
   formatDateAgo,
-  handleLongText,
   handleSplit,
   refreshSession,
 } from "../../../utils";
@@ -126,13 +125,8 @@ const PostCard = ({
     );
   }
 
-  const handleToggleText = () => {
-    setShowFullText(!showFullText);
-  };
-
   const handleLongText = (text: string | undefined) => {
     const words = text?.split(" ");
-    // const [showFullText, setShowFullText] = useState(false);
 
     const handleToggleText = () => {
       setShowFullText(!showFullText);
@@ -145,7 +139,12 @@ const PostCard = ({
             <>
               <p>
                 {words.join(" ")}...
-                <button onClick={handleToggleText}>Show less</button>
+                <button
+                  onClick={handleToggleText}
+                  className="text-blue-500 text-sm"
+                >
+                  See less
+                </button>
               </p>
             </>
           );
@@ -154,7 +153,12 @@ const PostCard = ({
             <>
               <p>
                 {words.slice(0, MAX_WORDS).join(" ")}...
-                <button onClick={handleToggleText}>Show more</button>
+                <button
+                  onClick={handleToggleText}
+                  className="text-blue-500 text-sm"
+                >
+                  See more
+                </button>
               </p>
             </>
           );
@@ -196,9 +200,10 @@ const PostCard = ({
         <div className="flex flex-col mt-3 w-full ">
           {/* Render author's profile image, name and caption */}
           {reason?.by !== undefined && (
-            <p className="text-sm text-slate-500 flex flex-row pb-2">
-              <BiRepost size={20} /> {` Reposted by ${reason?.by}`}
-            </p>
+            <div className="text-sm text-slate-500 flex flex-row items-center ">
+              <BiRepost /> &nbsp;{" "}
+              <div className="break-all line-clamp-1">{` Reposted by ${reason?.by}`}</div>
+            </div>
           )}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
