@@ -176,7 +176,10 @@ const PostCard = ({
               comments={replyParent?.replyCount}
               likes={replyParent?.likeCount}
               caption={replyParent?.record?.text}
-              image={replyParent?.record?.image?.thumb}
+              image={replyParent?.embed?.images && "images" in replyParent.embed
+                ? replyParent.embed.images[0].thumb
+                : []}
+
               profileImg={replyParent?.author?.avatar}
               uri={replyParent?.uri}
               cid={replyParent?.cid}
@@ -195,9 +198,10 @@ const PostCard = ({
         <div className="flex flex-col mt-3 w-full ">
           {/* Render author's profile image, name and caption */}
           {reason?.by !== undefined && (
-            <p className="text-sm text-slate-500 flex flex-row pb-2">
-              <BiRepost size={20} /> {` Reposted by ${reason?.by}`}
-            </p>
+            <div className="text-sm text-slate-500 flex flex-row items-center ">
+              <BiRepost /> &nbsp;{" "}
+              <div className="break-all line-clamp-1">{` Reposted by ${reason?.by}`}</div>
+            </div>
           )}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
