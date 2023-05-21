@@ -313,7 +313,7 @@ const PostCard = ({
               <div>{formatDateAgo(embed?.data?.indexedAt)}</div>
             </div>
             {/* section for text */}
-            <div className="text-base">{embed?.data?.value?.text}</div>
+            <div className="text-base">{handleLongText(embed?.data?.value?.text)}</div>
             <div>
               {/* section for image if available; */}
               {embed.data?.embeds[0]?.images && (
