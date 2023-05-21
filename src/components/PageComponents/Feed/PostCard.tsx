@@ -7,7 +7,7 @@ import { BiShare, BiRepost } from "react-icons/bi";
 import {
   agent,
   formatDateAgo,
-  handleLongText,
+  handleLinks,
   handleSplit,
   refreshSession,
 } from "../../../utils";
@@ -126,43 +126,42 @@ const PostCard = ({
     );
   }
 
-  const handleToggleText = () => {
-    setShowFullText(!showFullText);
-  };
-
   const handleLongText = (text: string | undefined) => {
-    const words = text?.split(" ");
-    // const [showFullText, setShowFullText] = useState(false);
+
+    const processedLinks = handleLinks(text);
+    const stringWithLinksHandled = processedLinks?.__html || text;
+
+    const words = stringWithLinksHandled?.split(' ');
+    // const words = text?.split(" ");
 
     const handleToggleText = () => {
       setShowFullText(!showFullText);
     };
-
     if (words?.length) {
-      if (words.length > MAX_WORDS) {
+      if (words?.length > MAX_WORDS) {
         if (showFullText) {
+          console.log("Show less text ", words?.join(" "))
           return (
             <>
-              <p>
-                {words.join(" ")}...
-                <button onClick={handleToggleText}>Show less</button>
+              <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}>
               </p>
+              <button onClick={handleToggleText}>Show less</button>
             </>
-          );
+          )
         } else {
+          console.log("show more text ", words?.slice(0, MAX_WORDS).join(" "))
           return (
             <>
-              <p>
-                {words.slice(0, MAX_WORDS).join(" ")}...
-                <button onClick={handleToggleText}>Show more</button>
+              <p dangerouslySetInnerHTML={{ __html: words.slice(0, MAX_WORDS).join(" ") }}>
               </p>
+              <button onClick={handleToggleText}>Show more</button>
             </>
           );
         }
       }
     }
-
-    return <p>{text}</p>;
+    if (words === undefined) return;
+    return <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}></p>;
   };
 
   return (
@@ -270,17 +269,17 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-              <div>
-                {/* Render the post image */}
-                <div className="w-full aspect-video overflow-hidden">
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+            <div>
+              {/* Render the post image */}
+              <div className="w-full aspect-video overflow-hidden">
+                <img
+                  src={image}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
               </div>
-            )}
+            </div>
+          )}
         {embed?.$type === "app.bsky.embed.record#view" && (
           <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
             <div className="flex flex-row justify-between items-center ">
