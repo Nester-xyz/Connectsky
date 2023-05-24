@@ -7,7 +7,7 @@ import { BiShare, BiRepost } from "react-icons/bi";
 import {
   agent,
   formatDateAgo,
-  handleLongText,
+  handleLinks,
   handleSplit,
   refreshSession,
 } from "../../../utils";
@@ -15,6 +15,7 @@ import PostLoader from "./PostLoader";
 import { userImage } from "../../UI/DefaultUserImage";
 // just a random Image I grabbed from the internet to show when no image is provided
 
+const MAX_WORDS = 20; // Maximum number of words to display initially
 const PostCard = ({
   author,
   handle,
@@ -37,6 +38,7 @@ const PostCard = ({
   const [likeCount, setLikeCount] = useState(likes);
   const [repostCnt, setRepostCnt] = useState(repostCount);
   const [isFetching, setIsFetching] = useState(true);
+  const [showFullText, setShowFullText] = useState(false);
   // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
   async function handleRepost() {
     try {
@@ -124,9 +126,47 @@ const PostCard = ({
     );
   }
 
+  const handleLongText = (text: string | undefined) => {
+
+    const processedLinks = handleLinks(text);
+    const stringWithLinksHandled = processedLinks?.__html || text;
+
+    const words = stringWithLinksHandled?.split(' ');
+    // const words = text?.split(" ");
+
+    const handleToggleText = () => {
+      setShowFullText(!showFullText);
+    };
+    if (words?.length) {
+      if (words?.length > MAX_WORDS) {
+        if (showFullText) {
+          console.log("Show less text ", words?.join(" "))
+          return (
+            <>
+              <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}>
+              </p>
+              <button onClick={handleToggleText}>Show less</button>
+            </>
+          )
+        } else {
+          console.log("show more text ", words?.slice(0, MAX_WORDS).join(" "))
+          return (
+            <>
+              <p dangerouslySetInnerHTML={{ __html: words.slice(0, MAX_WORDS).join(" ") }}>
+              </p>
+              <button onClick={handleToggleText}>Show more</button>
+            </>
+          );
+        }
+      }
+    }
+    if (words === undefined) return;
+    return <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}></p>;
+  };
+
   return (
     <>
-      <div className="w-full bg-white p-5 rounded-xl ">
+      <div className="w-full bg-white px-8 py-3 rounded-xl ">
         {/* if replies available then this runs */}
         {replyParent && (
           <div className="-mx-5 border-b border-slate-200">
@@ -136,7 +176,10 @@ const PostCard = ({
               comments={replyParent?.replyCount}
               likes={replyParent?.likeCount}
               caption={replyParent?.record?.text}
-              image={replyParent?.record?.image?.thumb}
+              image={replyParent?.embed?.images && "images" in replyParent.embed
+                ? replyParent.embed.images[0].thumb
+                : []}
+
               profileImg={replyParent?.author?.avatar}
               uri={replyParent?.uri}
               cid={replyParent?.cid}
@@ -152,61 +195,77 @@ const PostCard = ({
             />
           </div>
         )}
-        <div className="flex flex-col mt-3">
+        <div className="flex flex-col mt-3 w-full ">
           {/* Render author's profile image, name and caption */}
           {reason?.by !== undefined && (
-            <p className="text-sm text-slate-500 flex flex-row pb-2">
-              <BiRepost size={20} /> {` Reposted by ${reason?.by}`}
-            </p>
+            <div className="text-sm text-slate-500 flex flex-row items-center ">
+              <BiRepost /> &nbsp;{" "}
+              <div className="break-all line-clamp-1">{` Reposted by ${reason?.by}`}</div>
+            </div>
           )}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <div className="flex gap-4 items-center">
-                <div className="w-10 h-10 rounded-full overflow-hidden">
-                  {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
+              <div className="flex flex-col">
+                <div className="flex gap-4 items-center">
+                  <div className="w-10 h-10 rounded-full overflow-hidden min-w-fit">
+                    {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
 
-                  {profileImg ? (
-                    <img
-                      src={profileImg}
-                      alt=""
-                      className="w-10 h-10 object-cover"
-                    />
-                  ) : (
-                    <img
-                      src={userImage}
-                      alt=""
-                      className="w-10 h-10 object-cover"
-                    />
-                  )}
-                </div>
-                <div className="text-xl flex flex-col pb-3 ">
-                  <div className="flex items-center flex-nowrap">
-                    <p className="overflow-visible text-md whitespace-nowrap">
-                      {author === undefined ? handleSplit(handle) : author}
-                    </p>
-                    &nbsp;
-                    <p className="text-sm text-slate-500 break-all line-clamp-1">
-                      @{handle}
-                    </p>
-                    &nbsp; · &nbsp;
-                    <p className="text-sm text-slate-600">
-                      {formatDateAgo(indexedAt)}
-                    </p>
+                    {profileImg ? (
+                      <img
+                        src={profileImg}
+                        alt=""
+                        className="w-10 h-10 object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={userImage}
+                        alt=""
+                        className="w-10 h-10 object-cover"
+                      />
+                    )}
                   </div>
+                  <div className="text-xl flex flex-col  w-full">
+                    <div className="flex flex-row-reverse items-center gap-2 bg--300 h-10 flex-nowrap">
+                      {/* time stamp */}
+                      <div className="flex items-center gap-2">
+                        <div>·</div>
+                        <div className="text-sm text-slate-500">
+                          {formatDateAgo(indexedAt)}
+                        </div>
+                      </div>
 
+                      {/* handle and username */}
+                      <div className="flex items-center gap-2">
+                        <div className="text-md whitespace-nowrap">
+                          {author === undefined ? handleSplit(handle) : author}
+                        </div>
+                        <div className="text-sm text-slate-500 break-all line-clamp-1">
+                          @{handle}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="ml-10">
                   {reply?.by !== undefined && (
-                    <div className="text-sm text-slate-500 flex flex-row pb-4">
-                      <BiShare /> {` Replied to ${reply?.by}`}
+                    <div className="text-sm text-slate-500 flex flex-row items-center ">
+                      <BiShare /> &nbsp;{" "}
+                      <div className="break-all line-clamp-1">{` Replied to ${reply?.by}`}</div>
                     </div>
                   )}
                 </div>
               </div>
             </div>
-            <div>
-              <p
-                className="text-lg "
-                dangerouslySetInnerHTML={handleLongText(caption)}
-              ></p>
+            <div className="flex">
+              <p className="text-lg">
+                <span
+                // dangerouslySetInnerHTML={{
+                //   __html: handleLongText(caption),
+                // }}
+                >
+                  {handleLongText(caption)}
+                </span>
+              </p>
             </div>
           </div>
         </div>
@@ -214,36 +273,38 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-              <div>
-                {/* Render the post image */}
-                <div className="w-full aspect-video overflow-hidden">
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+            <div>
+              {/* Render the post image */}
+              <div className="w-full aspect-video overflow-hidden">
+                <img
+                  src={image}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
               </div>
-            )}
+            </div>
+          )}
         {embed?.$type === "app.bsky.embed.record#view" && (
           <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
-            <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-row justify-between items-center ">
               {/* section of the profileImage,handle,time, */}
-              <div className="flex flex-row w-10 h-10 items-center">
-                {embed?.data?.author?.avatar ? (
-                  <img
-                    className="w-10 h-10 object-cover rounded-full"
-                    src={embed?.data?.author?.avatar}
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    src={userImage}
-                    alt=""
-                    className="w-10 h-10 object-cover rounded-full"
-                  />
-                )}
-                <div className="text-lg flex flex-col pl-2 whitespace-nowrap break-all line-clamp-1">
+              <div className="flex flex-row items-center w-full">
+                <div className="w-10 h-10 min-w-fit">
+                  {embed?.data?.author?.avatar ? (
+                    <img
+                      className="w-10 h-10 object-cover rounded-full"
+                      src={embed?.data?.author?.avatar}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      src={userImage}
+                      alt=""
+                      className="w-10 h-10 object-cover rounded-full"
+                    />
+                  )}
+                </div>
+                <div className=" w-full text-lg pl-2 break-all line-clamp-1 ">
                   {embed?.data?.author?.displayName === undefined
                     ? handleSplit(embed?.data?.author?.handle)
                     : embed?.data?.author?.displayName}
@@ -252,7 +313,7 @@ const PostCard = ({
               <div>{formatDateAgo(embed?.data?.indexedAt)}</div>
             </div>
             {/* section for text */}
-            <div className="text-base">{embed?.data?.value?.text}</div>
+            <div className="text-base">{handleLongText(embed?.data?.value?.text)}</div>
             <div>
               {/* section for image if available; */}
               {embed.data?.embeds[0]?.images && (

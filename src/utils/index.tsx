@@ -92,25 +92,45 @@ export async function refreshSession() {
   }
 }
 
-export function handleLongText(
-  str: string | undefined
-): { __html: string } | undefined {
-  const longText = /^(?!\/).{31,}$/;
-  if (!str) {
-    return undefined;
-  }
-  const processedLinks = handleLinks(str);
-  const stringWithLinksHandled = processedLinks?.__html || str;
-  return {
-    __html: stringWithLinksHandled.replace(
-      longText,
-      (match) =>
-        `<div class="w-full overflow-hidden"><span class="break-words">${match}</span></div>`
-    ),
-  };
-}
 
-function handleLinks(str: string | undefined): { __html: string } | undefined {
+// const MAX_WORDS = 20; // Maximum number of words to display initially
+// export function handleLongText(
+//   str: string | undefined
+// ): { __html: string } | undefined {
+//   const longText = /^(?!\/).{31,}$/;
+//   if (!str) {
+//     return undefined;
+//   }
+//   const processedLinks = handleLinks(str);
+//   const stringWithLinksHandled = processedLinks?.__html || str;
+
+//   // Split the string into individual words
+//   const words = stringWithLinksHandled.split(' ');
+//   // Check if the number of words is greater than MAX_WORDS
+//   if (words.length > MAX_WORDS) {
+//     // If yes, then join the first MAX_WORDS number of words
+//     const shownText = words.slice(0, MAX_WORDS).join(' ');
+//     // And join the remaining words
+//     const hiddenText = words.slice(MAX_WORDS).join(' ');
+//     // Add 'Show more'/'Show less' links around the hidden text
+//     return {
+//       __html: shownText + ' <a href="#" class="show-more">Show more</a><span class="hidden-text" style="display: none;">' +
+//         hiddenText + ' <a href="#" class="show-less">Show less</a></span>',
+//     };
+//   } else {
+//     // If the number of words is less than or equal to MAX_WORDS, return the text as is
+//     return {
+//       __html: stringWithLinksHandled.replace(
+//         longText,
+//         (match) =>
+//           `<div class="w-full overflow-hidden"><span class="break-words">${match}</span></div>`
+//       ),
+//     };
+//   }
+// }
+
+
+export function handleLinks(str: string | undefined): { __html: string } | undefined {
   const linkRegex =
     /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|.]*)\S*/gi;
   if (!str) {
