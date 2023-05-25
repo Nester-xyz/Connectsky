@@ -149,7 +149,7 @@ const PostCard = ({
                 onClick={handleToggleText}
                 className="text-sm text-blue-500"
               >
-                {showFullText ? `see less` : "see more"}
+                {showFullText ? `see less` : "... see more"}
               </button>
             </p>
           </>
