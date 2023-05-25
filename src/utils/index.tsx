@@ -92,7 +92,6 @@ export async function refreshSession() {
   }
 }
 
-
 // const MAX_WORDS = 20; // Maximum number of words to display initially
 // export function handleLongText(
 //   str: string | undefined
@@ -129,13 +128,15 @@ export async function refreshSession() {
 //   }
 // }
 
-
-export function handleLinks(str: string | undefined): { __html: string } | undefined {
+export function handleLinks(
+  str: string | undefined
+): { __html: string } | undefined {
   const linkRegex =
     /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|.]*)\S*/gi;
   if (!str) {
     return undefined;
   }
+
   return {
     __html: str.replace(
       linkRegex,
