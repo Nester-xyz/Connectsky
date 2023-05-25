@@ -127,11 +127,10 @@ const PostCard = ({
   }
 
   const handleLongText = (text: string | undefined) => {
-
     const processedLinks = handleLinks(text);
     const stringWithLinksHandled = processedLinks?.__html || text;
 
-    const words = stringWithLinksHandled?.split(' ');
+    const words = stringWithLinksHandled?.split(" ");
     // const words = text?.split(" ");
 
     const handleToggleText = () => {
@@ -139,25 +138,22 @@ const PostCard = ({
     };
     if (words?.length) {
       if (words?.length > MAX_WORDS) {
-        if (showFullText) {
-          console.log("Show less text ", words?.join(" "))
-          return (
-            <>
-              <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}>
-              </p>
-              <button onClick={handleToggleText}>Show less</button>
-            </>
-          )
-        } else {
-          console.log("show more text ", words?.slice(0, MAX_WORDS).join(" "))
-          return (
-            <>
-              <p dangerouslySetInnerHTML={{ __html: words.slice(0, MAX_WORDS).join(" ") }}>
-              </p>
-              <button onClick={handleToggleText}>Show more</button>
-            </>
-          );
-        }
+        return (
+          <>
+            <p>
+              {showFullText
+                ? words.join(" ")
+                : words.slice(0, MAX_WORDS).join(" ")}{" "}
+              {/* Insert a space character here */}
+              <button
+                onClick={handleToggleText}
+                className="text-sm text-blue-500"
+              >
+                {showFullText ? `see less` : "see more"}
+              </button>
+            </p>
+          </>
+        );
       }
     }
     if (words === undefined) return;
@@ -176,10 +172,11 @@ const PostCard = ({
               comments={replyParent?.replyCount}
               likes={replyParent?.likeCount}
               caption={replyParent?.record?.text}
-              image={replyParent?.embed?.images && "images" in replyParent.embed
-                ? replyParent.embed.images[0].thumb
-                : []}
-
+              image={
+                replyParent?.embed?.images && "images" in replyParent.embed
+                  ? replyParent.embed.images[0].thumb
+                  : []
+              }
               profileImg={replyParent?.author?.avatar}
               uri={replyParent?.uri}
               cid={replyParent?.cid}
@@ -273,17 +270,17 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-            <div>
-              {/* Render the post image */}
-              <div className="w-full aspect-video overflow-hidden">
-                <img
-                  src={image}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
+              <div>
+                {/* Render the post image */}
+                <div className="w-full aspect-video overflow-hidden">
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         {embed?.$type === "app.bsky.embed.record#view" && (
           <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
             <div className="flex flex-row justify-between items-center ">
@@ -313,7 +310,9 @@ const PostCard = ({
               <div>{formatDateAgo(embed?.data?.indexedAt)}</div>
             </div>
             {/* section for text */}
-            <div className="text-base">{handleLongText(embed?.data?.value?.text)}</div>
+            <div className="text-base">
+              {handleLongText(embed?.data?.value?.text)}
+            </div>
             <div>
               {/* section for image if available; */}
               {embed.data?.embeds[0]?.images && (
