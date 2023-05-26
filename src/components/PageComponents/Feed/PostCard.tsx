@@ -177,6 +177,7 @@ const PostCard = ({
                 className="text-sm text-blue-500"
               >
                 See Less
+
               </button>
             }
           </>
