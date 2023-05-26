@@ -127,37 +127,111 @@ const PostCard = ({
   }
 
   const handleLongText = (text: string | undefined) => {
-    const processedLinks = handleLinks(text);
-    const stringWithLinksHandled = processedLinks?.__html || text;
+    if (!text?.length) return;
+    console.log(showFullText);
+    const wordListLong = text.split(" ");
+    const wordListSmall = text.split(" ").slice(0, MAX_WORDS);
 
-    const words = stringWithLinksHandled?.split(" ");
-    // const words = text?.split(" ");
+    const linkRegex =
+      /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|.]*)\S*/gi;
+
+    const processSmall = wordListSmall.map((part, index) => {
+      if (linkRegex.test(part)) {
+        return (
+          <span className="break-all" key={index}>
+            <a href={part} className="text-indigo-600" target="_blank">
+              {part + " "}
+            </a>
+          </span>
+        );
+      }
+      return part + " ";
+    });
+
+    const processLong = wordListLong.map((part, index) => {
+      if (linkRegex.test(part)) {
+        return (
+          <span className="break-all" key={index}>
+            <a href={part} className="text-indigo-600" target="_blank">
+              {part + " "}
+            </a>
+          </span>
+        );
+      }
+      return part + " ";
+    });
 
     const handleToggleText = () => {
       setShowFullText(!showFullText);
     };
-    if (words?.length) {
-      if (words?.length > MAX_WORDS) {
+
+
+    if (wordListLong.length > MAX_WORDS) {
+      if (showFullText) {
         return (
           <>
-            <p>
-              {showFullText
-                ? words.join(" ")
-                : words.slice(0, MAX_WORDS).join(" ")}{" "}
-              {/* Insert a space character here */}
+            {processLong}
+            {
               <button
                 onClick={handleToggleText}
                 className="text-sm text-blue-500"
               >
-                {showFullText ? `see less` : "... see more"}
+                See Less
+
               </button>
-            </p>
+            }
+          </>
+        );
+      } else {
+        return (
+          <>
+            {processSmall}
+            {
+              <button
+                onClick={handleToggleText}
+                className="text-sm text-blue-500"
+              >
+                See More
+              </button>
+            }
           </>
         );
       }
+    } else {
+      return <div>{processLong}</div>;
     }
-    if (words === undefined) return;
-    return <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}></p>;
+
+    // const processedLinks = handleLinks(text);
+    // const stringWithLinksHandled = processedLinks?.__html || text;
+
+    // const words = stringWithLinksHandled?.split(" ");
+    // // const words = text?.split(" ");
+
+    // const handleToggleText = () => {
+    //   setShowFullText(!showFullText);
+    // };
+    // if (words?.length) {
+    //   if (words?.length > MAX_WORDS) {
+    //     return (
+    //       <>
+    //         <p>
+    //           {showFullText
+    //             ? words.join(" ")
+    //             : words.slice(0, MAX_WORDS).join(" ")}{" "}
+    //           {/* Insert a space character here */}
+    //           <button
+    //             onClick={handleToggleText}
+    //             className="text-sm text-blue-500"
+    //           >
+    //             {showFullText ? `see less` : "see more"}
+    //           </button>
+    //         </p>
+    //       </>
+    //     );
+    //   }
+    // }
+    // if (words === undefined) return;
+    // return <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}></p>;
   };
 
   return (
@@ -233,7 +307,7 @@ const PostCard = ({
 
                       {/* handle and username */}
                       <div className="flex items-center gap-2">
-                        <div className="text-md whitespace-nowrap">
+                        <div className="text-md  break-all line-clamp-1">
                           {author === undefined ? handleSplit(handle) : author}
                         </div>
                         <div className="text-sm text-slate-500 break-all line-clamp-1">
