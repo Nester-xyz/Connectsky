@@ -7,6 +7,7 @@ import { BiShare, BiRepost } from "react-icons/bi";
 import {
   agent,
   formatDateAgo,
+  handleLinks,
   handleSplit,
   refreshSession,
 } from "../../../utils";
@@ -126,47 +127,110 @@ const PostCard = ({
   }
 
   const handleLongText = (text: string | undefined) => {
-    const words = text?.split(" ");
+    if (!text?.length) return;
+    console.log(showFullText);
+    const wordListLong = text.split(" ");
+    const wordListSmall = text.split(" ").slice(0, MAX_WORDS);
+
+    const linkRegex =
+      /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|.]*)\S*/gi;
+
+    const processSmall = wordListSmall.map((part, index) => {
+      if (linkRegex.test(part)) {
+        return (
+          <span className="break-all" key={index}>
+            <a href={part} className="text-indigo-600" target="_blank">
+              {part + " "}
+            </a>
+          </span>
+        );
+      }
+      return part + " ";
+    });
+
+    const processLong = wordListLong.map((part, index) => {
+      if (linkRegex.test(part)) {
+        return (
+          <span className="break-all" key={index}>
+            <a href={part} className="text-indigo-600" target="_blank">
+              {part + " "}
+            </a>
+          </span>
+        );
+      }
+      return part + " ";
+    });
 
     const handleToggleText = () => {
       setShowFullText(!showFullText);
     };
 
-    if (words?.length) {
-      if (words.length > MAX_WORDS) {
-        if (showFullText) {
-          return (
-            <>
-              <p>
-                {words.join(" ")}{" "}
-                <button
-                  onClick={handleToggleText}
-                  className="text-blue-500 text-sm"
-                >
-                  See less
-                </button>
-              </p>
-            </>
-          );
-        } else {
-          return (
-            <>
-              <p>
-                {words.slice(0, MAX_WORDS).join(" ")}{" "}
-                <button
-                  onClick={handleToggleText}
-                  className="text-blue-500 text-sm"
-                >
-                  See more
-                </button>
-              </p>
-            </>
-          );
-        }
+
+    if (wordListLong.length > MAX_WORDS) {
+      if (showFullText) {
+        return (
+          <>
+            {processLong}
+            {
+              <button
+                onClick={handleToggleText}
+                className="text-sm text-blue-500"
+              >
+                See Less
+              </button>
+            }
+          </>
+        );
+      } else {
+        return (
+          <>
+            {processSmall}
+            {
+              <button
+                onClick={handleToggleText}
+                className="text-sm text-blue-500"
+              >
+                See More
+              </button>
+            }
+          </>
+        );
       }
+    } else {
+      return <div>{processLong}</div>;
     }
 
-    return <p>{text}</p>;
+    // const processedLinks = handleLinks(text);
+    // const stringWithLinksHandled = processedLinks?.__html || text;
+
+    // const words = stringWithLinksHandled?.split(" ");
+    // // const words = text?.split(" ");
+
+    // const handleToggleText = () => {
+    //   setShowFullText(!showFullText);
+    // };
+    // if (words?.length) {
+    //   if (words?.length > MAX_WORDS) {
+    //     return (
+    //       <>
+    //         <p>
+    //           {showFullText
+    //             ? words.join(" ")
+    //             : words.slice(0, MAX_WORDS).join(" ")}{" "}
+    //           {/* Insert a space character here */}
+    //           <button
+    //             onClick={handleToggleText}
+    //             className="text-sm text-blue-500"
+    //           >
+    //             {showFullText ? `see less` : "see more"}
+    //           </button>
+    //         </p>
+    //       </>
+    //     );
+    //   }
+    // }
+    // if (words === undefined) return;
+    // return <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}></p>;
   };
 
   return (
@@ -181,7 +245,11 @@ const PostCard = ({
               comments={replyParent?.replyCount}
               likes={replyParent?.likeCount}
               caption={replyParent?.record?.text}
-              image={replyParent?.record?.image?.thumb}
+              image={
+                replyParent?.embed?.images && "images" in replyParent.embed
+                  ? replyParent.embed.images[0].thumb
+                  : []
+              }
               profileImg={replyParent?.author?.avatar}
               uri={replyParent?.uri}
               cid={replyParent?.cid}
@@ -315,7 +383,9 @@ const PostCard = ({
               <div>{formatDateAgo(embed?.data?.indexedAt)}</div>
             </div>
             {/* section for text */}
-            <div className="text-base">{embed?.data?.value?.text}</div>
+            <div className="text-base">
+              {handleLongText(embed?.data?.value?.text)}
+            </div>
             <div>
               {/* section for image if available; */}
               {embed.data?.embeds[0]?.images && (
