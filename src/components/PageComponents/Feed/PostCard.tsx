@@ -138,7 +138,7 @@ const PostCard = ({
           return (
             <>
               <p>
-                {words.join(" ")}...
+                {words.join(" ")}{" "}
                 <button
                   onClick={handleToggleText}
                   className="text-blue-500 text-sm"
@@ -152,7 +152,7 @@ const PostCard = ({
           return (
             <>
               <p>
-                {words.slice(0, MAX_WORDS).join(" ")}...
+                {words.slice(0, MAX_WORDS).join(" ")}{" "}
                 <button
                   onClick={handleToggleText}
                   className="text-blue-500 text-sm"
@@ -238,7 +238,7 @@ const PostCard = ({
 
                       {/* handle and username */}
                       <div className="flex items-center gap-2">
-                        <div className="text-md whitespace-nowrap">
+                        <div className="text-md  break-all line-clamp-1">
                           {author === undefined ? handleSplit(handle) : author}
                         </div>
                         <div className="text-sm text-slate-500 break-all line-clamp-1">
