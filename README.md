@@ -21,4 +21,4 @@ It will be tricky to run local server of app for Chrome Extension as extensions 
 - Make sure to create a PR with appropriate names with detailed comments.
 - We might not accept your PR if it isn't appropriate.
 
-Thank you for using our application & helping forward to achieve building this. Feel free to DM Ankit if you need help personally, here is his Twitter link https://www.twitter.com/whoisanku 💙
+Thank you for using our application & helping forward to achieve building this. Feel free to DM Ankit/Yogesh if you need help personally, here is his Twitter link Ankit: https://www.twitter.com/whoisanku & Yogesh: https://twitter.com/yogesharyal7 💙
