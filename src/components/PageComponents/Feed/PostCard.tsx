@@ -165,7 +165,6 @@ const PostCard = ({
       setShowFullText(!showFullText);
     };
 
-
     if (wordListLong.length > MAX_WORDS) {
       if (showFullText) {
         return (
@@ -177,7 +176,6 @@ const PostCard = ({
                 className="text-sm text-blue-500"
               >
                 See Less
-
               </button>
             }
           </>
@@ -269,9 +267,11 @@ const PostCard = ({
         <div className="flex flex-col mt-3 w-full ">
           {/* Render author's profile image, name and caption */}
           {reason?.by !== undefined && (
-            <div className="text-sm text-slate-500 flex flex-row items-center ">
-              <BiRepost /> &nbsp;{" "}
-              <div className="break-all line-clamp-1">{` Reposted by ${reason?.by}`}</div>
+            <div className="text-slate-600 flex flex-row items-center ">
+              <div className="text-lg flex items-center">
+                <BiRepost /> &nbsp;{" "}
+              </div>
+              <div className="break-all text-sm line-clamp-1">{` Reposted by ${reason?.by}`}</div>
             </div>
           )}
           <div className="flex flex-col gap-2">
@@ -317,18 +317,20 @@ const PostCard = ({
                     </div>
                   </div>
                 </div>
-                <div className="ml-10">
+                <div className="ml-14">
                   {reply?.by !== undefined && (
-                    <div className="text-sm text-slate-500 flex flex-row items-center ">
-                      <BiShare /> &nbsp;{" "}
-                      <div className="break-all line-clamp-1">{` Replied to ${reply?.by}`}</div>
+                    <div className="text-slate-600 flex flex-row items-center ">
+                      <div className="text-lg flex items-center">
+                        <BiShare /> &nbsp;{" "}
+                      </div>
+                      <div className="text-sm break-all line-clamp-1">{` Replied to ${reply?.by}`}</div>
                     </div>
                   )}
                 </div>
               </div>
             </div>
             <div className="flex">
-              <p className="text-lg">
+              <p className="text-lg text-thin">
                 <span
                 // dangerouslySetInnerHTML={{
                 //   __html: handleLongText(caption),
@@ -344,57 +346,68 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-            <div>
-              {/* Render the post image */}
-              <div className="w-full aspect-video overflow-hidden">
-                <img
-                  src={image}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
+              <div>
+                {/* Render the post image */}
+                <div className="w-full aspect-video overflow-hidden">
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+            )}
+        {embed?.$type === "app.bsky.embed.record#view" &&
+          embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
+            <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
+              <div className="flex flex-row justify-between items-center ">
+                {/* section of the profileImage,handle,time, */}
+                <div className="flex flex-row items-center w-full gap-2">
+                  <div className="w-10 h-10 min-w-fit">
+                    {embed?.data?.author?.avatar ? (
+                      <img
+                        className="w-10 h-10 object-cover rounded-full"
+                        src={embed?.data?.author?.avatar}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        src={userImage}
+                        alt=""
+                        className="w-10 h-10 object-cover rounded-full"
+                      />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-lg  break-all line-clamp-1">
+                      {embed?.data?.author?.displayName === undefined
+                        ? handleSplit(embed?.data?.author?.handle)
+                        : embed?.data?.author?.displayName}
+                    </div>
+                    <div className="text-sm text-slate-500 break-all line-clamp-1">
+                      @{embed?.data?.author?.handle}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-lg">·</div>
+                    <div className="text-sm text-slate-500">
+                      {formatDateAgo(embed?.data?.indexedAt)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* section for text */}
+              <div className="text-base mt-1">
+                {handleLongText(embed?.data?.value?.text)}
+              </div>
+              <div>
+                {/* section for image if available; */}
+                {embed.data?.embeds[0]?.images && (
+                  <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
+                )}
               </div>
             </div>
           )}
-        {embed?.$type === "app.bsky.embed.record#view" && embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
-          <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
-            <div className="flex flex-row justify-between items-center ">
-              {/* section of the profileImage,handle,time, */}
-              <div className="flex flex-row items-center w-full">
-                <div className="w-10 h-10 min-w-fit">
-                  {embed?.data?.author?.avatar ? (
-                    <img
-                      className="w-10 h-10 object-cover rounded-full"
-                      src={embed?.data?.author?.avatar}
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      src={userImage}
-                      alt=""
-                      className="w-10 h-10 object-cover rounded-full"
-                    />
-                  )}
-                </div>
-                <div className=" w-full text-lg pl-2 break-all line-clamp-1 ">
-                  {embed?.data?.author?.displayName === undefined
-                    ? handleSplit(embed?.data?.author?.handle)
-                    : embed?.data?.author?.displayName}
-                </div>
-              </div>
-              <div>{formatDateAgo(embed?.data?.indexedAt)}</div>
-            </div>
-            {/* section for text */}
-            <div className="text-base">
-              {handleLongText(embed?.data?.value?.text)}
-            </div>
-            <div>
-              {/* section for image if available; */}
-              {embed.data?.embeds[0]?.images && (
-                <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
-              )}
-            </div>
-          </div>
-        )}
 
         <div>
           {/* Render the number of likes and comments */}
