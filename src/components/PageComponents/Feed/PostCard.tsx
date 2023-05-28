@@ -129,11 +129,18 @@ const PostCard = ({
   const handleLongText = (text: string | undefined) => {
     if (!text?.length) return;
     console.log(showFullText);
-    const wordListLong = text.split(" ");
-    const wordListSmall = text.split(" ").slice(0, MAX_WORDS);
 
-    const linkRegex =
-      /(\bhttps?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|.]*)\S*/gi;
+    // firstly i should handle the \n break line thing
+    const processedText = text.replaceAll(/\n/g, " <br/> ");
+    const wordListLong = processedText.split(" ");
+    const wordListSmall = processedText.split(" ").slice(0, MAX_WORDS);
+
+
+    const linkRegex = /(https?:\/\/[^\s/$.?#]+\.[^\s/$.?#_]+(?:\/[^\s]*)?)\s*/gi;
+
+    console.log("wordListLong ", wordListLong);
+    console.log("wordlistsmall ", wordListSmall)
+
 
     const processSmall = wordListSmall.map((part, index) => {
       if (linkRegex.test(part)) {
@@ -145,8 +152,12 @@ const PostCard = ({
           </span>
         );
       }
+      if (part === "<br/>") {
+        return (<span><br /></span>);
+      }
       return part + " ";
     });
+
 
     const processLong = wordListLong.map((part, index) => {
       if (linkRegex.test(part)) {
@@ -158,6 +169,9 @@ const PostCard = ({
           </span>
         );
       }
+      if (part === "<br/>") {
+        return (<span><br /></span>);
+      }
       return part + " ";
     });
 
@@ -165,6 +179,8 @@ const PostCard = ({
       setShowFullText(!showFullText);
     };
 
+    console.log("processLong", processLong);
+    console.log("processSmall", processSmall)
 
     if (wordListLong.length > MAX_WORDS) {
       if (showFullText) {
@@ -198,7 +214,7 @@ const PostCard = ({
         );
       }
     } else {
-      return <div>{processLong}</div>;
+      return <div>{processSmall}</div>;
     }
 
     // const processedLinks = handleLinks(text);
