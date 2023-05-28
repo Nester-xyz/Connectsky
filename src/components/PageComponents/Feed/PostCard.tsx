@@ -414,9 +414,9 @@ const PostCard = ({
               </div>
               <div>
                 {/* section for image if available; */}
-                {embed.data?.embeds[0]?.images && (
+                {embed.data?.embeds && (embed.data?.embeds[0]?.images && (
                   <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
-                )}
+                ))}
               </div>
             </div>
           )}
