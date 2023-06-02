@@ -39,6 +39,7 @@ const PostCard = ({
   const [repostCnt, setRepostCnt] = useState(repostCount);
   const [isFetching, setIsFetching] = useState(true);
   const [showFullText, setShowFullText] = useState(false);
+  const [showEmbedFullText, setShowEmbedFullText] = useState(false);
   // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
   async function handleRepost() {
     try {
@@ -126,7 +127,7 @@ const PostCard = ({
     );
   }
 
-  const handleLongText = (text: string | undefined) => {
+  const handleLongText = (text: string | undefined, isEmbed: boolean) => {
     if (!text?.length) return;
     console.log(showFullText);
 
@@ -176,39 +177,77 @@ const PostCard = ({
     const handleToggleText = () => {
       setShowFullText(!showFullText);
     };
-
-    if (wordListLong.length > MAX_WORDS) {
-      if (showFullText) {
-        return (
-          <>
-            {processLong}
-            {
-              <button
-                onClick={handleToggleText}
-                className="text-sm text-blue-500"
-              >
-                See Less
-              </button>
-            }
-          </>
-        );
+    const handleEmbedToggleText = () => {
+      setShowEmbedFullText(!showEmbedFullText);
+    };
+    if (!isEmbed) {
+      if (wordListLong.length > MAX_WORDS) {
+        if (showFullText) {
+          return (
+            <>
+              {processLong}
+              {
+                <button
+                  onClick={handleToggleText}
+                  className="text-sm text-blue-500"
+                >
+                  See Less
+                </button>
+              }
+            </>
+          );
+        } else {
+          return (
+            <>
+              {processSmall}
+              {
+                <button
+                  onClick={handleToggleText}
+                  className="text-sm text-blue-500"
+                >
+                  See More
+                </button>
+              }
+            </>
+          );
+        }
       } else {
-        return (
-          <>
-            {processSmall}
-            {
-              <button
-                onClick={handleToggleText}
-                className="text-sm text-blue-500"
-              >
-                See More
-              </button>
-            }
-          </>
-        );
+        return <div>{processSmall}</div>;
       }
     } else {
-      return <div>{processSmall}</div>;
+      if (wordListLong.length > MAX_WORDS) {
+        if (showEmbedFullText) {
+          return (
+            <>
+              {processLong}
+              {
+                <button
+                  onClick={handleEmbedToggleText}
+                  className="text-sm text-blue-500"
+                >
+                  See Less
+                </button>
+              }
+            </>
+          );
+        } else {
+          return (
+            <>
+              {processSmall}
+              {
+                <button
+                  onClick={handleEmbedToggleText}
+                  className="text-sm text-blue-500"
+                >
+                  See More
+                </button>
+              }
+            </>
+          );
+        }
+      } else {
+        return <div>{processSmall}</div>;
+      }
     }
 
     // const processedLinks = handleLinks(text);
@@ -348,7 +387,7 @@ const PostCard = ({
                 //   __html: handleLongText(caption),
                 // }}
                 >
-                  {handleLongText(caption)}
+                  {handleLongText(caption, true)}
                 </span>
               </p>
             </div>
@@ -410,7 +449,7 @@ const PostCard = ({
               </div>
               {/* section for text */}
               <div className="text-base mt-1">
-                {handleLongText(embed?.data?.value?.text)}
+                {handleLongText(embed?.data?.value?.text, false)}
               </div>
               <div>
                 {/* section for image if available; */}
