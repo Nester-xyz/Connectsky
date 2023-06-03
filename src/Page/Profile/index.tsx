@@ -23,12 +23,11 @@ const index = (props: Props) => {
   const params = useParams();
   console.log(`did in profile section ${params.did}`)
 
-  // function setUserDid() {
-  //   const did = localStorage.getItem("did");
-  //   if (did === null) return;
-  //   console.log("here")
-  //   setUserDiD(did);
-  // }
+  function getUserDid() {
+    const did = localStorage.getItem("did");
+    if (did === null) return;
+    return did;
+  }
   async function fetchAuthorData() {
     try {
       // setUserDid();
@@ -155,9 +154,9 @@ const index = (props: Props) => {
 
       <div className="bg-slate-50 w-full h-56 relative">
         {/* <img src={} alt="" /> //cover image */}
-        <div className="px-5 py-1 border first-letter:rounded-md absolute right-5 top-5">
+        {getUserDid() !== params.did && <div className="px-5 py-1 border first-letter:rounded-md absolute right-5 top-5">
           Follow
-        </div>
+        </div>}
         {/* profile */}
         <div className="w-32 bg-slate-200 aspect-square rounded-full absolute left-10 -bottom-16  shadow-lg"><img src={avatar} alt="" className="rounded-full" /></div>
       </div>
