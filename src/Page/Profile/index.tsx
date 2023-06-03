@@ -3,6 +3,7 @@ import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { agent, refreshSession } from "../../utils";
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
+import { useParams } from 'react-router-dom'
 type Props = {};
 
 const index = (props: Props) => {
@@ -19,17 +20,18 @@ const index = (props: Props) => {
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
   const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
+  const params = useParams();
+  console.log(`did in profile section ${params.did}`)
 
-
-  function setUserDid() {
-    const did = localStorage.getItem("did");
-    if (did === null) return;
-    console.log("here")
-    setUserDiD(did);
-  }
+  // function setUserDid() {
+  //   const did = localStorage.getItem("did");
+  //   if (did === null) return;
+  //   console.log("here")
+  //   setUserDiD(did);
+  // }
   async function fetchAuthorData() {
     try {
-      setUserDid();
+      // setUserDid();
       if (userDiD === undefined) return;
       if (userDiD === "") return;
       await refreshSession();
@@ -47,15 +49,13 @@ const index = (props: Props) => {
     }
   }
 
-
-
   async function fetchAuthorFeed() {
     try {
-      const did = localStorage.getItem("did");
-      if (did === null) return;
-      setUserDiD(did);
+      // const did = localStorage.getItem("did");
+      // setUserDiD(params.did);
+      if (params.did === null) return;
       await refreshSession();
-      const { data } = await agent.getAuthorFeed({ actor: did, limit: 20, cursor: cursor })
+      const { data } = await agent.getAuthorFeed({ actor: params.did!, limit: 20, cursor: cursor })
       if (data.cursor == null) return;
       console.log("Author feed", data)
       setCursor(data.cursor);
@@ -79,6 +79,7 @@ const index = (props: Props) => {
             displayName: feed.post.author.displayName,
             avatar: feed.post.author.avatar,
             handle: feed.post.author.handle,
+            did: feed.post.author.did,
           },
           likes: feed.post.likeCount,
           comments: feed.post.replyCount,
@@ -117,6 +118,7 @@ const index = (props: Props) => {
   const observerCallback: IntersectionObserverCallback = (entries) => {
     const firstEntry = entries[0];
     if (firstEntry.isIntersecting) {
+      setUserDiD(params.did);
       fetchAuthorFeed();
       setIsLoading(true);
     }
@@ -125,6 +127,7 @@ const index = (props: Props) => {
     threshold: 1,
   });
   useEffect(() => {
+    setUserDiD(params.did);
     if (!isLoading) {
       fetchAuthorFeed();
       setIsLoading(true);
@@ -142,6 +145,7 @@ const index = (props: Props) => {
   }, [isLoading, observer]);
 
   useEffect(() => {
+    setUserDiD(params.did);
     fetchAuthorData();
   }, [userDiD])
 
@@ -189,6 +193,7 @@ const index = (props: Props) => {
                   <PostCard
                     author={item.author.displayName}
                     handle={item.author.handle}
+                    did={item.author.did}
                     comments={item.comments}
                     likes={item.likes}
                     caption={item.caption.text}
@@ -202,6 +207,7 @@ const index = (props: Props) => {
                     embed={item.embed}
                     indexedAt={item.indexedAt}
                     replyParent={item.replyParent}
+                    isFromProfile={true}
                   />
                 </div>
               );
@@ -211,6 +217,7 @@ const index = (props: Props) => {
                   <PostCard
                     author={item.author.displayName}
                     handle={item.author.handle}
+                    did={item.author.did}
                     comments={item.comments}
                     likes={item.likes}
                     caption={item.caption.text}
@@ -224,6 +231,7 @@ const index = (props: Props) => {
                     embed={item.embed}
                     indexedAt={item.indexedAt}
                     replyParent={item.replyParent}
+                    isFromProfile={true}
                   />
                 </div>
               );

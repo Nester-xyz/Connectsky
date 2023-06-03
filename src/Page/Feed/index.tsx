@@ -108,6 +108,7 @@ const Feed = () => {
           displayName: feed.post.author.displayName,
           avatar: feed.post.author.avatar,
           handle: feed.post.author.handle,
+          did: feed.post.author.did
         },
         likes: feed.post.likeCount,
         comments: feed.post.replyCount,
@@ -205,6 +206,7 @@ const Feed = () => {
                           <PostCard
                             author={item.author.displayName}
                             handle={item.author.handle}
+                            did={item.author.did}
                             comments={item.comments}
                             likes={item.likes}
                             caption={item.caption.text}
@@ -218,6 +220,7 @@ const Feed = () => {
                             embed={item.embed}
                             indexedAt={item.indexedAt}
                             replyParent={item.replyParent}
+                            isFromProfile={false}
                           />
                         </div>
                       );
@@ -227,6 +230,7 @@ const Feed = () => {
                           <PostCard
                             author={item.author.displayName}
                             handle={item.author.handle}
+                            did={item.author.did}
                             comments={item.comments}
                             likes={item.likes}
                             caption={item.caption.text}
@@ -240,6 +244,7 @@ const Feed = () => {
                             embed={item.embed}
                             indexedAt={item.indexedAt}
                             replyParent={item.replyParent}
+                            isFromProfile={false}
                           />
                         </div>
                       );

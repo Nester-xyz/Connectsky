@@ -18,6 +18,7 @@ export type differentButtonsForFeedProps = {
 export type fieldDataProps = {
   profileImg?: string;
   author: string;
+  did: string;
   handle: string;
   caption?: string;
   image?: string;
@@ -31,6 +32,7 @@ export type fieldDataProps = {
   embed: any;
   indexedAt: any;
   replyParent: any;
+  isFromProfile: boolean;
 };
 
 export type differentButtonsForFeed = differentButtonsForFeedProps[];
@@ -47,6 +49,7 @@ export type dataGotFromApi = {
     displayName: any;
     avatar: any;
     handle: any;
+    did: any;
   };
   likes: any;
   comments: any;

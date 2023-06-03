@@ -35,6 +35,7 @@ function App() {
           fileRef,
           setUploadedFile,
           uploadedFile,
+          setActivePage,
         }}
       >
         {/* Setting up the router for the application */}
@@ -48,7 +49,7 @@ function App() {
               <Route path="/search" element={<WillComeSoon />} />
               <Route path="/notifications" element={<Notification />} />
               <Route path="/settings" element={<WillComeSoon />} />
-              <Route path="/profile" element={<WillComeSoon />} />
+              <Route path="/profile/:did" element={<Profile />} />
             </Routes>
           </Layout>
         </Router>

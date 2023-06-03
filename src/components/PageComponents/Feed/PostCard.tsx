@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -13,12 +13,15 @@ import {
 } from "../../../utils";
 import PostLoader from "./PostLoader";
 import { userImage } from "../../UI/DefaultUserImage";
+import { useNavigate } from 'react-router-dom';
+import { appContext } from "../../../context/appContext";
 // just a random Image I grabbed from the internet to show when no image is provided
 
 const MAX_WORDS = 20; // Maximum number of words to display initially
 const PostCard = ({
   author,
   handle,
+  did,
   comments,
   likes,
   caption,
@@ -32,6 +35,7 @@ const PostCard = ({
   embed,
   indexedAt,
   replyParent,
+  isFromProfile
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
   const [repost, setRepost] = useState(false);
@@ -41,6 +45,8 @@ const PostCard = ({
   const [showFullText, setShowFullText] = useState(false);
   const [showEmbedFullText, setShowEmbedFullText] = useState(false);
   // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
+  const navigate = useNavigate();
+  const { setActivePage } = useContext(appContext);
   async function handleRepost() {
     try {
       if (repost) {
@@ -292,6 +298,7 @@ const PostCard = ({
             <PostCard
               author={replyParent?.author?.displayName}
               handle={replyParent?.author?.handle}
+              did={replyParent?.author?.did}
               comments={replyParent?.replyCount}
               likes={replyParent?.likeCount}
               caption={replyParent?.record?.text}
@@ -312,6 +319,7 @@ const PostCard = ({
               }}
               indexedAt={replyParent?.indexedAt}
               replyParent={replyParent?.replyParent}
+              isFromProfile={isFromProfile}
             />
           </div>
         )}
@@ -357,7 +365,10 @@ const PostCard = ({
                       </div>
 
                       {/* handle and username */}
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 cursor-pointer hover:underline" onClick={() => {
+                        console.log(did);
+                        navigate(`/profile/${did}`,); setActivePage("Profile"); isFromProfile && window.location.reload();
+                      }}>
                         <div className="text-md  break-all line-clamp-1">
                           {author === undefined ? handleSplit(handle) : author}
                         </div>
@@ -429,7 +440,7 @@ const PostCard = ({
                       />
                     )}
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 cursor-pointer hover:underline" onClick={() => { console.log(did); navigate(`/profile/${did}`,); setActivePage("Profile"); isFromProfile && window.location.reload(); }}>
                     <div className="text-lg  break-all line-clamp-1">
                       {embed?.data?.author?.displayName === undefined
                         ? handleSplit(embed?.data?.author?.handle)

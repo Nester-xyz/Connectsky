@@ -25,6 +25,11 @@ export type activePageCheck =
   | "Profile";
 // this contains the actual links which will be made into the buttons
 
+function getUserDid() {
+  const DID = localStorage.getItem("did");
+  if (DID === null) return;
+  return DID;
+}
 export const links: linksType[] = [
   {
     linkName: "Home",
@@ -53,7 +58,7 @@ export const links: linksType[] = [
   // },
   {
     linkName: "Profile",
-    links: "/profile",
+    links: `/profile/${getUserDid()}`,
     icon: <FaRegUserCircle />,
     activeIcon: <FaUserCircle />,
   },
