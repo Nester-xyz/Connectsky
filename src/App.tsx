@@ -11,6 +11,10 @@ import WillComeSoon from "./components/PageComponents/WillComeSoon";
 import Profile from "./Page/Profile";
 import { activePageCheck } from "./utils";
 
+export interface ProfileView {
+  did: string;
+}
+
 function App() {
   // State to manage the currently active page of the application
   const [activePage, setActivePage] = useState<activePageCheck>(() => {
@@ -21,8 +25,12 @@ function App() {
   const [postText, setPostText] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<Uint8Array | null>(null);
+  const [isFollows, setIsFollows] = useState<ProfileView[]>([]);
 
   useEffect(() => {
+    // await agent.getFollows({
+    //   actor: response.data.did,
+    // });
     // Update localStorage whenever activePage changes
     localStorage.setItem("activePage", JSON.stringify(activePage));
   }, [activePage]);

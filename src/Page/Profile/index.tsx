@@ -3,7 +3,7 @@ import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { agent, refreshSession } from "../../utils";
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
-import { useParams } from 'react-router-dom'
+import { useParams } from "react-router-dom";
 type Props = {};
 
 const index = (props: Props) => {
@@ -20,8 +20,9 @@ const index = (props: Props) => {
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
   const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
+
   const params = useParams();
-  console.log(`did in profile section ${params.did}`)
+  // console.log(`did in profile section ${params.did}`);
 
   function getUserDid() {
     const did = localStorage.getItem("did");
@@ -35,14 +36,51 @@ const index = (props: Props) => {
       if (userDiD === "") return;
       await refreshSession();
       const { data } = await agent.getProfile({ actor: userDiD });
-      console.log(data);
-      setAvatar(data.avatar)
-      setDescription(data.description)
+      // console.log(data);
+      setAvatar(data.avatar);
+      setDescription(data.description);
       setDisplayName(data.displayName);
-      setHandle(data.handle)
-      setFollowersCount(data.followersCount)
-      setFollowsCount(data.followsCount)
-      setPostsCount(data.postsCount)
+      setHandle(data.handle);
+      setFollowersCount(data.followersCount);
+      setFollowsCount(data.followsCount);
+      setPostsCount(data.postsCount);
+      // getFollowings(50);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // async function getFollowings(cursor: number): Promise<any> {
+  //   // console.log("Following button has been triggered!");
+
+  //   try {
+  //     if (params.did == null) return;
+  //     await refreshSession();
+  //     const { data } = await agent.getFollowers({
+  //       actor: params.did,
+  //       cursor: `${cursor}`,
+  //     });
+  //     console.log(data.followers);
+  //     const something : number = cursor;
+  //     const isFollowedUser = data.followers.some(
+  //       (obj) => obj.did == getUserDid()
+  //     );
+  //     console.log("hello" + isFollowedUser);
+  //     if (isFollowedUser == true) return;
+  //     if (followersCount? < something) return;
+  //     return getFollowings(cursor + 50);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  async function follow() {
+    // console.log("Follow btn triggered!");
+    try {
+      if (userDiD == null) return;
+      await refreshSession();
+      const data = await agent.follow(userDiD);
+      // console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -54,9 +92,13 @@ const index = (props: Props) => {
       // setUserDiD(params.did);
       if (params.did === null) return;
       await refreshSession();
-      const { data } = await agent.getAuthorFeed({ actor: params.did!, limit: 20, cursor: cursor })
+      const { data } = await agent.getAuthorFeed({
+        actor: params.did!,
+        limit: 20,
+        cursor: cursor,
+      });
       if (data.cursor == null) return;
-      console.log("Author feed", data)
+      // console.log("Author feed", data);
       setCursor(data.cursor);
       const mappedData: dataGotFromApi[] = data.feed.map((feed: any) => {
         // console.log(feed);
@@ -106,13 +148,10 @@ const index = (props: Props) => {
       });
       setFetchedDataLength(mappedData.length);
       setFeedData((prevData) => [...prevData, ...mappedData]);
-
     } catch (error) {
       console.log(error);
-
     }
   }
-
 
   const observerCallback: IntersectionObserverCallback = (entries) => {
     const firstEntry = entries[0];
@@ -139,46 +178,61 @@ const index = (props: Props) => {
       if (lastElementRef.current) {
         observer.unobserve(lastElementRef.current);
       }
-
     };
   }, [isLoading, observer]);
 
   useEffect(() => {
     setUserDiD(params.did);
     fetchAuthorData();
-  }, [userDiD])
+  }, [userDiD]);
 
   return (
     <div className="p-5">
       {/* cover */}
 
-      <div className="bg-slate-50 w-full h-56 relative">
+      <div className="bg-blue-700 w-full h-32 relative">
         {/* <img src={} alt="" /> //cover image */}
-        {getUserDid() !== params.did && <div className="px-5 py-1 border first-letter:rounded-md absolute right-5 top-5">
-          Follow
-        </div>}
         {/* profile */}
-        <div className="w-32 bg-slate-200 aspect-square rounded-full absolute left-10 -bottom-16  shadow-lg"><img src={avatar} alt="" className="rounded-full" /></div>
+        <div className="flex items-center">
+          <div className="flex w-24 bg-slate-200 aspect-square rounded-full absolute left-4 -bottom-16 shadow-lg">
+            <img src={avatar} alt="" className="rounded-full" />
+          </div>
+          {getUserDid() !== params.did && (
+            <button
+              onClick={follow}
+              className="px-5 py-1 select-none bg-blue-600 cursor-pointer absolute rounded-lg right-10 top-5 mt-[8rem] text-white"
+            >
+              + Follow
+            </button>
+          )}
+        </div>
       </div>
 
       {/* profile details */}
-      <div className="flex flex-col gap-3 mt-16">
-        <div className="flex flex-col gap-1">
-          <div className="text-2xl font-bold">{displayName}</div>
-          <div className="text-sm text-slate-500">@{handle}</div>
+      <div className="flex flex-col gap-3 mt-[70px]">
+        <div className="flex flex-col">
+          <div className="text-2xl font-bold ml-2">{displayName}</div>
+          <div className="text-sm text-slate-500 ml-2">@{handle}</div>
         </div>
-        <div className="flex flex-col gap-1">
-          <div className="text-sm">Bio</div>
-          <div className="text-sm">
-            {description}
-          </div>
+        <div>
+          {/* <div className="text-sm">Bio</div> */}
+          <div className="text-sm ml-2">{description}</div>
         </div>
       </div>
       {/* profile stats */}
-      <div className="flex gap-2 items.center pt-1">
-        <div>{followersCount?.toString()} <span className="text-slate-500">followers</span></div>
-        <div>{followsCount?.toString()} <span className="text-slate-500">following</span></div>
-        <div>{postsCount?.toString()} <span className="text-slate-500">posts</span></div>
+      <div className="flex gap-8 pt-2 ml-2">
+        <div className="flex gap-1 items-center">
+          <div className="text-[15px]">{followersCount?.toString()} </div>
+          <span className="text-slate-500 text-[13px]">followers</span>
+        </div>
+        <div className="flex gap-1 items-center">
+          <div className="text-[15px]">{followsCount?.toString()} </div>
+          <span className="text-slate-500 text-[13px]">following</span>
+        </div>
+        <div className="flex gap-1 items-center">
+          <div className="text-[15px]">{postsCount?.toString()} </div>
+          <span className="text-slate-500 text-[13px]">posts</span>
+        </div>
       </div>
 
       {/* posts */}

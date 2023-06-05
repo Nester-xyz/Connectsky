@@ -13,7 +13,7 @@ import {
 } from "../../../utils";
 import PostLoader from "./PostLoader";
 import { userImage } from "../../UI/DefaultUserImage";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { appContext } from "../../../context/appContext";
 // just a random Image I grabbed from the internet to show when no image is provided
 
@@ -35,7 +35,7 @@ const PostCard = ({
   embed,
   indexedAt,
   replyParent,
-  isFromProfile
+  isFromProfile,
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
   const [repost, setRepost] = useState(false);
@@ -135,17 +135,15 @@ const PostCard = ({
 
   const handleLongText = (text: string | undefined, isEmbed: boolean) => {
     if (!text?.length) return;
-    console.log(showFullText);
+    // console.log(showFullText);
 
     // firstly i should handle the \n break line thing
     const processedText = text.replaceAll(/\n/g, " <br/> ");
     const wordListLong = processedText.split(" ");
     const wordListSmall = processedText.split(" ").slice(0, MAX_WORDS);
 
-
-    const linkRegex = /(https?:\/\/[^\s/$.?#]+\.[^\s/$.?#_]+(?:\/[^\s]*)?)\s*/gi;
-
-
+    const linkRegex =
+      /(https?:\/\/[^\s/$.?#]+\.[^\s/$.?#_]+(?:\/[^\s]*)?)\s*/gi;
 
     const processSmall = wordListSmall.map((part, index) => {
       if (linkRegex.test(part)) {
@@ -158,11 +156,14 @@ const PostCard = ({
         );
       }
       if (part === "<br/>") {
-        return (<span><br /></span>);
+        return (
+          <span>
+            <br />
+          </span>
+        );
       }
       return part + " ";
     });
-
 
     const processLong = wordListLong.map((part, index) => {
       if (linkRegex.test(part)) {
@@ -175,7 +176,11 @@ const PostCard = ({
         );
       }
       if (part === "<br/>") {
-        return (<span><br /></span>);
+        return (
+          <span>
+            <br />
+          </span>
+        );
       }
       return part + " ";
     });
@@ -365,10 +370,15 @@ const PostCard = ({
                       </div>
 
                       {/* handle and username */}
-                      <div className="flex items-center gap-2 cursor-pointer hover:underline" onClick={() => {
-                        console.log(did);
-                        navigate(`/profile/${did}`,); setActivePage("Profile"); isFromProfile && window.location.reload();
-                      }}>
+                      <div
+                        className="flex items-center gap-2 cursor-pointer hover:underline"
+                        onClick={() => {
+                          console.log(did);
+                          navigate(`/profile/${did}`);
+                          setActivePage("Profile");
+                          isFromProfile && window.location.reload();
+                        }}
+                      >
                         <div className="text-md  break-all line-clamp-1">
                           {author === undefined ? handleSplit(handle) : author}
                         </div>
@@ -408,17 +418,17 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-            <div>
-              {/* Render the post image */}
-              <div className="w-full aspect-video overflow-hidden">
-                <img
-                  src={image}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
+              <div>
+                {/* Render the post image */}
+                <div className="w-full aspect-video overflow-hidden">
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         {embed?.$type === "app.bsky.embed.record#view" &&
           embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
             <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
@@ -440,7 +450,15 @@ const PostCard = ({
                       />
                     )}
                   </div>
-                  <div className="flex items-center gap-2 cursor-pointer hover:underline" onClick={() => { console.log(did); navigate(`/profile/${did}`,); setActivePage("Profile"); isFromProfile && window.location.reload(); }}>
+                  <div
+                    className="flex items-center gap-2 cursor-pointer hover:underline"
+                    onClick={() => {
+                      console.log(did);
+                      navigate(`/profile/${did}`);
+                      setActivePage("Profile");
+                      isFromProfile && window.location.reload();
+                    }}
+                  >
                     <div className="text-lg  break-all line-clamp-1">
                       {embed?.data?.author?.displayName === undefined
                         ? handleSplit(embed?.data?.author?.handle)
@@ -464,9 +482,9 @@ const PostCard = ({
               </div>
               <div>
                 {/* section for image if available; */}
-                {embed.data?.embeds && (embed.data?.embeds[0]?.images && (
+                {embed.data?.embeds && embed.data?.embeds[0]?.images && (
                   <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
-                ))}
+                )}
               </div>
             </div>
           )}
