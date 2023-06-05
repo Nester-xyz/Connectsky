@@ -81,11 +81,27 @@ const NotificationCard = ({
         </div>
       </div>
       <div
-        className={`${title === "reply" ? "block" : "hidden"
-          } ml-14 px-2 -mt-3 py-1`}
+        className={`${
+          title === "reply" ? "block" : "hidden"
+        } ml-14 px-2 -mt-3 py-1`}
       >
         {title === "reply" ? (
-          <div className="line-clamp-2 bg-slate-200 rounded-md p-1">{reply}</div>
+          <div className="w-full py-5 shadow-custom bg-red-300">
+            <div className="flex">
+              <div className="bg-blue-300 w-8 h-8 rounded-full flex-shrink-0"></div>
+              <div>
+                <div className="line-clamp-2 bg-slate-200 rounded-md p-1">
+                  {reply}
+                </div>
+                <div className="flex w-full justify-between">
+                  <div>Like</div>
+                  <div>Comment</div>
+                  <div>Share</div>
+                  <div>Some field</div>
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           ""
         )}

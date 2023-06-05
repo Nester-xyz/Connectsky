@@ -59,6 +59,7 @@ const Notification = () => {
     await refreshSession();
     await agent.updateSeenNotifications();
   }
+
   useEffect(() => {
     markUnread();
 
