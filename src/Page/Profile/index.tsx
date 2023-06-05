@@ -11,7 +11,7 @@ const index = (props: Props) => {
   const [displayName, setDisplayName] = useState<string | undefined>("");
   const [handle, setHandle] = useState<string | undefined>("");
   const [avatar, setAvatar] = useState<string | undefined>("");
-  const [followersCount, setFollowersCount] = useState<Number | undefined>(0);
+  const [followersCount, setFollowersCount] = useState<number | undefined>(0);
   const [followsCount, setFollowsCount] = useState<Number | undefined>(0);
   const [postsCount, setPostsCount] = useState<Number | undefined>(0);
   const [description, setDescription] = useState<string | undefined>("");
@@ -44,35 +44,39 @@ const index = (props: Props) => {
       setFollowersCount(data.followersCount);
       setFollowsCount(data.followsCount);
       setPostsCount(data.postsCount);
-      // getFollowings(50);
+      getFollowings();
     } catch (error) {
       console.log(error);
     }
   }
 
-  // async function getFollowings(cursor: number): Promise<any> {
-  //   // console.log("Following button has been triggered!");
-
-  //   try {
-  //     if (params.did == null) return;
-  //     await refreshSession();
-  //     const { data } = await agent.getFollowers({
-  //       actor: params.did,
-  //       cursor: `${cursor}`,
-  //     });
-  //     console.log(data.followers);
-  //     const something : number = cursor;
-  //     const isFollowedUser = data.followers.some(
-  //       (obj) => obj.did == getUserDid()
-  //     );
-  //     console.log("hello" + isFollowedUser);
-  //     if (isFollowedUser == true) return;
-  //     if (followersCount? < something) return;
-  //     return getFollowings(cursor + 50);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async function getFollowings() {
+    console.log("Following button has been triggered!");
+    try {
+      if (params.did == null) return;
+      let i: number;
+      let isFollowedUser;
+      if (followersCount == undefined) return;
+      console.log("passed params")
+      let initialCursor: string | undefined = '';
+      for (i = 0; i <= followersCount; i += 50) {
+        await refreshSession();
+        const { data } = await agent.getFollowers({
+          actor: params.did,
+          cursor: initialCursor,
+        });
+        console.log(data.followers);
+        initialCursor = data.cursor;
+        isFollowedUser = data.followers.some(
+          (obj) => obj.did == getUserDid()
+        );
+        console.log("hello" + isFollowedUser);
+        if (isFollowedUser == true) break;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function follow() {
     // console.log("Follow btn triggered!");
