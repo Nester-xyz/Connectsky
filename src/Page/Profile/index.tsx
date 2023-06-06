@@ -4,6 +4,7 @@ import { agent, refreshSession } from "../../utils";
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
 import { useParams } from "react-router-dom";
+
 type Props = {};
 
 const index = (props: Props) => {
@@ -20,9 +21,10 @@ const index = (props: Props) => {
   const [feedData, setFeedData] = useState<dataGotFromApi[]>([]);
   const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
+  const [isFollowing, setisFollowing] = useState<boolean>(false);
+  const [followURI, setFollowURI] = useState<string | undefined>("");
 
   const params = useParams();
-  // console.log(`did in profile section ${params.did}`);
 
   function getUserDid() {
     const did = localStorage.getItem("did");
@@ -36,7 +38,10 @@ const index = (props: Props) => {
       if (userDiD === "") return;
       await refreshSession();
       const { data } = await agent.getProfile({ actor: userDiD });
-      // console.log(data);
+      setFollowURI(data.viewer?.following);
+      if (data.viewer?.following !== undefined) {
+        setisFollowing(true);
+      }
       setAvatar(data.avatar);
       setDescription(data.description);
       setDisplayName(data.displayName);
@@ -44,48 +49,29 @@ const index = (props: Props) => {
       setFollowersCount(data.followersCount);
       setFollowsCount(data.followsCount);
       setPostsCount(data.postsCount);
-      getFollowings(data.followersCount);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getFollowings(followersCount: number | undefined) {
-    console.log("Following button has been triggered!");
-    try {
-      if (params.did == null) return;
-      let i: number;
-      let isFollowedUser;
-      if (followersCount == undefined) return;
-      console.log("passed params")
-      let initialCursor: string | undefined = '';
-      console.log("follower count" + followersCount);
-      for (i = 0; i <= followersCount; i += 50) {
-        await refreshSession();
-        const { data } = await agent.getFollowers({
-          actor: params.did,
-          cursor: initialCursor,
-        });
-        // console.log(data.followers);
-        initialCursor = data.cursor;
-        isFollowedUser = data.followers.some(
-          (obj) => obj.did == getUserDid()
-        );
-        console.log("hello" + isFollowedUser);
-        if (isFollowedUser == true) break;
-      }
     } catch (error) {
       console.log(error);
     }
   }
 
   async function follow() {
-    // console.log("Follow btn triggered!");
+    setisFollowing(true);
     try {
       if (userDiD == null) return;
       await refreshSession();
       const data = await agent.follow(userDiD);
-      // console.log(data);
+      setFollowURI(data.uri);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function unfollow() {
+    setisFollowing(false);
+    try {
+      if (followURI == null) return;
+      await refreshSession();
+      await agent.deleteFollow(followURI);
     } catch (error) {
       console.log(error);
     }
@@ -204,10 +190,12 @@ const index = (props: Props) => {
           </div>
           {getUserDid() !== params.did && (
             <button
-              onClick={follow}
-              className="px-5 py-1 select-none bg-blue-600 cursor-pointer absolute rounded-lg right-10 top-5 mt-[8rem] text-white"
+              onClick={isFollowing ? unfollow : follow}
+              className={`px-5 py-1 select-none ${
+                isFollowing ? `bg-slate-500` : ` bg-blue-600`
+              } cursor-pointer absolute rounded-lg right-10 top-5 mt-[8rem] text-white`}
             >
-              + Follow
+              {isFollowing ? "Following" : "+ Follow"}
             </button>
           )}
         </div>
