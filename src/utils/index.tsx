@@ -25,7 +25,7 @@ export type activePageCheck =
   | "Profile";
 // this contains the actual links which will be made into the buttons
 
-function getUserDid() {
+export function getUserDid() {
   const DID = localStorage.getItem("did");
   if (DID === null) return;
   return DID;
