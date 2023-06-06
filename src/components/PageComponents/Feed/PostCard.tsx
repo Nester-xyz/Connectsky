@@ -15,6 +15,7 @@ import PostLoader from "./PostLoader";
 import { userImage } from "../../UI/DefaultUserImage";
 import { useNavigate } from "react-router-dom";
 import { appContext } from "../../../context/appContext";
+import { useParams } from "react-router-dom";
 // just a random Image I grabbed from the internet to show when no image is provided
 
 const MAX_WORDS = 20; // Maximum number of words to display initially
@@ -47,6 +48,7 @@ const PostCard = ({
   // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
   const navigate = useNavigate();
   const { setActivePage } = useContext(appContext);
+  const params = useParams();
   async function handleRepost() {
     try {
       if (repost) {
@@ -374,6 +376,7 @@ const PostCard = ({
                         className="flex items-center gap-2 cursor-pointer hover:underline"
                         onClick={() => {
                           console.log(did);
+                          if (did == params.did) return;
                           navigate(`/profile/${did}`);
                           setActivePage("Profile");
                           isFromProfile && window.location.reload();
@@ -418,17 +421,17 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-              <div>
-                {/* Render the post image */}
-                <div className="w-full aspect-video overflow-hidden">
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+            <div>
+              {/* Render the post image */}
+              <div className="w-full aspect-video overflow-hidden">
+                <img
+                  src={image}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
               </div>
-            )}
+            </div>
+          )}
         {embed?.$type === "app.bsky.embed.record#view" &&
           embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
             <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
@@ -454,7 +457,8 @@ const PostCard = ({
                     className="flex items-center gap-2 cursor-pointer hover:underline"
                     onClick={() => {
                       console.log(did);
-                      navigate(`/profile/${did}`);
+                      if (embed.data?.author?.did == params.did) return;
+                      navigate(`/profile/${embed.data?.author?.did}`);
                       setActivePage("Profile");
                       isFromProfile && window.location.reload();
                     }}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
-import { agent, refreshSession } from "../../utils";
+import { agent, refreshSession, getUserDid } from "../../utils";
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
 import { useParams } from "react-router-dom";
@@ -24,11 +24,7 @@ const index = (props: Props) => {
   const params = useParams();
   // console.log(`did in profile section ${params.did}`);
 
-  function getUserDid() {
-    const did = localStorage.getItem("did");
-    if (did === null) return;
-    return did;
-  }
+
   async function fetchAuthorData() {
     try {
       // setUserDid();
