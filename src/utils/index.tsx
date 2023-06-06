@@ -85,6 +85,7 @@ export const agent = new BskyAgent({
   persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
     // console.log("first");
     const sessData = JSON.stringify(sess);
+    if (sessData == undefined) return;
     localStorage.setItem("sess", sessData);
   },
 });

@@ -44,13 +44,13 @@ const index = (props: Props) => {
       setFollowersCount(data.followersCount);
       setFollowsCount(data.followsCount);
       setPostsCount(data.postsCount);
-      getFollowings();
+      getFollowings(data.followersCount);
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function getFollowings() {
+  async function getFollowings(followersCount: number | undefined) {
     console.log("Following button has been triggered!");
     try {
       if (params.did == null) return;
@@ -59,13 +59,14 @@ const index = (props: Props) => {
       if (followersCount == undefined) return;
       console.log("passed params")
       let initialCursor: string | undefined = '';
+      console.log("follower count" + followersCount);
       for (i = 0; i <= followersCount; i += 50) {
         await refreshSession();
         const { data } = await agent.getFollowers({
           actor: params.did,
           cursor: initialCursor,
         });
-        console.log(data.followers);
+        // console.log(data.followers);
         initialCursor = data.cursor;
         isFollowedUser = data.followers.some(
           (obj) => obj.did == getUserDid()
