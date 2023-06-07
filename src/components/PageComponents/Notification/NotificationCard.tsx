@@ -63,8 +63,11 @@ const NotificationCard = ({
       <div className="flex flex-row gap-5 py-2 items-center justify-between">
         {/* left side for the image */}
         <div className="flex flex-row relative items-center">
-          <div className="rounded-full w-12 h-12 overflow-hidden">
-            <img src={image === undefined ? userImage : image} alt={title} />
+          <div className="relative ">
+            <div className="rounded-full w-12 h-12 overflow-hidden">
+              <img src={image === undefined ? userImage : image} alt={title} />
+            </div>
+            <div className="w-4 h-4 rounded-full absolute bg-red-400 -right-0 -bottom-0"></div>
           </div>
           {/* <div
             className={`absolute bottom-0 right-0 w-6 h-6  rounded-full ${color}`}
@@ -89,28 +92,28 @@ const NotificationCard = ({
         } px-3 w-full -mt-3 py-1`}
       >
         {title === "reply" ? (
-          <div className="w-full py-2 ml-2 px-2 shadow-custom border rounded-lg">
+          <div className="w-full py-2 ml-2 px-2 shadow-custom border rounded-lg mt-2">
             <div className="flex w-full gap-2">
               <div className="bg-blue-300 w-8 h-8 rounded-full flex-shrink-0"></div>
               <div className="w-full">
                 <div className="line-clamp-2 w-full bg-slate-200 rounded-md p-1">
                   {reply}
                 </div>
-                <div className="flex w-full justify-between">
+                <div className="flex w-full justify-between mt-2">
                   <div>
                     <div className="flex flex-col items-center">
-                      <div className="text-xl">
+                      <div className="text-lg">
                         <AiOutlineHeart />
                       </div>
-                      <div>Like</div>
+                      <div className="text-xs">Like</div>
                     </div>
                   </div>
                   <div>
                     <div className="flex flex-col items-center">
-                      <div className="text-xl">
+                      <div className="text-lg">
                         <FiMessageCircle />
                       </div>
-                      <div>Comment</div>
+                      <div className="text-xs">Comment</div>
                     </div>
                   </div>
                   <div>
@@ -118,7 +121,7 @@ const NotificationCard = ({
                       <div className="text-xl">
                         <BiRepost />
                       </div>
-                      <div>Share</div>
+                      <div className="text-xs">Share</div>
                     </div>
                   </div>
                 </div>
