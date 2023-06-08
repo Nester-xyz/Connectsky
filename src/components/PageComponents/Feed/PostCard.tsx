@@ -13,8 +13,9 @@ import {
 } from "../../../utils";
 import PostLoader from "./PostLoader";
 import { userImage } from "../../UI/DefaultUserImage";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { appContext } from "../../../context/appContext";
+import { useParams } from "react-router-dom";
 // just a random Image I grabbed from the internet to show when no image is provided
 
 const MAX_WORDS = 20; // Maximum number of words to display initially
@@ -35,7 +36,7 @@ const PostCard = ({
   embed,
   indexedAt,
   replyParent,
-  isFromProfile
+  isFromProfile,
 }: fieldDataProps) => {
   const [like, setLike] = useState(false);
   const [repost, setRepost] = useState(false);
@@ -47,6 +48,7 @@ const PostCard = ({
   // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
   const navigate = useNavigate();
   const { setActivePage } = useContext(appContext);
+  const params = useParams();
   async function handleRepost() {
     try {
       if (repost) {
@@ -135,17 +137,15 @@ const PostCard = ({
 
   const handleLongText = (text: string | undefined, isEmbed: boolean) => {
     if (!text?.length) return;
-    console.log(showFullText);
+    // console.log(showFullText);
 
     // firstly i should handle the \n break line thing
     const processedText = text.replaceAll(/\n/g, " <br/> ");
     const wordListLong = processedText.split(" ");
     const wordListSmall = processedText.split(" ").slice(0, MAX_WORDS);
 
-
-    const linkRegex = /(https?:\/\/[^\s/$.?#]+\.[^\s/$.?#_]+(?:\/[^\s]*)?)\s*/gi;
-
-
+    const linkRegex =
+      /(https?:\/\/[^\s/$.?#]+\.[^\s/$.?#_]+(?:\/[^\s]*)?)\s*/gi;
 
     const processSmall = wordListSmall.map((part, index) => {
       if (linkRegex.test(part)) {
@@ -158,11 +158,14 @@ const PostCard = ({
         );
       }
       if (part === "<br/>") {
-        return (<span><br /></span>);
+        return (
+          <span>
+            <br />
+          </span>
+        );
       }
       return part + " ";
     });
-
 
     const processLong = wordListLong.map((part, index) => {
       if (linkRegex.test(part)) {
@@ -175,7 +178,11 @@ const PostCard = ({
         );
       }
       if (part === "<br/>") {
-        return (<span><br /></span>);
+        return (
+          <span>
+            <br />
+          </span>
+        );
       }
       return part + " ";
     });
@@ -330,7 +337,13 @@ const PostCard = ({
               <div className="text-lg flex items-center">
                 <BiRepost /> &nbsp;{" "}
               </div>
-              <div className="break-all text-sm line-clamp-1">{` Reposted by ${reason?.by}`}</div>
+              <div className={`break-all text-sm line-clamp-1 ${reason?.did !== params.did && "cursor-pointer"}`} onClick={() => {
+                console.log(reason);
+                if (reason?.did == params.did) return;
+                navigate(`/profile/${reason?.did}`);
+                setActivePage("Profile");
+                isFromProfile && window.location.reload();
+              }}> Reposted by <span className={`${reason?.did !== params.did && "hover:underline"}`}>{reason?.by}</span></div>
             </div>
           )}
           <div className="flex flex-col gap-2">
@@ -365,10 +378,16 @@ const PostCard = ({
                       </div>
 
                       {/* handle and username */}
-                      <div className="flex items-center gap-2 cursor-pointer hover:underline" onClick={() => {
-                        console.log(did);
-                        navigate(`/profile/${did}`,); setActivePage("Profile"); isFromProfile && window.location.reload();
-                      }}>
+                      <div
+                        className={`flex items-center gap-2  ${did !== params.did && "cursor-pointer hover:underline"}`}
+                        onClick={() => {
+                          console.log(did);
+                          if (did == params.did) return;
+                          navigate(`/profile/${did}`);
+                          setActivePage("Profile");
+                          isFromProfile && window.location.reload();
+                        }}
+                      >
                         <div className="text-md  break-all line-clamp-1">
                           {author === undefined ? handleSplit(handle) : author}
                         </div>
@@ -381,11 +400,17 @@ const PostCard = ({
                 </div>
                 <div className="ml-14">
                   {reply?.by !== undefined && (
-                    <div className="text-slate-600 flex flex-row items-center ">
+                    <div className="text-slate-600 flex flex-row items-center -mt-2">
                       <div className="text-lg flex items-center">
                         <BiShare /> &nbsp;{" "}
                       </div>
-                      <div className="text-sm break-all line-clamp-1">{` Replied to ${reply?.by}`}</div>
+                      <div className={`text-sm break-all line-clamp-1 ${reply?.did !== params.did && "cursor-pointer"}`} onClick={() => {
+                        console.log(reply);
+                        if (reply?.did == params.did) return;
+                        navigate(`/profile/${reply?.did}`);
+                        setActivePage("Profile");
+                        isFromProfile && window.location.reload();
+                      }}>Replied to <span className={`${reply?.did !== params.did && "hover:underline"}`}>{reply?.by}</span></div>
                     </div>
                   )}
                 </div>
@@ -440,7 +465,16 @@ const PostCard = ({
                       />
                     )}
                   </div>
-                  <div className="flex items-center gap-2 cursor-pointer hover:underline" onClick={() => { console.log(did); navigate(`/profile/${did}`,); setActivePage("Profile"); isFromProfile && window.location.reload(); }}>
+                  <div
+                    className={`flex items-center gap-2  ${embed.data?.author?.did !== params.did && "cursor-pointer hover:underline"}`}
+                    onClick={() => {
+                      console.log(did);
+                      if (embed.data?.author?.did == params.did) return;
+                      navigate(`/profile/${embed.data?.author?.did}`);
+                      setActivePage("Profile");
+                      isFromProfile && window.location.reload();
+                    }}
+                  >
                     <div className="text-lg  break-all line-clamp-1">
                       {embed?.data?.author?.displayName === undefined
                         ? handleSplit(embed?.data?.author?.handle)
@@ -464,9 +498,9 @@ const PostCard = ({
               </div>
               <div>
                 {/* section for image if available; */}
-                {embed.data?.embeds && (embed.data?.embeds[0]?.images && (
+                {embed.data?.embeds && embed.data?.embeds[0]?.images && (
                   <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
-                ))}
+                )}
               </div>
             </div>
           )}

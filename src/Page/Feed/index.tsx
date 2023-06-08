@@ -8,6 +8,7 @@ import { appContext } from "../../context/appContext";
 import { agent, refreshSession } from "../../utils";
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 // the component begins here
+
 const Feed = () => {
   const [showAddPost, setShowAddPost] = useState(false);
   const [showImage, setShowImage] = useState(false);
@@ -79,6 +80,22 @@ const Feed = () => {
     },
   ];
 
+  // async function isFollowing() {
+  //   console.log("Following button has been triggered!");
+  //   const loggedDID = localStorage.getItem("did");
+  //   try {
+  //     if (loggedDID == null) return;
+  //     await refreshSession();
+  //     const response = await agent.getFollows({
+  //       actor: loggedDID,
+  //     });
+  //     console.log(response);
+  //     setIsFollows(response.data.follows);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   async function followingFeed() {
     await refreshSession();
     const { data } = await agent.getTimeline({
@@ -87,7 +104,7 @@ const Feed = () => {
     });
     if (data.cursor == null) return;
     setCursor(data.cursor);
-    console.log(data);
+    // console.log(data);
     const mappedData: dataGotFromApi[] = data.feed.map((feed: any) => {
       // console.log(feed);
       const images =
@@ -99,16 +116,18 @@ const Feed = () => {
       return {
         reason: {
           by: feed.reason?.by?.displayName,
+          did: feed.reason?.by?.did
         },
         reply: {
           text: feed.reply?.parent?.record?.text,
           by: feed.reply?.parent?.author?.displayName,
+          did: feed.reply?.parent?.author?.did
         },
         author: {
           displayName: feed.post.author.displayName,
           avatar: feed.post.author.avatar,
           handle: feed.post.author.handle,
-          did: feed.post.author.did
+          did: feed.post.author.did,
         },
         likes: feed.post.likeCount,
         comments: feed.post.replyCount,
@@ -149,6 +168,8 @@ const Feed = () => {
   });
 
   useEffect(() => {
+    // const didValues = isFollows.map((profileView) => profileView.did);
+    // console.log(didValues);
     if (!isLoading) {
       followingFeed();
       setIsLoading(true);

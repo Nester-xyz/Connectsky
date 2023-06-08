@@ -25,7 +25,7 @@ export type activePageCheck =
   | "Profile";
 // this contains the actual links which will be made into the buttons
 
-function getUserDid() {
+export function getUserDid() {
   const DID = localStorage.getItem("did");
   if (DID === null) return;
   return DID;
@@ -85,6 +85,7 @@ export const agent = new BskyAgent({
   persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
     // console.log("first");
     const sessData = JSON.stringify(sess);
+    if (sessData == undefined) return;
     localStorage.setItem("sess", sessData);
   },
 });
