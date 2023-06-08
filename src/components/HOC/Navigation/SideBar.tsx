@@ -21,7 +21,7 @@ const SideBar = ({ activePage, setActivePage, notiCount }: SideBarProps) => {
           <div
             key={index}
             onClick={() => {
-              setActivePage(link.linkName);
+              { setActivePage(link.linkName); if (link.linkName === "Profile") { window.location.reload() } }
             }}
             className="relative bg-yellow-300 w-full"
           >
@@ -39,7 +39,7 @@ const SideBar = ({ activePage, setActivePage, notiCount }: SideBarProps) => {
           <div
             key={index}
             onClick={() => {
-              setActivePage(link.linkName);
+              { setActivePage(link.linkName); if (link.linkName === "Profile") { window.location.reload() } }
             }}
             className="relative bg-yellow-300 w-full"
           >

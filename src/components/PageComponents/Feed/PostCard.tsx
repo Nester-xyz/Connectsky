@@ -339,7 +339,7 @@ const PostCard = ({
               </div>
               <div className="break-all text-sm line-clamp-1 cursor-pointer" onClick={() => {
                 console.log(reason);
-                if (did == params.did) return;
+                if (reason?.did == params.did) return;
                 navigate(`/profile/${reason?.did}`);
                 setActivePage("Profile");
                 isFromProfile && window.location.reload();
@@ -406,7 +406,7 @@ const PostCard = ({
                       </div>
                       <div className="text-sm break-all line-clamp-1 cursor-pointer" onClick={() => {
                         console.log(reply);
-                        if (did == params.did) return;
+                        if (reply?.did == params.did) return;
                         navigate(`/profile/${reply?.did}`);
                         setActivePage("Profile");
                         isFromProfile && window.location.reload();
