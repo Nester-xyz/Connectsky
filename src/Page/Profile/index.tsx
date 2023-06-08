@@ -22,10 +22,10 @@ const index = (props: Props) => {
   const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
   const [isFollowing, setisFollowing] = useState<boolean>(false);
+  const [followsYou, setfollowsYou] = useState<boolean>(false);
   const [followURI, setFollowURI] = useState<string | undefined>("");
 
   const params = useParams();
-
 
   async function fetchAuthorData() {
     try {
@@ -37,6 +37,9 @@ const index = (props: Props) => {
       setFollowURI(data.viewer?.following);
       if (data.viewer?.following !== undefined) {
         setisFollowing(true);
+      }
+      if (data.viewer?.followedBy !== undefined) {
+        setfollowsYou(true);
       }
       setAvatar(data.avatar);
       setDescription(data.description);
@@ -51,11 +54,11 @@ const index = (props: Props) => {
   }
 
   async function follow() {
-    setisFollowing(true);
     try {
       if (userDiD == null) return;
       await refreshSession();
       const data = await agent.follow(userDiD);
+      setisFollowing(true);
       setFollowURI(data.uri);
     } catch (error) {
       console.log(error);
@@ -63,11 +66,11 @@ const index = (props: Props) => {
   }
 
   async function unfollow() {
-    setisFollowing(false);
     try {
       if (followURI == null) return;
       await refreshSession();
       await agent.deleteFollow(followURI);
+      setisFollowing(false);
     } catch (error) {
       console.log(error);
     }
@@ -181,15 +184,15 @@ const index = (props: Props) => {
         {/* <img src={} alt="" /> //cover image */}
         {/* profile */}
         <div className="flex items-center">
-          <div className="flex w-24 bg-slate-200 aspect-square rounded-full absolute left-4 -bottom-16 shadow-lg">
+          <div className="flex w-24 bg-slate-200 aspect-square rounded-full absolute left-4 -bottom-12 shadow-lg">
             <img src={avatar} alt="" className="rounded-full" />
           </div>
           {getUserDid() !== params.did && (
             <button
               onClick={isFollowing ? unfollow : follow}
               className={`px-5 py-1 select-none ${
-                isFollowing ? `bg-slate-500` : ` bg-blue-600`
-              } cursor-pointer absolute rounded-lg right-10 top-5 mt-[8rem] text-white`}
+                isFollowing ? `bg-slate-700` : ` bg-blue-600`
+              } cursor-pointer absolute rounded-lg right-10 top-3 mt-[8rem] text-white`}
             >
               {isFollowing ? "Following" : "+ Follow"}
             </button>
@@ -198,10 +201,17 @@ const index = (props: Props) => {
       </div>
 
       {/* profile details */}
-      <div className="flex flex-col gap-3 mt-[70px]">
+      <div className="flex flex-col gap-3 mt-[64px]">
         <div className="flex flex-col">
           <div className="text-2xl font-bold ml-2">{displayName}</div>
-          <div className="text-sm text-slate-500 ml-2">@{handle}</div>
+          <div className="flex ml-2 gap-2">
+            {followsYou ? (
+              <button className="bg-slate-200 text-[10px] rounded-md p-1">
+                Follows You
+              </button>
+            ) : null}
+            <div className="text-sm text-slate-500">@{handle}</div>
+          </div>
         </div>
         <div>
           {/* <div className="text-sm">Bio</div> */}

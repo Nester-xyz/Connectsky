@@ -394,7 +394,7 @@ const PostCard = ({
                 </div>
                 <div className="ml-14">
                   {reply?.by !== undefined && (
-                    <div className="text-slate-600 flex flex-row items-center ">
+                    <div className="text-slate-600 flex flex-row items-center -mt-2">
                       <div className="text-lg flex items-center">
                         <BiShare /> &nbsp;{" "}
                       </div>
@@ -421,17 +421,17 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-            <div>
-              {/* Render the post image */}
-              <div className="w-full aspect-video overflow-hidden">
-                <img
-                  src={image}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
+              <div>
+                {/* Render the post image */}
+                <div className="w-full aspect-video overflow-hidden">
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         {embed?.$type === "app.bsky.embed.record#view" &&
           embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
             <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
