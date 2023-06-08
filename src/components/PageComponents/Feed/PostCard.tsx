@@ -337,13 +337,13 @@ const PostCard = ({
               <div className="text-lg flex items-center">
                 <BiRepost /> &nbsp;{" "}
               </div>
-              <div className="break-all text-sm line-clamp-1 cursor-pointer" onClick={() => {
+              <div className={`break-all text-sm line-clamp-1 ${reason?.did !== params.did && "cursor-pointer"}`} onClick={() => {
                 console.log(reason);
                 if (reason?.did == params.did) return;
                 navigate(`/profile/${reason?.did}`);
                 setActivePage("Profile");
                 isFromProfile && window.location.reload();
-              }}> Reposted by <span className="hover:underline">{reason?.by}</span></div>
+              }}> Reposted by <span className={`${reason?.did !== params.did && "hover:underline"}`}>{reason?.by}</span></div>
             </div>
           )}
           <div className="flex flex-col gap-2">
@@ -379,7 +379,7 @@ const PostCard = ({
 
                       {/* handle and username */}
                       <div
-                        className="flex items-center gap-2 cursor-pointer hover:underline"
+                        className={`flex items-center gap-2  ${did !== params.did && "cursor-pointer hover:underline"}`}
                         onClick={() => {
                           console.log(did);
                           if (did == params.did) return;
@@ -404,13 +404,13 @@ const PostCard = ({
                       <div className="text-lg flex items-center">
                         <BiShare /> &nbsp;{" "}
                       </div>
-                      <div className="text-sm break-all line-clamp-1 cursor-pointer" onClick={() => {
+                      <div className={`text-sm break-all line-clamp-1 ${reply?.did !== params.did && "cursor-pointer"}`} onClick={() => {
                         console.log(reply);
                         if (reply?.did == params.did) return;
                         navigate(`/profile/${reply?.did}`);
                         setActivePage("Profile");
                         isFromProfile && window.location.reload();
-                      }}>Replied to <span className="hover:underline">{reply?.by}</span></div>
+                      }}>Replied to <span className={`${reply?.did !== params.did && "hover:underline"}`}>{reply?.by}</span></div>
                     </div>
                   )}
                 </div>
@@ -466,7 +466,7 @@ const PostCard = ({
                     )}
                   </div>
                   <div
-                    className="flex items-center gap-2 cursor-pointer hover:underline"
+                    className={`flex items-center gap-2  ${embed.data?.author?.did !== params.did && "cursor-pointer hover:underline"}`}
                     onClick={() => {
                       console.log(did);
                       if (embed.data?.author?.did == params.did) return;
