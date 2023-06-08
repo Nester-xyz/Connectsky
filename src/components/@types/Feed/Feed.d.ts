@@ -41,9 +41,11 @@ export type dataGotFromApi = {
   reply: {
     text: any;
     by: any;
+    did: any;
   };
   reason: {
     by: any;
+    did: any;
   };
   author: {
     displayName: any;

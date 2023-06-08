@@ -101,10 +101,12 @@ const index = (props: Props) => {
         return {
           reason: {
             by: feed.reason?.by?.displayName,
+            did: feed.reason?.by?.did
           },
           reply: {
             text: feed.reply?.parent?.record?.text,
             by: feed.reply?.parent?.author?.displayName,
+            did: feed.reply?.parent?.author?.did,
           },
           author: {
             displayName: feed.post.author.displayName,
@@ -190,9 +192,8 @@ const index = (props: Props) => {
           {getUserDid() !== params.did && (
             <button
               onClick={isFollowing ? unfollow : follow}
-              className={`px-5 py-1 select-none ${
-                isFollowing ? `bg-slate-700` : ` bg-blue-600`
-              } cursor-pointer absolute rounded-lg right-10 top-3 mt-[8rem] text-white`}
+              className={`px-5 py-1 select-none ${isFollowing ? `bg-slate-700` : ` bg-blue-600`
+                } cursor-pointer absolute rounded-lg right-10 top-3 mt-[8rem] text-white`}
             >
               {isFollowing ? "Following" : "+ Follow"}
             </button>
