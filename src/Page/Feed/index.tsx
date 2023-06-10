@@ -116,10 +116,12 @@ const Feed = () => {
       return {
         reason: {
           by: feed.reason?.by?.displayName,
+          did: feed.reason?.by?.did
         },
         reply: {
           text: feed.reply?.parent?.record?.text,
           by: feed.reply?.parent?.author?.displayName,
+          did: feed.reply?.parent?.author?.did
         },
         author: {
           displayName: feed.post.author.displayName,
