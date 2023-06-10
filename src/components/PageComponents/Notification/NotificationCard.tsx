@@ -4,6 +4,8 @@ import { formatDateAgo } from "../../../utils";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { BiShare, BiRepost } from "react-icons/bi";
+import { MdPersonAddAlt1 } from "react-icons/md";
+import { BsReplyFill } from "react-icons/bs";
 type NotificationCardProps = {
   image: string;
   title: "repost" | "follow" | "reply" | "like";
@@ -67,7 +69,28 @@ const NotificationCard = ({
             <div className="rounded-full w-12 h-12 overflow-hidden">
               <img src={image === undefined ? userImage : image} alt={title} />
             </div>
-            <div className="w-4 h-4 rounded-full absolute bg-red-400 -right-0 -bottom-0"></div>
+            <div className="w-4 h-4  rounded-full items-center absolute bg-blue-600 text-white -right-0 -bottom-0">
+              {title === "like" && (
+                <div className="mt-[0.15rem] ml-[0.13rem]">
+                  <AiFillHeart />
+                </div>
+              )}
+              {title === "repost" && (
+                <div className="mt-[0.05rem] ml-[0.05rem] text-sm">
+                  <BiRepost />
+                </div>
+              )}
+              {title === "follow" && (
+                <div className="mt-[0.1rem] ml-[0.15rem]">
+                  <MdPersonAddAlt1 />
+                </div>
+              )}
+              {title === "reply" && (
+                <div className="mt-[0.1rem] ml-[0.15rem]">
+                  <BsReplyFill />
+                </div>
+              )}
+            </div>
           </div>
           {/* <div
             className={`absolute bottom-0 right-0 w-6 h-6  rounded-full ${color}`}
@@ -94,7 +117,6 @@ const NotificationCard = ({
         {title === "reply" ? (
           <div className="w-full py-2 ml-2 px-2 shadow-custom border rounded-lg mt-2">
             <div className="flex w-full gap-2">
-              <div className="bg-blue-300 w-8 h-8 rounded-full flex-shrink-0"></div>
               <div className="w-full">
                 <div className="line-clamp-2 w-full bg-slate-200 rounded-md p-1">
                   {reply}
@@ -103,17 +125,8 @@ const NotificationCard = ({
                   <div>
                     <div className="flex flex-col items-center">
                       <div className="text-lg">
-                        <AiOutlineHeart />
-                      </div>
-                      <div className="text-xs">Like</div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex flex-col items-center">
-                      <div className="text-lg">
                         <FiMessageCircle />
                       </div>
-                      <div className="text-xs">Comment</div>
                     </div>
                   </div>
                   <div>
@@ -121,7 +134,13 @@ const NotificationCard = ({
                       <div className="text-xl">
                         <BiRepost />
                       </div>
-                      <div className="text-xs">Share</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex flex-col items-center">
+                      <div className="text-lg">
+                        <AiOutlineHeart />
+                      </div>
                     </div>
                   </div>
                 </div>
