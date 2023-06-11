@@ -16,7 +16,7 @@ const ReplyInnerPOst = ({ reply, image }: Props) => {
           <div className="line-clamp-2 w-full bg-slate-200 rounded-md p-1">
             {reply}
           </div>
-          <div className="flex w-full justify-between mt-2">
+          <div className="flex w-full justify-between px-6 mt-2">
             <div>
               <div className="flex flex-col items-center">
                 <div className="text-lg">

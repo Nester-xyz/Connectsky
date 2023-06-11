@@ -10,6 +10,7 @@ interface NotificationItem {
   handle: string;
   indexedAt: Date;
   reply: string;
+  reasonSubject: string;
 }
 
 const Notification = () => {
@@ -18,6 +19,7 @@ const Notification = () => {
   const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
+  const [reasonSubject, setReasonSubject] = useState<string>("");
 
   async function listNotifications() {
     await refreshSession();
@@ -39,6 +41,7 @@ const Notification = () => {
           handle: notifications.author.handle,
           indexedAt: notifications.indexedAt,
           reply: notifications.record?.text ? notifications.record.text : "",
+          reasonSubject: notifications.reasonSubject,
         };
       }
     );
@@ -97,6 +100,7 @@ const Notification = () => {
                     createdAt={item.indexedAt}
                     reply={item.reply}
                     handle={item.handle}
+                    reasonSubject={item.reasonSubject}
                   />
                 </div>
               );
@@ -110,6 +114,7 @@ const Notification = () => {
                     createdAt={item.indexedAt}
                     reply={item.reply}
                     handle={item.handle}
+                    reasonSubject={item.reasonSubject}
                   />
                 </div>
               );

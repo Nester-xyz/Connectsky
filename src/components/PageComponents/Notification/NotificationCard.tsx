@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { formatDateAgo } from "../../../utils";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { FiMessageCircle } from "react-icons/fi";
-import { BiShare, BiRepost } from "react-icons/bi";
-import { MdPersonAddAlt1 } from "react-icons/md";
-import { BsReplyFill } from "react-icons/bs";
+import { agent, refreshSession, formatDateAgo } from "../../../utils";
 
 import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
 import LikeInnerPost from "./NestedPost/LikeInnerPost";
@@ -17,6 +12,7 @@ type NotificationCardProps = {
   handle: string;
   createdAt: Date;
   reply: string;
+  reasonSubject: string;
 };
 
 const NotificationCard = ({
@@ -26,12 +22,27 @@ const NotificationCard = ({
   handle,
   createdAt,
   reply,
+  reasonSubject,
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
+  const [ogText, setOgText] = useState<any | unknown>({});
 
   useEffect(() => {
+    console.log(reasonSubject);
+    getPost();
     setHandleSplit(handle.split(".")[0]);
   }, []);
+
+  async function getPost() {
+    await refreshSession();
+    if (reasonSubject === undefined) return;
+    const { data } = await agent.getPostThread({
+      uri: reasonSubject,
+    });
+    // console.log(data);
+    // console.log(data?.thread?.post);
+    setOgText(data?.thread?.post);
+  }
 
   let reason = "";
   let color = "";
@@ -98,7 +109,7 @@ const NotificationCard = ({
         } px-3 w-full -mt-3 py-1`}
       >
         {title === "reply" && <ReplyInnerPOst reply={reply} />}
-        {title === "like" && <LikeInnerPost reply={"lorem"} />}
+        {title === "like" && <LikeInnerPost ogText={ogText} />}
       </div>
     </div>
   );

@@ -4,27 +4,29 @@ import { BiRepost } from "react-icons/bi";
 import { FiMessageCircle } from "react-icons/fi";
 
 type Props = {
-  reply: string;
+  reply?: string;
   image?: string;
+  ogText?: any;
 };
 
-const LikeInnerPost = ({ reply, image }: Props) => {
+const LikeInnerPost = ({ reply, image, ogText }: Props) => {
+  console.log(ogText);
   return (
     <div className="w-full py-2 ml-2 px-2 shadow-custom border rounded-lg mt-2">
       <div className="flex w-full gap-2">
         <div className="w-full">
-          {image && (
+          <div className="line-clamp-2 w-full bg-slate-200 rounded-md p-1">
+            {!image && ogText.record?.text}
+          </div>
+          {ogText?.embed?.images && ogText?.embed?.images[0]?.thumb && (
             <img
-              src={image}
+              src={ogText.embed.images[0].thumb}
               alt={reply}
-              className="opacity-50"
-              width={160}
-              height={160}
+              className="shadow-sm"
+              width={100}
+              height={100}
             />
           )}
-          <div className="line-clamp-2 w-full bg-slate-200 rounded-md p-1">
-            {!image && reply}
-          </div>
         </div>
       </div>
     </div>
