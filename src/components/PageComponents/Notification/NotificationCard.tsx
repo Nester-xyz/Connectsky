@@ -9,6 +9,7 @@ import { BsReplyFill } from "react-icons/bs";
 
 import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
 import LikeInnerPost from "./NestedPost/LikeInnerPost";
+import Badges from "./Badges";
 type NotificationCardProps = {
   image: string;
   title: "repost" | "follow" | "reply" | "like";
@@ -72,30 +73,7 @@ const NotificationCard = ({
             <div className="rounded-full w-12 h-12 overflow-hidden">
               <img src={image === undefined ? userImage : image} alt={title} />
             </div>
-            <div
-              className={`w-4 h-4 ${color} rounded-full items-center absolute text-white -right-0 -bottom-0`}
-            >
-              {title === "like" && (
-                <div className="mt-[0.15rem] ml-[0.13rem]">
-                  <AiFillHeart />
-                </div>
-              )}
-              {title === "repost" && (
-                <div className="mt-[0.05rem] ml-[0.05rem] text-sm">
-                  <BiRepost />
-                </div>
-              )}
-              {title === "follow" && (
-                <div className="mt-[0.1rem] ml-[0.15rem]">
-                  <MdPersonAddAlt1 />
-                </div>
-              )}
-              {title === "reply" && (
-                <div className="mt-[0.1rem] ml-[0.15rem]">
-                  <BsReplyFill />
-                </div>
-              )}
-            </div>
+            <Badges title={title} color={color} />
           </div>
           {/* <div
             className={`absolute bottom-0 right-0 w-6 h-6  rounded-full ${color}`}
