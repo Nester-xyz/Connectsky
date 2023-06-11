@@ -6,6 +6,9 @@ import { FiMessageCircle } from "react-icons/fi";
 import { BiShare, BiRepost } from "react-icons/bi";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { BsReplyFill } from "react-icons/bs";
+
+import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
+import LikeInnerPost from "./NestedPost/LikeInnerPost";
 type NotificationCardProps = {
   image: string;
   title: "repost" | "follow" | "reply" | "like";
@@ -40,12 +43,12 @@ const NotificationCard = ({
       break;
     }
     case "follow": {
-      color = "bg-green-500";
+      color = "bg-blue-500";
       reason = "follows you!";
       break;
     }
     case "reply": {
-      color = "bg-yellow-500";
+      color = "bg-green-500";
       reason = "replied on your post!";
       break;
     }
@@ -69,7 +72,9 @@ const NotificationCard = ({
             <div className="rounded-full w-12 h-12 overflow-hidden">
               <img src={image === undefined ? userImage : image} alt={title} />
             </div>
-            <div className="w-4 h-4  rounded-full items-center absolute bg-blue-600 text-white -right-0 -bottom-0">
+            <div
+              className={`w-4 h-4 ${color} rounded-full items-center absolute text-white -right-0 -bottom-0`}
+            >
               {title === "like" && (
                 <div className="mt-[0.15rem] ml-[0.13rem]">
                   <AiFillHeart />
@@ -111,45 +116,11 @@ const NotificationCard = ({
       </div>
       <div
         className={`${
-          title === "reply" ? "block" : "hidden"
+          title === "reply" || title === "like" ? "block" : "hidden"
         } px-3 w-full -mt-3 py-1`}
       >
-        {title === "reply" ? (
-          <div className="w-full py-2 ml-2 px-2 shadow-custom border rounded-lg mt-2">
-            <div className="flex w-full gap-2">
-              <div className="w-full">
-                <div className="line-clamp-2 w-full bg-slate-200 rounded-md p-1">
-                  {reply}
-                </div>
-                <div className="flex w-full justify-between mt-2">
-                  <div>
-                    <div className="flex flex-col items-center">
-                      <div className="text-lg">
-                        <FiMessageCircle />
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex flex-col items-center">
-                      <div className="text-xl">
-                        <BiRepost />
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex flex-col items-center">
-                      <div className="text-lg">
-                        <AiOutlineHeart />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
+        {title === "reply" && <ReplyInnerPOst reply={reply} />}
+        {title === "like" && <LikeInnerPost reply={"lorem"} />}
       </div>
     </div>
   );
