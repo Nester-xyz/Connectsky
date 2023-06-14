@@ -3,7 +3,7 @@ import moment from "moment";
 import { agent, refreshSession, formatDateAgo } from "../../../utils";
 
 import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
-import LikeInnerPost from "./NestedPost/LikeInnerPost";
+import LikeInnerPost from "./NestedPost/Like&RepostInnerPost";
 import Badges from "./Badges";
 type NotificationCardProps = {
   image: string;
@@ -60,7 +60,7 @@ const NotificationCard = ({
       break;
     }
     case "reply": {
-      color = "bg-green-500";
+      color = "bg-green-600";
       reason = "replied on your post!";
       break;
     }
@@ -105,11 +105,14 @@ const NotificationCard = ({
       </div>
       <div
         className={`${
-          title === "reply" || title === "like" ? "block" : "hidden"
+          title === "reply" || title === "like" || title === "repost"
+            ? "block"
+            : "hidden"
         } px-3 w-full -mt-3 py-1`}
       >
         {title === "reply" && <ReplyInnerPOst reply={reply} />}
         {title === "like" && <LikeInnerPost ogText={ogText} />}
+        {title === "repost" && <LikeInnerPost ogText={ogText} />}
       </div>
     </div>
   );
