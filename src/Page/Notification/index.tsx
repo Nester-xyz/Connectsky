@@ -45,6 +45,7 @@ const Notification = () => {
         };
       }
     );
+    console.log(mappedData);
     setFetchedDataLength(mappedData.length);
     setNotifications((prevData) => [...prevData, ...mappedData]);
   }

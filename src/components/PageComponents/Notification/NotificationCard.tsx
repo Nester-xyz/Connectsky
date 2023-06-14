@@ -26,23 +26,27 @@ const NotificationCard = ({
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
   const [ogText, setOgText] = useState<any | unknown>({});
-
+  const [isAvailabePost, setIsAvailabePost] = useState(true);
   useEffect(() => {
-    console.log(reasonSubject);
+    console.log(`reasonSubject ${reasonSubject}`);
     getPost();
     setHandleSplit(handle.split(".")[0]);
-  }, []);
+  }, [createdAt]);
 
   async function getPost() {
-    await refreshSession();
-    if (reasonSubject === undefined) return;
-    const { data } = await agent.getPostThread({
-      uri: reasonSubject,
-    });
-    // console.log(data);
-    // console.log(data?.thread?.post);
-    setOgText(data?.thread?.post);
+    try {
+      if (reasonSubject === undefined) return;
+      const { data } = await agent.getPostThread({
+        uri: reasonSubject,
+      });
+      // console.log(data);
+      // console.log(data?.thread?.post);
+      setOgText(data?.thread?.post);
+    } catch (error) {
+      setIsAvailabePost(false);
+    }
   }
+
 
   let reason = "";
   let color = "";
@@ -75,6 +79,7 @@ const NotificationCard = ({
       break;
     }
   }
+
   return (
     <div className="bg-white shadow-custom rounded-xl px-2">
       <div className="flex flex-row gap-5 py-2 items-center justify-between">
@@ -103,17 +108,16 @@ const NotificationCard = ({
           <span>{formatDateAgo(createdAt)}</span>
         </div>
       </div>
-      <div
-        className={`${
-          title === "reply" || title === "like" || title === "repost"
-            ? "block"
-            : "hidden"
-        } px-3 w-full -mt-3 py-1`}
+      {isAvailabePost && <div
+        className={`${title === "reply" || title === "like" || title === "repost"
+          ? "block"
+          : "hidden"
+          } px-3 w-full -mt-3 py-1`}
       >
         {title === "reply" && <ReplyInnerPOst reply={reply} />}
         {title === "like" && <LikeInnerPost ogText={ogText} />}
         {title === "repost" && <LikeInnerPost ogText={ogText} />}
-      </div>
+      </div>}
     </div>
   );
 };
