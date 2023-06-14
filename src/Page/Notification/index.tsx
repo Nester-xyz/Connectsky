@@ -20,7 +20,7 @@ const Notification = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
   const [reasonSubject, setReasonSubject] = useState<string>("");
-
+  const [groupLikes, setGroupLikes] = useState<Set<string>>(new Set());
   async function listNotifications() {
     await refreshSession();
     const { data } = await agent.listNotifications({
@@ -34,6 +34,12 @@ const Notification = () => {
     const notificationsData = data.notifications || data;
     const mappedData: NotificationItem[] = notificationsData.map(
       (notifications: any) => {
+
+        if (notifications.reasonSubject) {
+          const newItem = notifications.reasonSubject;
+          setGroupLikes(prevSetList => new Set([...prevSetList, newItem]));
+          console.log(`new group`, newItem);
+        }
         return {
           image: notifications.author.avatar,
           title: notifications.reason, // You should map this value from the API response too.
@@ -48,6 +54,7 @@ const Notification = () => {
     console.log(mappedData);
     setFetchedDataLength(mappedData.length);
     setNotifications((prevData) => [...prevData, ...mappedData]);
+
   }
   const observerCallback: IntersectionObserverCallback = (entries) => {
     const firstEntry = entries[0];
@@ -63,10 +70,11 @@ const Notification = () => {
     await refreshSession();
     await agent.updateSeenNotifications();
   }
+  useEffect(() => console.log(`groupLikes`, groupLikes), [groupLikes])
 
   useEffect(() => {
     markUnread();
-
+    // console.log(groupLikes)
     if (!isLoading) {
       listNotifications();
       setIsLoading(true);
@@ -93,7 +101,7 @@ const Notification = () => {
           {notifications.map((item: NotificationItem, index) => {
             if (index === notifications.length - 1) {
               return (
-                <div ref={lastElementRef} key={index}>
+                <div ref={lastElementRef} key={item.reasonSubject}>
                   <NotificationCard
                     author={item.author}
                     image={item.image}
@@ -102,12 +110,13 @@ const Notification = () => {
                     reply={item.reply}
                     handle={item.handle}
                     reasonSubject={item.reasonSubject}
+                    groupLikes={groupLikes}
                   />
                 </div>
               );
             } else {
               return (
-                <div key={index}>
+                <div key={item.reasonSubject}>
                   <NotificationCard
                     author={item.author}
                     image={item.image}
@@ -116,6 +125,7 @@ const Notification = () => {
                     reply={item.reply}
                     handle={item.handle}
                     reasonSubject={item.reasonSubject}
+                    groupLikes={groupLikes}
                   />
                 </div>
               );

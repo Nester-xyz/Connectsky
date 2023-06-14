@@ -5,6 +5,7 @@ import { agent, refreshSession, formatDateAgo } from "../../../utils";
 import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
 import LikeInnerPost from "./NestedPost/Like&RepostInnerPost";
 import Badges from "./Badges";
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 type NotificationCardProps = {
   image: string;
   title: "repost" | "follow" | "reply" | "like";
@@ -13,6 +14,7 @@ type NotificationCardProps = {
   createdAt: Date;
   reply: string;
   reasonSubject: string;
+  groupLikes: Set<string>;
 };
 
 const NotificationCard = ({
@@ -23,14 +25,20 @@ const NotificationCard = ({
   createdAt,
   reply,
   reasonSubject,
+  groupLikes
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
   const [ogText, setOgText] = useState<any | unknown>({});
   const [isAvailabePost, setIsAvailabePost] = useState(true);
+  const [othersLikesCnt, setOthersLikesCnt] = useState<number>(0);
+  const [shouldGroup, setShouldGroup] = useState(false);
   useEffect(() => {
     console.log(`reasonSubject ${reasonSubject}`);
     getPost();
     setHandleSplit(handle.split(".")[0]);
+    if (groupLikes.has(reasonSubject)) {
+      setShouldGroup(true);
+    }
   }, [createdAt]);
 
   async function getPost() {
@@ -42,10 +50,29 @@ const NotificationCard = ({
       // console.log(data);
       // console.log(data?.thread?.post);
       setOgText(data?.thread?.post);
+      // console.log("thread", data?.thread?.post);
+      if (title === "like") {
+        try {
+          // console.log(data.thread.post);
+          console.log(`ogText`, ogText?.likeCount);
+          if (data && data.thread && data.thread.post) {
+            const { likeCount } = data.thread.post as PostView;
+            console.log("post", likeCount);
+            if (likeCount === undefined) return;
+            setOthersLikesCnt(likeCount);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     } catch (error) {
       setIsAvailabePost(false);
     }
   }
+  useEffect(() => {
+    console.log('othersLikes', othersLikesCnt);
+    console.log(groupLikes);
+  }, [shouldGroup, ogText, othersLikesCnt])
 
 
   let reason = "";
@@ -96,8 +123,12 @@ const NotificationCard = ({
           >
           </div> */}
           <div className="flex flex-col px-2 py-2">
-            <p className="line-clamp-2">
-              {author === undefined ? handleSplit : author}
+            <p className="line-clamp-2">{shouldGroup && othersLikesCnt > 0 ?
+
+              author === undefined ? handleSplit : author + ` and ${othersLikesCnt - 1} others...`
+              :
+              author === undefined ? handleSplit : author
+            }
             </p>
             <p className="text-blue-800 line-clamp-2">{reason}</p>
           </div>
