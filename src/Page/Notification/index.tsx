@@ -29,16 +29,15 @@ const Notification = () => {
     });
     if (data.cursor == null) return;
     setCursor(data.cursor);
-    console.log(data);
     // Check if data.notifications exists, otherwise use data directly.
     const notificationsData = data.notifications || data;
+    console.log(data);
     const mappedData: NotificationItem[] = notificationsData.map(
       (notifications: any) => {
-
-        if (notifications.reasonSubject) {
+        // console.log(notifications.reason);s
+        if (notifications.reason === "like" && !groupLikes.has(notifications.reasonSubject)) {
           const newItem = notifications.reasonSubject;
           setGroupLikes(prevSetList => new Set([...prevSetList, newItem]));
-          console.log(`new group`, newItem);
         }
         return {
           image: notifications.author.avatar,
@@ -51,10 +50,9 @@ const Notification = () => {
         };
       }
     );
-    console.log(mappedData);
     setFetchedDataLength(mappedData.length);
     setNotifications((prevData) => [...prevData, ...mappedData]);
-
+    console.log("notifications ", mappedData);
   }
   const observerCallback: IntersectionObserverCallback = (entries) => {
     const firstEntry = entries[0];
@@ -70,7 +68,15 @@ const Notification = () => {
     await refreshSession();
     await agent.updateSeenNotifications();
   }
-  useEffect(() => console.log(`groupLikes`, groupLikes), [groupLikes])
+  useEffect(() => {
+    const uniqueArray = notifications.filter((notification, index, self) => {
+      console.log("filter", self.findIndex((obj) => obj.reasonSubject === notification.reasonSubject));
+      return (self.findIndex((obj) => obj.reasonSubject === notification.reasonSubject) === index) || notification.reasonSubject === undefined
+    }
+    );
+    setNotifications(uniqueArray);
+    console.log("unique array data", uniqueArray);
+  }, [groupLikes, isLoading])
 
   useEffect(() => {
     markUnread();
@@ -90,6 +96,10 @@ const Notification = () => {
     };
   }, [isLoading, observer]);
 
+  // Look inside the set and use 
+  // only top occuring notifications reason subject 
+
+
   return (
     <div className="w-full h-full grid grid-cols-4 gap-5 relative">
       <div className="col-span-4 lg:col-span-3  p-5 lg:pr-0">
@@ -101,7 +111,7 @@ const Notification = () => {
           {notifications.map((item: NotificationItem, index) => {
             if (index === notifications.length - 1) {
               return (
-                <div ref={lastElementRef} key={item.reasonSubject}>
+                <div ref={lastElementRef} key={index}>
                   <NotificationCard
                     author={item.author}
                     image={item.image}
@@ -116,7 +126,7 @@ const Notification = () => {
               );
             } else {
               return (
-                <div key={item.reasonSubject}>
+                <div key={index}>
                   <NotificationCard
                     author={item.author}
                     image={item.image}
