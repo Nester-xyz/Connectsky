@@ -4,11 +4,16 @@ import { agent, refreshSession, formatDateAgo } from "../../../utils";
 import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
 import LikeInnerPost from "./NestedPost/Like&RepostInnerPost";
 import Badges from "./Badges";
+import QuotePost from "./NestedPost/QuotePost";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { appContext } from "../../../context/appContext";
 type NotificationCardProps = {
   image: string;
-  title: "repost" | "follow" | "reply" | "like" | "mention";
+  title: "repost" | "follow" | "reply" | "like" | "mention" | "quote";
   author: string;
   handle: string;
+  authorDiD: string;
   createdAt: Date;
   reply: string;
   reasonSubject: string;
@@ -22,18 +27,18 @@ const NotificationCard = ({
   handle,
   createdAt,
   reply,
+  authorDiD,
   reasonSubject,
   post,
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
   const [ogText, setOgText] = useState<any | unknown>({});
   const [isAvailabePost, setIsAvailabePost] = useState(true);
-  const [othersLikesCnt, setOthersLikesCnt] = useState<number>(0);
-  const [shouldGroup, setShouldGroup] = useState(false);
+  const { setActivePage } = useContext(appContext);
+  const navigate = useNavigate()
   useEffect(() => {
     // console.log(reasonSubject);
     // getPost();
-    console.log(post);
     setHandleSplit(handle.split(".")[0]);
     setOgText(post);
   }, []);
@@ -81,8 +86,6 @@ const NotificationCard = ({
       break;
     }
     default: {
-      color = "bg-orange-500";
-      // setReason("unknown!")
       break;
     }
   }
@@ -103,13 +106,20 @@ const NotificationCard = ({
           >
           </div> */}
           <div className="flex flex-col px-2 py-2">
-            <p className="line-clamp-2">{shouldGroup && othersLikesCnt > 1 && title !== "follow" ?
-
-              (author === undefined ? handleSplit + ` and ${othersLikesCnt - 1} others...` : author + ` and ${othersLikesCnt - 1} others...`)
-              :
-              (author === undefined ? handleSplit : author)
-            }
-            </p>
+            <div className="flex gap-2 cursor-pointer hover:underline"
+              onClick={() => {
+                console.log(authorDiD);
+                navigate(`/profile/${authorDiD}`);
+                setActivePage("Profile");
+              }}
+            >
+              <p className="line-clamp-2">
+                {author === undefined ? handleSplit : author}
+              </p>
+              {title == "quote" && <div className="text-slate-500">
+                @{handle}
+              </div>}
+            </div>
             <p className="text-blue-800 line-clamp-2">{reason}</p>
           </div>
         </div>
@@ -120,15 +130,16 @@ const NotificationCard = ({
         </div>
       </div>
       {isAvailabePost && <div
-        className={`${title === "reply" || title === "like" || title === "repost" || title === "mention"
+        className={`${title === "reply" || title === "like" || title === "repost" || title === "mention" || title === "quote"
           ? "block"
           : "hidden"
           } px-3 w-full -mt-3 py-1`}
       >
-        {title === "reply" && <ReplyInnerPOst reply={reply} />}
-        {title === "mention" && <div className="mt-[-0.5rem]"><ReplyInnerPOst reply={reply} /></div>}
+        {title === "reply" && <ReplyInnerPOst reply={reply} post={post} />}
+        {title === "mention" && <div className="mt-[-0.5rem]"><ReplyInnerPOst reply={reply} post={post} /></div>}
         {title === "like" && <LikeInnerPost ogText={ogText} />}
         {title === "repost" && <LikeInnerPost ogText={ogText} />}
+        {title === "quote" && <QuotePost reply={reply} post={post} />}
       </div>}
     </div>
   );

@@ -5,9 +5,10 @@ import { agent, refreshSession } from "../../utils";
 
 interface NotificationItem {
   image: string;
-  title: "repost" | "follow" | "reply" | "like" | "mention";
+  title: "repost" | "follow" | "reply" | "like" | "mention" | "quote";
   author: string;
   handle: string;
+  authorDiD: string;
   indexedAt: Date;
   reply: string;
   reasonSubject: string;
@@ -28,10 +29,10 @@ const Notification = () => {
     });
     if (data.cursor == null) return;
     setCursor(data.cursor);
-    console.log(data);
 
     // Check if data.notifications exists, otherwise use data directly.
     const notificationsData = data.notifications || data;
+    console.log("notifications data", notificationsData);
     const fetchPromises = notificationsData
       .map(async (notification: any) => {
         let postData;
@@ -43,11 +44,18 @@ const Notification = () => {
           });
           // console.log(postData);
         }
+        if (notification.reason === "mention") {
+          postData = await agent.getPostThread({
+            uri: notification?.uri,
+          })
+          console.log("mention", postData)
+        }
 
         return {
           image: notification.author.avatar,
           title: notification.reason,
           author: notification.author.displayName,
+          authorDiD: notification.author.did,
           handle: notification.author.handle,
           indexedAt: notification.indexedAt,
           reply: notification.record?.text ? notification.record.text : "",
@@ -129,6 +137,7 @@ const Notification = () => {
                     createdAt={item.indexedAt}
                     reply={item.reply}
                     handle={item.handle}
+                    authorDiD={item.authorDiD}
                     reasonSubject={item.reasonSubject}
                     post={item.post}
                   />
@@ -144,6 +153,7 @@ const Notification = () => {
                     createdAt={item.indexedAt}
                     reply={item.reply}
                     handle={item.handle}
+                    authorDiD={item.authorDiD}
                     reasonSubject={item.reasonSubject}
                     post={item.post}
                   />

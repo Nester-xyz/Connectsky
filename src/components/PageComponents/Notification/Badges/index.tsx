@@ -1,7 +1,7 @@
 import React from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BiRepost } from "react-icons/bi";
-import { BsReplyFill } from "react-icons/bs";
+import { BsReplyFill, BsFillChatLeftQuoteFill } from "react-icons/bs";
 import { VscMention } from "react-icons/vsc";
 import { MdPersonAddAlt1 } from "react-icons/md";
 

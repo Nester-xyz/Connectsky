@@ -6,9 +6,10 @@ import { FiMessageCircle } from "react-icons/fi";
 type Props = {
   reply: string;
   image?: string;
+  post?: any;
 };
 
-const ReplyInnerPOst = ({ reply, image }: Props) => {
+const ReplyInnerPOst = ({ reply, image, post }: Props) => {
   console.log(reply);
   return (
     <div className="w-full py-2 ml-2 px-2 shadow-custom rounded-lg mt-2">
@@ -20,22 +21,22 @@ const ReplyInnerPOst = ({ reply, image }: Props) => {
           <div className="flex w-full justify-between px-6">
             <div>
               <div className="flex flex-col items-center">
-                <div className="text-lg">
-                  <FiMessageCircle />
+                <div className="text-lg flex items-center">
+                  <FiMessageCircle />&nbsp;<p className='text-sm'>{post?.replyCount}</p>
                 </div>
               </div>
             </div>
             <div>
               <div className="flex flex-col items-center">
-                <div className="text-xl">
-                  <BiRepost />
+                <div className="text-xl flex items-center">
+                  <BiRepost />&nbsp; <p className='text-sm'>{post?.repostCount}</p>
                 </div>
               </div>
             </div>
             <div>
               <div className="flex flex-col items-center">
-                <div className="text-lg">
-                  <AiOutlineHeart />
+                <div className="text-lg flex items-center">
+                  <AiOutlineHeart />&nbsp; <p className='text-sm'>{post?.likeCount}</p>
                 </div>
               </div>
             </div>
