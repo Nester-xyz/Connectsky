@@ -47,8 +47,8 @@ const Notification = () => {
         if (notification.reason === "mention") {
           postData = await agent.getPostThread({
             uri: notification?.uri,
-          })
-          console.log("mention", postData)
+          });
+          console.log("mention", postData);
         }
 
         return {
@@ -86,15 +86,6 @@ const Notification = () => {
     await refreshSession();
     await agent.updateSeenNotifications();
   }
-  // useEffect(() => {
-  //   const uniqueArray = notifications.filter((notification, index, self) => {
-  //     console.log("filter", self.findIndex((obj) => obj.reasonSubject === notification.reasonSubject));
-  //     return (self.findIndex((obj) => obj.reasonSubject === notification.reasonSubject) === index) || notification.reasonSubject === undefined
-  //   }
-  //   );
-  //   setNotifications(uniqueArray);
-  //   console.log("unique array data", uniqueArray);
-  // }, [groupLikes, isLoading])
 
   useEffect(() => {
     markUnread();
@@ -114,9 +105,8 @@ const Notification = () => {
     };
   }, [isLoading, observer]);
 
-  // Look inside the set and use 
-  // only top occuring notifications reason subject 
-
+  // Look inside the set and use
+  // only top occuring notifications reason subject
 
   return (
     <div className="w-full h-full grid grid-cols-4 gap-5 relative">

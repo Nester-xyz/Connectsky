@@ -27,7 +27,12 @@ const BottomBar = ({
         return link.linkName !== "Notifications" ? (
           <div
             key={index}
-            onClick={() => { setActivePage(link.linkName); if (link.linkName === "Profile") { window.location.reload() } }}
+            onClick={() => {
+              setActivePage(link.linkName);
+              if (link.linkName === "Profile") {
+                window.location.reload();
+              }
+            }}
             className="w-10 h-10  relative"
           >
             <HoverButtonIconOnly
@@ -42,7 +47,12 @@ const BottomBar = ({
         ) : (
           <div
             key={index}
-            onClick={() => { setActivePage(link.linkName); if (link.linkName === "Profile") { window.location.reload() } }}
+            onClick={() => {
+              setActivePage(link.linkName);
+              if (link.linkName === "Profile") {
+                window.location.reload();
+              }
+            }}
             className="w-10 h-10  relative"
           >
             {notiCount.valueOf() > 0 && activePage !== "Notifications" ? (
