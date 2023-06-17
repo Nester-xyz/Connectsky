@@ -13,7 +13,7 @@ const ReplyInnerPOst = ({ reply, image }: Props) => {
     <div className="w-full py-2 ml-2 px-2 shadow-custom rounded-lg mt-2">
       <div className="flex w-full gap-2">
         <div className="w-full">
-          <div className="break-words w-full  mb-4 -mt-4 opacity-70 rounded-md">
+          <div className="break-words w-full  mb-4 -mt-4 opacity-90 rounded-md">
             <div className="ml-7">{reply}</div>
           </div>
           <div className="flex w-full justify-between px-6">

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
 import { agent, refreshSession, formatDateAgo } from "../../../utils";
 
 import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
 import LikeInnerPost from "./NestedPost/Like&RepostInnerPost";
 import Badges from "./Badges";
-import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 type NotificationCardProps = {
   image: string;
   title: "repost" | "follow" | "reply" | "like";
@@ -14,7 +12,7 @@ type NotificationCardProps = {
   createdAt: Date;
   reply: string;
   reasonSubject: string;
-  groupLikes: Set<string>;
+  post: any;
 };
 
 const NotificationCard = ({
@@ -25,7 +23,7 @@ const NotificationCard = ({
   createdAt,
   reply,
   reasonSubject,
-  groupLikes
+  post,
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
   const [ogText, setOgText] = useState<any | unknown>({});
@@ -33,42 +31,23 @@ const NotificationCard = ({
   const [othersLikesCnt, setOthersLikesCnt] = useState<number>(0);
   const [shouldGroup, setShouldGroup] = useState(false);
   useEffect(() => {
-    // console.log(`reasonSubject ${reasonSubject}`);
-    getPost();
+    // console.log(reasonSubject);
+    // getPost();
+    console.log(post);
     setHandleSplit(handle.split(".")[0]);
-    if (groupLikes.has(reasonSubject)) {
-      setShouldGroup(true);
-    }
-  }, [createdAt]);
+    setOgText(post);
+  }, []);
 
-  async function getPost() {
-    try {
-      if (reasonSubject === undefined) return;
-      const { data } = await agent.getPostThread({
-        uri: reasonSubject,
-      });
-      // console.log(data);
-      // console.log(data?.thread?.post);
-      setOgText(data?.thread?.post);
-      // console.log("thread", data?.thread?.post);
-      if (title === "like") {
-        try {
-          // console.log(data.thread.post);
-          // console.log(`ogText`, ogText?.likeCount);
-          if (data && data.thread && data.thread.post) {
-            const { likeCount } = data.thread.post as PostView;
-            // console.log("post", likeCount);
-            if (likeCount === undefined) return;
-            setOthersLikesCnt(likeCount);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } catch (error) {
-      setIsAvailabePost(false);
-    }
-  }
+  // async function getPost() {
+  //   await refreshSession();
+  //   if (reasonSubject === undefined) return;
+  //   const { data } = await agent.getPostThread({
+  //     uri: reasonSubject,
+  //   });
+  //   // console.log(data);
+  //   // console.log(data?.thread?.post);
+  //   setOgText(data?.thread?.post);
+  // }
 
 
   let reason = "";

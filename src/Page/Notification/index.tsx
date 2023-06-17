@@ -11,6 +11,7 @@ interface NotificationItem {
   indexedAt: Date;
   reply: string;
   reasonSubject: string;
+  post: any;
 }
 
 const Notification = () => {
@@ -19,8 +20,6 @@ const Notification = () => {
   const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
-  const [reasonSubject, setReasonSubject] = useState<string>("");
-  const [groupLikes, setGroupLikes] = useState<Set<string>>(new Set());
   async function listNotifications() {
     await refreshSession();
     const { data } = await agent.listNotifications({
@@ -29,26 +28,37 @@ const Notification = () => {
     });
     if (data.cursor == null) return;
     setCursor(data.cursor);
+    console.log(data);
+
     // Check if data.notifications exists, otherwise use data directly.
     const notificationsData = data.notifications || data;
-    console.log(data);
-    const mappedData: NotificationItem[] = notificationsData.map(
-      (notifications: any) => {
-        // console.log(notifications.reason);s
-        if (notifications.reason === "like" && !groupLikes.has(notifications.reasonSubject)) {
-          const newItem = notifications.reasonSubject;
-          setGroupLikes(prevSetList => new Set([...prevSetList, newItem]));
+    const fetchPromises = notificationsData
+      .map(async (notification: any) => {
+        let postData;
+        if (notification.reasonSubject !== undefined) {
+          // console.log(notification.reasonSubject);
+
+          postData = await agent.getPostThread({
+            uri: notification.reasonSubject,
+          });
+          // console.log(postData);
         }
+
         return {
-          image: notifications.author.avatar,
-          title: notifications.reason, // You should map this value from the API response too.
-          author: notifications.author.displayName,
-          handle: notifications.author.handle,
-          indexedAt: notifications.indexedAt,
-          reply: notifications.record?.text ? notifications.record.text : "",
-          reasonSubject: notifications.reasonSubject,
+          image: notification.author.avatar,
+          title: notification.reason,
+          author: notification.author.displayName,
+          handle: notification.author.handle,
+          indexedAt: notification.indexedAt,
+          reply: notification.record?.text ? notification.record.text : "",
+          reasonSubject: notification?.reasonSubject,
+          post: postData?.data?.thread?.post, // Include the fetched post data
         };
-      }
+      })
+      .filter((item) => item !== null);
+
+    const mappedData: NotificationItem[] = await Promise.all(
+      fetchPromises as Promise<NotificationItem>[]
     );
     setFetchedDataLength(mappedData.length);
     setNotifications((prevData) => [...prevData, ...mappedData]);
@@ -68,15 +78,15 @@ const Notification = () => {
     await refreshSession();
     await agent.updateSeenNotifications();
   }
-  useEffect(() => {
-    const uniqueArray = notifications.filter((notification, index, self) => {
-      console.log("filter", self.findIndex((obj) => obj.reasonSubject === notification.reasonSubject));
-      return (self.findIndex((obj) => obj.reasonSubject === notification.reasonSubject) === index) || notification.reasonSubject === undefined
-    }
-    );
-    setNotifications(uniqueArray);
-    console.log("unique array data", uniqueArray);
-  }, [groupLikes, isLoading])
+  // useEffect(() => {
+  //   const uniqueArray = notifications.filter((notification, index, self) => {
+  //     console.log("filter", self.findIndex((obj) => obj.reasonSubject === notification.reasonSubject));
+  //     return (self.findIndex((obj) => obj.reasonSubject === notification.reasonSubject) === index) || notification.reasonSubject === undefined
+  //   }
+  //   );
+  //   setNotifications(uniqueArray);
+  //   console.log("unique array data", uniqueArray);
+  // }, [groupLikes, isLoading])
 
   useEffect(() => {
     markUnread();
@@ -120,7 +130,7 @@ const Notification = () => {
                     reply={item.reply}
                     handle={item.handle}
                     reasonSubject={item.reasonSubject}
-                    groupLikes={groupLikes}
+                    post={item.post}
                   />
                 </div>
               );
@@ -135,7 +145,7 @@ const Notification = () => {
                     reply={item.reply}
                     handle={item.handle}
                     reasonSubject={item.reasonSubject}
-                    groupLikes={groupLikes}
+                    post={item.post}
                   />
                 </div>
               );
