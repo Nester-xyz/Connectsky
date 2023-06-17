@@ -9,6 +9,7 @@ type Props = {
 };
 
 const ReplyInnerPOst = ({ reply, image }: Props) => {
+  console.log(reply);
   return (
     <div className="w-full py-2 ml-2 px-2 shadow-custom rounded-lg mt-2">
       <div className="flex w-full gap-2">

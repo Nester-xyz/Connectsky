@@ -5,7 +5,7 @@ import { agent, refreshSession } from "../../utils";
 
 interface NotificationItem {
   image: string;
-  title: "repost" | "follow" | "reply" | "like";
+  title: "repost" | "follow" | "reply" | "like" | "mention";
   author: string;
   handle: string;
   indexedAt: Date;

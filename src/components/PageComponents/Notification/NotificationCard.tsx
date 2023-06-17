@@ -6,7 +6,7 @@ import LikeInnerPost from "./NestedPost/Like&RepostInnerPost";
 import Badges from "./Badges";
 type NotificationCardProps = {
   image: string;
-  title: "repost" | "follow" | "reply" | "like";
+  title: "repost" | "follow" | "reply" | "like" | "mention";
   author: string;
   handle: string;
   createdAt: Date;
@@ -75,6 +75,11 @@ const NotificationCard = ({
       reason = "liked your post!";
       break;
     }
+    case "mention": {
+      color = "bg-blue-500";
+      reason = "mentioned you on a post!";
+      break;
+    }
     default: {
       color = "bg-orange-500";
       // setReason("unknown!")
@@ -115,12 +120,13 @@ const NotificationCard = ({
         </div>
       </div>
       {isAvailabePost && <div
-        className={`${title === "reply" || title === "like" || title === "repost"
+        className={`${title === "reply" || title === "like" || title === "repost" || title === "mention"
           ? "block"
           : "hidden"
           } px-3 w-full -mt-3 py-1`}
       >
         {title === "reply" && <ReplyInnerPOst reply={reply} />}
+        {title === "mention" && <div className="mt-[-0.5rem]"><ReplyInnerPOst reply={reply} /></div>}
         {title === "like" && <LikeInnerPost ogText={ogText} />}
         {title === "repost" && <LikeInnerPost ogText={ogText} />}
       </div>}

@@ -2,6 +2,7 @@ import React from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BiRepost } from "react-icons/bi";
 import { BsReplyFill } from "react-icons/bs";
+import { VscMention } from "react-icons/vsc";
 import { MdPersonAddAlt1 } from "react-icons/md";
 
 type Props = {
@@ -32,6 +33,11 @@ const Badges = ({ color, title }: Props) => {
       {title === "reply" && (
         <div className="mt-[0.1rem] ml-[0.15rem]">
           <BsReplyFill />
+        </div>
+      )}
+      {title === "mention" && (
+        <div className="text-[1rem]">
+          <VscMention />
         </div>
       )}
     </div>
