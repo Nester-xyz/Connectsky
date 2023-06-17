@@ -13,6 +13,7 @@ type NotificationCardProps = {
   createdAt: Date;
   reply: string;
   reasonSubject: string;
+  post: any;
 };
 
 const NotificationCard = ({
@@ -23,26 +24,29 @@ const NotificationCard = ({
   createdAt,
   reply,
   reasonSubject,
+  post,
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
   const [ogText, setOgText] = useState<any | unknown>({});
 
   useEffect(() => {
-    console.log(reasonSubject);
-    getPost();
+    // console.log(reasonSubject);
+    // getPost();
+    console.log(post);
     setHandleSplit(handle.split(".")[0]);
+    setOgText(post);
   }, []);
 
-  async function getPost() {
-    await refreshSession();
-    if (reasonSubject === undefined) return;
-    const { data } = await agent.getPostThread({
-      uri: reasonSubject,
-    });
-    // console.log(data);
-    // console.log(data?.thread?.post);
-    setOgText(data?.thread?.post);
-  }
+  // async function getPost() {
+  //   await refreshSession();
+  //   if (reasonSubject === undefined) return;
+  //   const { data } = await agent.getPostThread({
+  //     uri: reasonSubject,
+  //   });
+  //   // console.log(data);
+  //   // console.log(data?.thread?.post);
+  //   setOgText(data?.thread?.post);
+  // }
 
   let reason = "";
   let color = "";
