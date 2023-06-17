@@ -5,11 +5,14 @@ import { agent, refreshSession } from "../../utils";
 
 interface NotificationItem {
   image: string;
-  title: "repost" | "follow" | "reply" | "like";
+  title: "repost" | "follow" | "reply" | "like" | "mention" | "quote";
   author: string;
   handle: string;
+  authorDiD: string;
   indexedAt: Date;
   reply: string;
+  reasonSubject: string;
+  post: any;
 }
 
 const Notification = () => {
@@ -18,7 +21,6 @@ const Notification = () => {
   const [fetchedDataLength, setFetchedDataLength] = useState(21);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
-
   async function listNotifications() {
     await refreshSession();
     const { data } = await agent.listNotifications({
@@ -27,23 +29,48 @@ const Notification = () => {
     });
     if (data.cursor == null) return;
     setCursor(data.cursor);
-    console.log(data);
+
     // Check if data.notifications exists, otherwise use data directly.
     const notificationsData = data.notifications || data;
-    const mappedData: NotificationItem[] = notificationsData.map(
-      (notifications: any) => {
+    console.log("notifications data", notificationsData);
+    const fetchPromises = notificationsData
+      .map(async (notification: any) => {
+        let postData;
+        if (notification.reasonSubject !== undefined) {
+          // console.log(notification.reasonSubject);
+
+          postData = await agent.getPostThread({
+            uri: notification.reasonSubject,
+          });
+          // console.log(postData);
+        }
+        if (notification.reason === "mention") {
+          postData = await agent.getPostThread({
+            uri: notification?.uri,
+          });
+          console.log("mention", postData);
+        }
+
         return {
-          image: notifications.author.avatar,
-          title: notifications.reason, // You should map this value from the API response too.
-          author: notifications.author.displayName,
-          handle: notifications.author.handle,
-          indexedAt: notifications.indexedAt,
-          reply: notifications.record?.text ? notifications.record.text : "",
+          image: notification.author.avatar,
+          title: notification.reason,
+          author: notification.author.displayName,
+          authorDiD: notification.author.did,
+          handle: notification.author.handle,
+          indexedAt: notification.indexedAt,
+          reply: notification.record?.text ? notification.record.text : "",
+          reasonSubject: notification?.reasonSubject,
+          post: postData?.data?.thread?.post, // Include the fetched post data
         };
-      }
+      })
+      .filter((item) => item !== null);
+
+    const mappedData: NotificationItem[] = await Promise.all(
+      fetchPromises as Promise<NotificationItem>[]
     );
     setFetchedDataLength(mappedData.length);
     setNotifications((prevData) => [...prevData, ...mappedData]);
+    console.log("notifications ", mappedData);
   }
   const observerCallback: IntersectionObserverCallback = (entries) => {
     const firstEntry = entries[0];
@@ -59,9 +86,10 @@ const Notification = () => {
     await refreshSession();
     await agent.updateSeenNotifications();
   }
+
   useEffect(() => {
     markUnread();
-
+    // console.log(groupLikes)
     if (!isLoading) {
       listNotifications();
       setIsLoading(true);
@@ -76,6 +104,9 @@ const Notification = () => {
       }
     };
   }, [isLoading, observer]);
+
+  // Look inside the set and use
+  // only top occuring notifications reason subject
 
   return (
     <div className="w-full h-full grid grid-cols-4 gap-5 relative">
@@ -96,6 +127,9 @@ const Notification = () => {
                     createdAt={item.indexedAt}
                     reply={item.reply}
                     handle={item.handle}
+                    authorDiD={item.authorDiD}
+                    reasonSubject={item.reasonSubject}
+                    post={item.post}
                   />
                 </div>
               );
@@ -109,6 +143,9 @@ const Notification = () => {
                     createdAt={item.indexedAt}
                     reply={item.reply}
                     handle={item.handle}
+                    authorDiD={item.authorDiD}
+                    reasonSubject={item.reasonSubject}
+                    post={item.post}
                   />
                 </div>
               );

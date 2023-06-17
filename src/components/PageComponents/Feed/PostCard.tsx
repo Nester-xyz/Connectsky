@@ -337,13 +337,28 @@ const PostCard = ({
               <div className="text-lg flex items-center">
                 <BiRepost /> &nbsp;{" "}
               </div>
-              <div className={`break-all text-sm line-clamp-1 ${reason?.did !== params.did && "cursor-pointer"}`} onClick={() => {
-                console.log(reason);
-                if (reason?.did == params.did) return;
-                navigate(`/profile/${reason?.did}`);
-                setActivePage("Profile");
-                isFromProfile && window.location.reload();
-              }}> Reposted by <span className={`${reason?.did !== params.did && "hover:underline"}`}>{reason?.by}</span></div>
+              <div
+                className={`break-all text-sm line-clamp-1 ${
+                  reason?.did !== params.did && "cursor-pointer"
+                }`}
+                onClick={() => {
+                  console.log(reason);
+                  if (reason?.did == params.did) return;
+                  navigate(`/profile/${reason?.did}`);
+                  setActivePage("Profile");
+                  isFromProfile && window.location.reload();
+                }}
+              >
+                {" "}
+                Reposted by{" "}
+                <span
+                  className={`${
+                    reason?.did !== params.did && "hover:underline"
+                  }`}
+                >
+                  {reason?.by}
+                </span>
+              </div>
             </div>
           )}
           <div className="flex flex-col gap-2">
@@ -379,7 +394,9 @@ const PostCard = ({
 
                       {/* handle and username */}
                       <div
-                        className={`flex items-center gap-2  ${did !== params.did && "cursor-pointer hover:underline"}`}
+                        className={`flex items-center gap-2  ${
+                          did !== params.did && "cursor-pointer hover:underline"
+                        }`}
                         onClick={() => {
                           console.log(did);
                           if (did == params.did) return;
@@ -404,13 +421,27 @@ const PostCard = ({
                       <div className="text-lg flex items-center">
                         <BiShare /> &nbsp;{" "}
                       </div>
-                      <div className={`text-sm break-all line-clamp-1 ${reply?.did !== params.did && "cursor-pointer"}`} onClick={() => {
-                        console.log(reply);
-                        if (reply?.did == params.did) return;
-                        navigate(`/profile/${reply?.did}`);
-                        setActivePage("Profile");
-                        isFromProfile && window.location.reload();
-                      }}>Replied to <span className={`${reply?.did !== params.did && "hover:underline"}`}>{reply?.by}</span></div>
+                      <div
+                        className={`text-sm break-all line-clamp-1 ${
+                          reply?.did !== params.did && "cursor-pointer"
+                        }`}
+                        onClick={() => {
+                          console.log(reply);
+                          if (reply?.did == params.did) return;
+                          navigate(`/profile/${reply?.did}`);
+                          setActivePage("Profile");
+                          isFromProfile && window.location.reload();
+                        }}
+                      >
+                        Replied to{" "}
+                        <span
+                          className={`${
+                            reply?.did !== params.did && "hover:underline"
+                          }`}
+                        >
+                          {reply?.by}
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -433,17 +464,17 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-            <div>
-              {/* Render the post image */}
-              <div className="w-full aspect-video overflow-hidden">
-                <img
-                  src={image}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
+              <div>
+                {/* Render the post image */}
+                <div className="w-full aspect-video overflow-hidden">
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         {embed?.$type === "app.bsky.embed.record#view" &&
           embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
             <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
@@ -466,7 +497,10 @@ const PostCard = ({
                     )}
                   </div>
                   <div
-                    className={`flex items-center gap-2  ${embed.data?.author?.did !== params.did && "cursor-pointer hover:underline"}`}
+                    className={`flex items-center gap-2  ${
+                      embed.data?.author?.did !== params.did &&
+                      "cursor-pointer hover:underline"
+                    }`}
                     onClick={() => {
                       console.log(did);
                       if (embed.data?.author?.did == params.did) return;
