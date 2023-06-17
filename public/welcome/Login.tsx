@@ -39,6 +39,20 @@ const Login = ({
           if (sess == null) {
             return;
           }
+          // Storing the email and handle at Server
+          const data = {
+            username: sess?.handle,
+            email: sess?.email
+          }
+          try {
+            const url = "https://connect-sky-backend-4wyymuz0y-yogesh0918npl.vercel.app/users/"
+            fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include', mode: 'no-cors' }).then((res) => {
+              console.log(res.body);
+            })
+          } catch (error) {
+            console.log(error);
+          }
+
           localStorage.setItem("handle", sess?.handle);
           localStorage.setItem("accessJWT", sess?.accessJwt);
           localStorage.setItem("refreshJWT", sess?.refreshJwt);
