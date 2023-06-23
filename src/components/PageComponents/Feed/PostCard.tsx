@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { fieldDataProps } from "../../../components/@types/Feed/Feed";
-
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { BiShare, BiRepost } from "react-icons/bi";
@@ -16,9 +15,10 @@ import { userImage } from "../../UI/DefaultUserImage";
 import { useNavigate } from "react-router-dom";
 import { appContext } from "../../../context/appContext";
 import { useParams } from "react-router-dom";
+import "../../UI/static.css";
 // just a random Image I grabbed from the internet to show when no image is provided
 
-const MAX_WORDS = 20; // Maximum number of words to display initially
+const MAX_WORDS = 40; // Maximum number of words to display initially
 const PostCard = ({
   author,
   handle,
@@ -363,7 +363,7 @@ const PostCard = ({
           )}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <div className="flex flex-col">
+              <div className={`flex flex-col ${reply?.did ? "ml-3" : ""}`}>
                 <div className="flex gap-4 items-center">
                   <div className="w-10 h-10 rounded-full overflow-hidden min-w-fit">
                     {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
@@ -447,8 +447,8 @@ const PostCard = ({
                 </div>
               </div>
             </div>
-            <div className="flex">
-              <p className="text-lg text-thin">
+            <div className={`flex ${reply?.did ? "ml-3" : ""}`}>
+              <p className="text-[15px] font-light feed-caption">
                 <span
                 // dangerouslySetInnerHTML={{
                 //   __html: handleLongText(caption),
@@ -527,7 +527,7 @@ const PostCard = ({
                 </div>
               </div>
               {/* section for text */}
-              <div className="text-base mt-1">
+              <div className="text-base mt-1 feed-caption">
                 {handleLongText(embed?.data?.value?.text, false)}
               </div>
               <div>

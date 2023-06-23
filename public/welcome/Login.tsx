@@ -5,7 +5,6 @@ import { HiEye } from "react-icons/hi";
 import { HiEyeSlash } from "react-icons/hi2";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import Signup from "./Signup";
-// import styled from "styled-components";
 
 const { BskyAgent } = bsky;
 
@@ -101,16 +100,6 @@ const Login = ({
     setSignUpClick(true);
   }
 
-  // const CheckboxContainer = styled.div`
-  //   display: flex;
-  //   align-items: center;
-  //   gap: 1rem;
-  // `;
-
-  // const CheckboxLabel = styled.label`
-  //   /* Add any additional styling for the label here */
-  // `;
-
   return (
     <>
       <div className="background_main">
@@ -157,7 +146,6 @@ const Login = ({
                 required
               />
             </div>
-            {/* <br /> */}
 
             <div className="input-container password-container">
               <div className="tooltip-container">
