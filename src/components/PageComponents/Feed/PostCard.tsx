@@ -449,7 +449,7 @@ const PostCard = ({
               </div>
             </div>
             <div className={`flex ${reply?.did ? "ml-3" : ""}`}>
-              <p className="text-[15px] font-light feed-caption">
+              <p className="text-[15px] font-light tracking-[.020em] text-slate-800 feed-caption">
                 <span
                 // dangerouslySetInnerHTML={{
                 //   __html: handleLongText(caption),
