@@ -9,10 +9,12 @@ const index = () => {
 
   return (
     <div className="px-5">
-      <h1 className="text-xl">Discovery</h1>
+      <h1 className="text-xl mt-5">Discovery</h1>
       <Search />
+      <div className="mt-5 ">
+        Select {5 - followCount} more people to continue
+      </div>
 
-      <div>You need to select {5 - followCount} more people to continue</div>
       <div>
         <div className="text-xl mt-5">
           <h1>Top Creators</h1>

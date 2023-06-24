@@ -9,6 +9,7 @@ import Discovery from "./Page/Discovery";
 import Feed from "./Page/Feed";
 import Notification from "./Page/Notification";
 import Profile from "./Page/Profile";
+import Start from "./Page/Start";
 import WillComeSoon from "./components/PageComponents/WillComeSoon";
 import { activePageCheck } from "./utils";
 
@@ -54,7 +55,9 @@ function App() {
             {/* Setting up the routes for the application */}
             <Routes>
               {/* Defining routes for different pages */}
-              <Route path="/" element={<Feed />} />
+              <Route path="/" element={<Start />} />
+              {/* <Route path="/" element={<Feed />} /> */}
+
               <Route path="/search" element={<Discovery />} />
               <Route path="/notifications" element={<Notification />} />
               <Route path="/settings" element={<WillComeSoon />} />
