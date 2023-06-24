@@ -198,7 +198,7 @@ const Feed = () => {
       ) : (
         <div className="w-full h-full">
           <button
-            className="md:hidden z-50 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white"
+            className="md:hidden z-30 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white"
             onClick={() => setShowAddPost(true)}
           >
             +
