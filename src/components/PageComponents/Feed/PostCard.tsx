@@ -590,13 +590,13 @@ const PostCard = ({
             HI
           </a> */}
           <div className="relative">
-            <div>
+            <div className="mx-5">
               <img
                 id="modal-img"
                 src={image}
-                className=" max-w-[384px] max-h-96 object-contain relative"
+                className=" w-full max-h-[520px] object-contain relative"
               />
-              <div className="absolute -top-12 -right-4 w-4 h-4">
+              <div className="absolute -top-12 right-8 w-4 h-4">
                 <div
                   className="text-5xl text-white font-bold cursor-pointer"
                   onClick={() => setShowImageModal(false)}
