@@ -1,12 +1,10 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
   font-family: "Montserrat", sans-serif;
-}
+} */
 
 .shadow_custom {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);

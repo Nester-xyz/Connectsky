@@ -1,5 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 
+@font-face {
+  font-family: Circular;
+  src: url("../../assets/Fonts/CircularXXSub-Book.woff");
+}
+
+@font-face {
+  font-family: Circular-Bold;
+  src: url("../../assets/Fonts/CircularXXSub-Bold.woff");
+}
+
+@font-face {
+  font-family: Circular-Medium;
+  src: url("../../assets/Fonts/CircularXXSub-Medium.woff");
+}
+
 .feed-caption {
-  font-family: "Montserrat";
+  font-family: "Circular";
+}
+
+.display-font {
+  font-family: "Circular-Bold";
 }

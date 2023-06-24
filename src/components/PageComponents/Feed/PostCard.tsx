@@ -506,7 +506,7 @@ const PostCard = ({
                       isFromProfile && window.location.reload();
                     }}
                   >
-                    <div className="text-lg  break-all line-clamp-1">
+                    <div className="text-lg break-all line-clamp-1">
                       {embed?.data?.author?.displayName === undefined
                         ? handleSplit(embed?.data?.author?.handle)
                         : embed?.data?.author?.displayName}
@@ -539,7 +539,7 @@ const PostCard = ({
         <div>
           {/* Render the number of likes and comments */}
           <div
-            className={`flex mt-5 text-xl gap-[6rem] items-center select-none ${
+            className={`flex mt-5 text-xl gap-[4rem] items-center select-none ${
               reply?.did ? "ml-[10px]" : ""
             }`}
           >
