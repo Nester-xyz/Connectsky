@@ -1,14 +1,15 @@
 // Importing required modules from React and React Router libraries
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Route, HashRouter as Router, Routes } from "react-router-dom";
 import Layout from "./components/HOC/Navigation/Layout";
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { appContext } from "./context/appContext";
 import "./interceptors/axios";
 // Importing components for different pages of the application
+import Discovery from "./Page/Discovery";
 import Feed from "./Page/Feed";
 import Notification from "./Page/Notification";
-import WillComeSoon from "./components/PageComponents/WillComeSoon";
 import Profile from "./Page/Profile";
+import WillComeSoon from "./components/PageComponents/WillComeSoon";
 import { activePageCheck } from "./utils";
 
 export interface ProfileView {
@@ -54,7 +55,7 @@ function App() {
             <Routes>
               {/* Defining routes for different pages */}
               <Route path="/" element={<Feed />} />
-              <Route path="/search" element={<WillComeSoon />} />
+              <Route path="/search" element={<Discovery />} />
               <Route path="/notifications" element={<Notification />} />
               <Route path="/settings" element={<WillComeSoon />} />
               <Route path="/profile/:did" element={<Profile />} />
