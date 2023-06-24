@@ -28,63 +28,120 @@ const Login = React.memo(({
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const [signUpClick, setSignUpClick] = useState<boolean>(false);
   const [isSignedUp, setIsSignedUp] = useState<boolean>(false);
-  const [isNewsLetterChecked, setIsNewsLetterChecked] = useState(true)
-  const agent = useMemo(
-    () =>
-      new BskyAgent({
-        service: "https://bsky.social",
-        persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-          console.log("setSession", sess);
-          console.log(sess);
-          if (sess == null) {
-            return;
+  const [isNewsLetterChecked, setIsNewsLetterChecked] = useState(true);
+  const [agent, setAgent] = useState<any>(null);
+
+  useEffect(() => {
+    const agentInstance = new BskyAgent({
+      service: "https://bsky.social",
+      persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
+        // Your existing logic here
+        console.log("setSession", sess);
+        console.log(sess);
+        if (sess == null) {
+          return;
+        }
+        // Storing the email and handle at Server
+        const data = {
+          username: sess?.handle,
+          email: sess?.email
+        }
+        if (isNewsLetterChecked) {
+          console.log("newsletter checked", isNewsLetterChecked)
+          try {
+            const url = "https://connect-sky-backend-4wyymuz0y-yogesh0918npl.vercel.app/users/"
+            fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include', mode: 'no-cors' }).then((res) => {
+              console.log(res.body);
+            })
+          } catch (error) {
+            console.log(error);
           }
-          // Storing the email and handle at Server
-          const data = {
-            username: sess?.handle,
-            email: sess?.email
-          }
-          if (isNewsLetterChecked) {
-            console.log("newsletter checked", isNewsLetterChecked)
-          }
-          // try {
-          //   const url = "https://connect-sky-backend-4wyymuz0y-yogesh0918npl.vercel.app/users/"
-          //   fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include', mode: 'no-cors' }).then((res) => {
-          //     console.log(res.body);
-          //   })
-          // } catch (error) {
-          //   console.log(error);
-          // }
+        }
 
 
-          localStorage.setItem("handle", sess?.handle);
-          localStorage.setItem("accessJWT", sess?.accessJwt);
-          localStorage.setItem("refreshJWT", sess?.refreshJwt);
-          localStorage.setItem("did", sess?.did);
-          if (sess?.email) localStorage.setItem("email", sess?.email);
-          const sessData = JSON.stringify(sess);
-          localStorage.setItem("sess", sessData);
-          if (sess != null) {
-            // setSession(sess!);
-            setLoggedInSuccess(true);
-            // Store a value in chrome storage
+        localStorage.setItem("handle", sess?.handle);
+        localStorage.setItem("accessJWT", sess?.accessJwt);
+        localStorage.setItem("refreshJWT", sess?.refreshJwt);
+        localStorage.setItem("did", sess?.did);
+        if (sess?.email) localStorage.setItem("email", sess?.email);
+        const sessData = JSON.stringify(sess);
+        localStorage.setItem("sess", sessData);
+        if (sess != null) {
+          // setSession(sess!);
+          setLoggedInSuccess(true);
+          // Store a value in chrome storage
 
-            chrome.storage.sync.set({ isLoggedIn: true }, function () {
-              // console.log(result);
-              chrome.runtime.sendMessage(true, function (response) {
-                if (response) {
-                  console.log("Message sent successfully!");
-                }
-              });
+          chrome.storage.sync.set({ isLoggedIn: true }, function () {
+            // console.log(result);
+            chrome.runtime.sendMessage(true, function (response) {
+              if (response) {
+                console.log("Message sent successfully!");
+              }
             });
-          }
-        },
-      }),
-    []
-  );
+          });
+        }
+      },
+    },
+    );
+    setAgent(agentInstance);
+  }, [agent]);
+
+  // const agent = useMemo(
+  //   () =>
+  //     new BskyAgent({
+  //       service: "https://bsky.social",
+  //       persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
+  //         console.log("setSession", sess);
+  //         console.log(sess);
+  //         if (sess == null) {
+  //           return;
+  //         }
+  //         // Storing the email and handle at Server
+  //         const data = {
+  //           username: sess?.handle,
+  //           email: sess?.email
+  //         }
+  //         if (isNewsLetterChecked) {
+  //           console.log("newsletter checked", isNewsLetterChecked)
+  //         }
+  //         // try {
+  //         //   const url = "https://connect-sky-backend-4wyymuz0y-yogesh0918npl.vercel.app/users/"
+  //         //   fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'include', mode: 'no-cors' }).then((res) => {
+  //         //     console.log(res.body);
+  //         //   })
+  //         // } catch (error) {
+  //         //   console.log(error);
+  //         // }
+
+
+  //         localStorage.setItem("handle", sess?.handle);
+  //         localStorage.setItem("accessJWT", sess?.accessJwt);
+  //         localStorage.setItem("refreshJWT", sess?.refreshJwt);
+  //         localStorage.setItem("did", sess?.did);
+  //         if (sess?.email) localStorage.setItem("email", sess?.email);
+  //         const sessData = JSON.stringify(sess);
+  //         localStorage.setItem("sess", sessData);
+  //         if (sess != null) {
+  //           // setSession(sess!);
+  //           setLoggedInSuccess(true);
+  //           // Store a value in chrome storage
+
+  //           chrome.storage.sync.set({ isLoggedIn: true }, function () {
+  //             // console.log(result);
+  //             chrome.runtime.sendMessage(true, function (response) {
+  //               if (response) {
+  //                 console.log("Message sent successfully!");
+  //               }
+  //             });
+  //           });
+  //         }
+  //       },
+  //     }),
+  //   []
+  // );
 
   const handleCheckBoxChange = () => {
-    console.log("tweaked", !isNewsLetterChecked)
+    // console.log("tweaked", !isNewsLetterChecked)
     setIsNewsLetterChecked((prevState) => !prevState);
   }
 
@@ -120,6 +177,9 @@ const Login = React.memo(({
     setSignUpClick(true);
   }
 
+  useEffect(() => {
+    console.log("tweaked", isNewsLetterChecked)
+  }, [isNewsLetterChecked]);
   return (
     <>
       <div className="background_main">
