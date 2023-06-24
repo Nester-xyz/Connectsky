@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
-import { fieldDataProps } from "../../../components/@types/Feed/Feed";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { FiMessageCircle } from "react-icons/fi";
+import React, { useContext, useEffect, useState } from "react";
+import { AiFillHeart, AiOutlineHeart, AiOutlineRetweet } from "react-icons/ai";
 import { BiShare } from "react-icons/bi";
-import { AiOutlineRetweet } from "react-icons/ai";
+import { FiMessageCircle } from "react-icons/fi";
+import { useNavigate, useParams } from "react-router-dom";
+import { fieldDataProps } from "../../../components/@types/Feed/Feed";
+import { appContext } from "../../../context/appContext";
 import {
   agent,
   formatDateAgo,
@@ -11,12 +12,9 @@ import {
   handleSplit,
   refreshSession,
 } from "../../../utils";
-import PostLoader from "./PostLoader";
 import { userImage } from "../../UI/DefaultUserImage";
-import { useNavigate } from "react-router-dom";
-import { appContext } from "../../../context/appContext";
-import { useParams } from "react-router-dom";
 import "../../UI/static.css";
+import PostLoader from "./PostLoader";
 // just a random Image I grabbed from the internet to show when no image is provided
 
 const MAX_WORDS = 40; // Maximum number of words to display initially
@@ -340,8 +338,9 @@ const PostCard = ({
                 <AiOutlineRetweet /> &nbsp;{" "}
               </div>
               <div
-                className={`break-all text-sm line-clamp-1 ${reason?.did !== params.did && "cursor-pointer"
-                  }`}
+                className={`break-all text-sm line-clamp-1 ${
+                  reason?.did !== params.did && "cursor-pointer"
+                }`}
                 onClick={() => {
                   console.log(reason);
                   if (reason?.did == params.did) return;
@@ -353,8 +352,9 @@ const PostCard = ({
                 {" "}
                 Reposted by{" "}
                 <span
-                  className={`${reason?.did !== params.did && "hover:underline"
-                    }`}
+                  className={`${
+                    reason?.did !== params.did && "hover:underline"
+                  }`}
                 >
                   {reason?.by}
                 </span>
@@ -394,8 +394,9 @@ const PostCard = ({
 
                       {/* handle and username */}
                       <div
-                        className={`flex items-center gap-2  ${did !== params.did && "cursor-pointer hover:underline"
-                          }`}
+                        className={`flex items-center gap-2  ${
+                          did !== params.did && "cursor-pointer hover:underline"
+                        }`}
                         onClick={() => {
                           console.log(did);
                           if (did == params.did) return;
@@ -421,8 +422,9 @@ const PostCard = ({
                         <BiShare /> &nbsp;{" "}
                       </div>
                       <div
-                        className={`text-sm break-all line-clamp-1 ${reply?.did !== params.did && "cursor-pointer"
-                          }`}
+                        className={`text-sm break-all line-clamp-1 ${
+                          reply?.did !== params.did && "cursor-pointer"
+                        }`}
                         onClick={() => {
                           console.log(reply);
                           if (reply?.did == params.did) return;
@@ -433,8 +435,9 @@ const PostCard = ({
                       >
                         Replied to{" "}
                         <span
-                          className={`${reply?.did !== params.did && "hover:underline"
-                            }`}
+                          className={`${
+                            reply?.did !== params.did && "hover:underline"
+                          }`}
                         >
                           {reply?.by}
                         </span>
@@ -461,13 +464,18 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-            <div>
-              {/* Render the post image */}
-              <div className="aspect-video overflow-hidden">
-                <img src={image} alt="" className="h-full object-contain  cursor-pointer" onClick={() => setShowImageModal(true)} />
+              <div>
+                {/* Render the post image */}
+                <div className="aspect-video overflow-hidden">
+                  <img
+                    src={image}
+                    alt=""
+                    className="h-full object-contain  cursor-pointer"
+                    onClick={() => setShowImageModal(true)}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         {embed?.$type === "app.bsky.embed.record#view" &&
           embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
             <div className="flex flex-col p-4 border border-slate-300 rounded-lg mt-[4px]">
@@ -490,9 +498,10 @@ const PostCard = ({
                     )}
                   </div>
                   <div
-                    className={`flex items-center gap-2  ${embed.data?.author?.did !== params.did &&
+                    className={`flex items-center gap-2  ${
+                      embed.data?.author?.did !== params.did &&
                       "cursor-pointer hover:underline"
-                      }`}
+                    }`}
                     onClick={() => {
                       console.log(did);
                       if (embed.data?.author?.did == params.did) return;
@@ -534,8 +543,9 @@ const PostCard = ({
         <div>
           {/* Render the number of likes and comments */}
           <div
-            className={`flex mt-5 text-xl gap-[4rem] items-center select-none ${reply?.did ? "ml-[10px]" : ""
-              }`}
+            className={`flex mt-5 text-xl gap-[4rem] items-center select-none ${
+              reply?.did ? "ml-[10px]" : ""
+            }`}
           >
             <div className="flex items-center gap-1">
               <FiMessageCircle />
@@ -565,13 +575,37 @@ const PostCard = ({
           </div>
         </div>
         {/* Modal here */}
-        <div id="modal"
-          className={`${showImageModal ? "opacity-100" : "opacity-0 pointer-events-none"
-            } fixed top-0 left-0 z-40 w-screen h-screen bg-black/70 flex justify-center items-center transition-opacity duration-300`}>
-
-          <a className="fixed z-90 top-6 right-8 text-white text-5xl font-bold" href="javascript:void(0)"
-            onClick={() => setShowImageModal(false)}>&times;</a>
-          <img id="modal-img" src={image} className="max-w-[700px] max-h-[700px] object-contain p-32" />
+        <div
+          id="modal"
+          onClick={() => setShowImageModal(false)}
+          className={`${
+            showImageModal ? "opacity-100" : "opacity-0 pointer-events-none"
+          } fixed top-0 left-0 z-40 w-screen h-screen bg-black/70 flex justify-center items-center transition-opacity duration-300`}
+        >
+          {/* <a
+            className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
+            href="javascript:void(0)"
+            onClick={() => setShowImageModal(false)}
+          >
+            HI
+          </a> */}
+          <div className="relative">
+            <div>
+              <img
+                id="modal-img"
+                src={image}
+                className=" max-w-[384px] max-h-96 object-contain relative"
+              />
+              <div className="absolute -top-12 -right-4 w-4 h-4">
+                <div
+                  className="text-5xl text-white font-bold cursor-pointer"
+                  onClick={() => setShowImageModal(false)}
+                >
+                  &times;
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
