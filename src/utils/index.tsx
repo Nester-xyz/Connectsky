@@ -6,7 +6,13 @@ import { IoMdNotifications } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
-export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
+import ProfileImage from "./profileImage";
+
+export function readFileAsArrayBuffer({
+  file,
+}: {
+  file: File;
+}): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as ArrayBuffer);
@@ -59,8 +65,18 @@ export const links: linksType[] = [
   {
     linkName: "Profile",
     links: `/profile/${getUserDid()}`,
-    icon: <FaRegUserCircle />,
-    activeIcon: <FaUserCircle />,
+    icon: <ProfileImage />,
+    activeIcon: (
+      <ProfileImage
+        style={{
+          border: "1px solid #005A9C",
+          borderRadius: "50%",
+          padding: "1px",
+          objectFit: "cover",
+          scale: "1.2",
+        }}
+      />
+    ),
   },
 ];
 

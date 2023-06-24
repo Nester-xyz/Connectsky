@@ -300,7 +300,7 @@ const PostCard = ({
     <>
       <div className="w-full bg-white px-8 py-3 rounded-xl ">
         {/* if replies available then this runs */}
-        {replyParent && (
+        {/* {replyParent && (
           <div className="-mx-5 border-b border-slate-200">
             <PostCard
               author={replyParent?.author?.displayName}
@@ -329,7 +329,7 @@ const PostCard = ({
               isFromProfile={isFromProfile}
             />
           </div>
-        )}
+        )} */}
         <div className="flex flex-col mt-3 w-full ">
           {/* Render author's profile image, name and caption */}
           {reason?.by !== undefined && (
