@@ -4,6 +4,8 @@ import { agent, refreshSession, getUserDid } from "../../utils";
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
 import { useParams } from "react-router-dom";
+import { userImage } from "../../components/UI/DefaultUserImage";
+import "../../components/UI/static.css";
 
 type Props = {};
 
@@ -101,7 +103,7 @@ const index = (props: Props) => {
         return {
           reason: {
             by: feed.reason?.by?.displayName,
-            did: feed.reason?.by?.did
+            did: feed.reason?.by?.did,
           },
           reply: {
             text: feed.reply?.parent?.record?.text,
@@ -187,13 +189,18 @@ const index = (props: Props) => {
         {/* profile */}
         <div className="flex items-center">
           <div className="flex w-24 bg-slate-200 aspect-square rounded-full absolute left-4 -bottom-12 shadow-lg">
-            <img src={avatar} alt="" className="rounded-full" />
+            <img
+              src={avatar === undefined ? userImage : avatar}
+              alt=""
+              className="rounded-full"
+            />
           </div>
           {getUserDid() !== params.did && (
             <button
               onClick={isFollowing ? unfollow : follow}
-              className={`px-5 py-1 select-none ${isFollowing ? `bg-slate-700` : ` bg-blue-600`
-                } cursor-pointer absolute rounded-lg right-10 top-3 mt-[8rem] text-white`}
+              className={`px-5 py-1 select-none ${
+                isFollowing ? `bg-slate-700` : ` bg-blue-600`
+              } cursor-pointer absolute rounded-lg right-10 top-3 mt-[8rem] text-white`}
             >
               {isFollowing ? "Following" : "+ Follow"}
             </button>
@@ -204,7 +211,9 @@ const index = (props: Props) => {
       {/* profile details */}
       <div className="flex flex-col gap-3 mt-[64px]">
         <div className="flex flex-col">
-          <div className="text-2xl font-bold ml-2">{displayName}</div>
+          <div className="text-2xl display-font ml-2">
+            {displayName === undefined ? handle : displayName}
+          </div>
           <div className="flex ml-2 gap-2">
             {followsYou ? (
               <button className="bg-slate-200 text-[10px] rounded-md p-1">

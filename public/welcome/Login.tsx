@@ -160,7 +160,6 @@ const Login = ({
                 required
               />
             </div>
-            {/* <br /> */}
 
             <div className="input-container password-container">
               <div className="tooltip-container">
@@ -208,10 +207,33 @@ const Login = ({
             {attemptedLogin && loggedInSuccess
               ? null
               : attemptedLogin &&
-              submitted &&
-              !loggedInSuccess && (
-                <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
-              )}
+                submitted &&
+                !loggedInSuccess && (
+                  <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
+                )}
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto 1fr",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+                userSelect: "none",
+                marginLeft: "-13px",
+              }}
+            >
+              <input type="checkbox" id="newsletter-checkbox" defaultChecked />
+              <label
+                htmlFor="newsletter-checkbox"
+                style={{
+                  marginTop: "5px",
+                }}
+              >
+                Subscribe to our Email Newsletter
+              </label>
+            </div>
+
             <button className="submit" type="submit">
               Login
             </button>

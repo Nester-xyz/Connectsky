@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { fieldDataProps } from "../../../components/@types/Feed/Feed";
-
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
-import { BiShare, BiRepost } from "react-icons/bi";
+import { BiShare } from "react-icons/bi";
+import { AiOutlineRetweet } from "react-icons/ai";
 import {
   agent,
   formatDateAgo,
@@ -16,9 +16,10 @@ import { userImage } from "../../UI/DefaultUserImage";
 import { useNavigate } from "react-router-dom";
 import { appContext } from "../../../context/appContext";
 import { useParams } from "react-router-dom";
+import "../../UI/static.css";
 // just a random Image I grabbed from the internet to show when no image is provided
 
-const MAX_WORDS = 20; // Maximum number of words to display initially
+const MAX_WORDS = 40; // Maximum number of words to display initially
 const PostCard = ({
   author,
   handle,
@@ -333,9 +334,9 @@ const PostCard = ({
         <div className="flex flex-col mt-3 w-full ">
           {/* Render author's profile image, name and caption */}
           {reason?.by !== undefined && (
-            <div className="text-slate-600 flex flex-row items-center ">
-              <div className="text-lg flex items-center">
-                <BiRepost /> &nbsp;{" "}
+            <div className={`text-slate-600 flex flex-row items-center `}>
+              <div className="text-base flex items-center">
+                <AiOutlineRetweet /> &nbsp;{" "}
               </div>
               <div
                 className={`break-all text-sm line-clamp-1 ${
@@ -363,7 +364,7 @@ const PostCard = ({
           )}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <div className="flex flex-col">
+              <div className={`flex flex-col ${reply?.did ? "ml-3" : ""}`}>
                 <div className="flex gap-4 items-center">
                   <div className="w-10 h-10 rounded-full overflow-hidden min-w-fit">
                     {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
@@ -382,7 +383,7 @@ const PostCard = ({
                       />
                     )}
                   </div>
-                  <div className="text-xl flex flex-col  w-full">
+                  <div className="text-xl flex flex-col">
                     <div className="flex flex-row-reverse items-center gap-2 bg--300 h-10 flex-nowrap">
                       {/* time stamp */}
                       <div className="flex items-center gap-2">
@@ -447,8 +448,8 @@ const PostCard = ({
                 </div>
               </div>
             </div>
-            <div className="flex">
-              <p className="text-lg text-thin">
+            <div className={`flex ${reply?.did ? "ml-3" : ""}`}>
+              <p className="text-[15px] font-light feed-caption">
                 <span
                 // dangerouslySetInnerHTML={{
                 //   __html: handleLongText(caption),
@@ -466,18 +467,14 @@ const PostCard = ({
           : image && (
               <div>
                 {/* Render the post image */}
-                <div className="w-full aspect-video overflow-hidden">
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
+                <div className="aspect-video overflow-hidden">
+                  <img src={image} alt="" className="h-full object-contain" />
                 </div>
               </div>
             )}
         {embed?.$type === "app.bsky.embed.record#view" &&
           embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
-            <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
+            <div className="flex flex-col p-4 border border-slate-300 rounded-lg mt-[4px]">
               <div className="flex flex-row justify-between items-center ">
                 {/* section of the profileImage,handle,time, */}
                 <div className="flex flex-row items-center w-full gap-2">
@@ -509,7 +506,7 @@ const PostCard = ({
                       isFromProfile && window.location.reload();
                     }}
                   >
-                    <div className="text-lg  break-all line-clamp-1">
+                    <div className="text-lg break-all line-clamp-1">
                       {embed?.data?.author?.displayName === undefined
                         ? handleSplit(embed?.data?.author?.handle)
                         : embed?.data?.author?.displayName}
@@ -527,7 +524,7 @@ const PostCard = ({
                 </div>
               </div>
               {/* section for text */}
-              <div className="text-base mt-1">
+              <div className="text-base mt-1 feed-caption">
                 {handleLongText(embed?.data?.value?.text, false)}
               </div>
               <div>
@@ -541,13 +538,17 @@ const PostCard = ({
 
         <div>
           {/* Render the number of likes and comments */}
-          <div className="flex mt-5 text-xl gap-16 items-center select-none">
+          <div
+            className={`flex mt-5 text-xl gap-[4rem] items-center select-none ${
+              reply?.did ? "ml-[10px]" : ""
+            }`}
+          >
             <div className="flex items-center gap-1">
               <FiMessageCircle />
               <p className="text-sm">{comments}</p>
             </div>
-            <div className="flex items-center text-3xl gap-1">
-              <BiRepost
+            <div className="flex items-center  gap-1">
+              <AiOutlineRetweet
                 className={`cursor-pointer ${repost ? "text-green-500" : ""}`}
                 onClick={handleRepost}
               />
