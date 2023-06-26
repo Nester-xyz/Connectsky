@@ -309,7 +309,7 @@ const Login = React.memo(
                   justifyContent: "center",
                   gap: "0.5rem",
                   userSelect: "none",
-                  marginLeft: "-13px",
+                  marginLeft: "-25px",
                 }}
               >
                 <input

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AiFillHeart, AiOutlineHeart, AiOutlineRetweet } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { LuRepeat2 } from "react-icons/lu";
 import { BiShare } from "react-icons/bi";
 import { FiMessageCircle } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -335,7 +336,7 @@ const PostCard = ({
           {reason?.by !== undefined && (
             <div className={`text-slate-600 flex flex-row items-center `}>
               <div className="text-base flex items-center">
-                <AiOutlineRetweet /> &nbsp;{" "}
+                <LuRepeat2 /> &nbsp;{" "}
               </div>
               <div
                 className={`break-all text-sm line-clamp-1 ${
@@ -361,7 +362,9 @@ const PostCard = ({
               </div>
             </div>
           )}
-          <div className="flex flex-col gap-2">
+          <div
+            className={`flex flex-col gap-2 ${reply?.did ? "ml-[-12px]" : ""} `}
+          >
             <div className="flex justify-between">
               <div className={`flex flex-col ${reply?.did ? "ml-3" : ""}`}>
                 <div className="flex gap-4 items-center">
@@ -534,7 +537,12 @@ const PostCard = ({
               <div>
                 {/* section for image if available; */}
                 {embed.data?.embeds && embed.data?.embeds[0]?.images && (
-                  <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
+                  <img
+                    className="cursor-pointer"
+                    src={embed?.data?.embeds[0]?.images[0]?.thumb}
+                    alt=""
+                    onClick={() => setShowImageModal(true)}
+                  />
                 )}
               </div>
             </div>
@@ -543,18 +551,17 @@ const PostCard = ({
         <div>
           {/* Render the number of likes and comments */}
           <div
-            className={`flex mt-5 text-xl gap-[4rem] items-center select-none ${
-              reply?.did ? "ml-[10px]" : ""
-            }`}
+            className={`flex mt-5 text-xl gap-[4rem] items-center select-none `}
           >
             <div className="flex items-center gap-1">
               <FiMessageCircle />
               <p className="text-sm">{comments}</p>
             </div>
-            <div className="flex items-center  gap-1">
-              <AiOutlineRetweet
+            <div className="flex items-center  gap-1 scale-[1.1]">
+              <LuRepeat2
                 className={`cursor-pointer ${repost ? "text-green-500" : ""}`}
                 onClick={handleRepost}
+                style={{ opacity: 0.8 }}
               />
               <p className="text-sm">{repostCnt}</p>
             </div>
@@ -593,7 +600,11 @@ const PostCard = ({
             <div className="mx-5">
               <img
                 id="modal-img"
-                src={image}
+                src={
+                  embed?.data?.embeds
+                    ? embed?.data?.embeds[0]?.images?.[0]?.thumb
+                    : image
+                }
                 className=" w-full max-h-[520px] object-contain relative"
               />
               <div className="absolute -top-12 right-8 w-4 h-4">
