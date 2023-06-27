@@ -46,7 +46,7 @@ const PostComments = ({
     setIsReplying(true);
     try {
       e.preventDefault();
-      console.log(textFieldValue);
+      // console.log(textFieldValue);
       if (uri === undefined && cid === undefined) return;
       await refreshSession();
       const response = await agent.post({
@@ -56,7 +56,7 @@ const PostComments = ({
           parent: { uri: uri!, cid: cid! },
         },
       });
-      console.log(response);
+      // console.log(response);
       setCommentCnt((prev) => prev + 1);
       setIsReplying(false);
       setTextFieldValue("");
@@ -71,9 +71,9 @@ const PostComments = ({
 
   useEffect(() => {
     chrome.storage.sync.get(["avatar"], function (result) {
-      console.log("Value currently is " + result.avatar);
+      // console.log("Value currently is " + result.avatar);
       setAvatarURL(result.avatar); // Set the state within the callback
-      console.log(result.avatar);
+      // console.log(result.avatar);
     });
   }, []);
 

@@ -9,12 +9,14 @@ import {
   repostApi,
   disLikeApi,
   likeApi,
+  agent,
 } from "../../../../../utils";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { appContext } from "../../../../../context/appContext";
 import PostComments from "../../../Feed/PostComments";
 import { LuRepeat2 } from "react-icons/lu";
+import { PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 type Props = {
   reply: string;
   post: any;
@@ -35,6 +37,27 @@ const QuotePost = ({ reply, post, image, uri, cid, author, handle }: Props) => {
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [repostCnt, setRepostCnt] = useState(post.repostCount);
   const [commentCnt, setCommentCnt] = useState(post.replyCount);
+  const [ogText, setOgText] = useState<any>();
+  async function getPostDetails() {
+    try {
+      const { data } = await agent.getPostThread({
+        uri: uri,
+      });
+      if (data.error === "NotFound") return;
+      console.log("notifications quote data", data.thread.post, "reply is", reply)
+      const post = data.thread.post as PostView;
+      setOgText(post);
+      setLikeCount(post.likeCount);
+      setCommentCnt(post.replyCount);
+      setRepostCnt(post.repostCount);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getPostDetails();
+  }, [])
+
 
   async function handleRepost() {
     try {
@@ -195,9 +218,8 @@ const QuotePost = ({ reply, post, image, uri, cid, author, handle }: Props) => {
                 <div className="flex flex-col items-center">
                   <div className="text-xl flex items-center">
                     <LuRepeat2
-                      className={`cursor-pointer ${
-                        repost ? "text-green-500" : ""
-                      }`}
+                      className={`cursor-pointer ${repost ? "text-green-500" : ""
+                        }`}
                       onClick={handleRepost}
                       style={{ opacity: 0.8 }}
                     />

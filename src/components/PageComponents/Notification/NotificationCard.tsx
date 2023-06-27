@@ -36,13 +36,26 @@ const NotificationCard = ({
   cid,
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
-  const [ogText, setOgText] = useState<any | unknown>({});
+  const [ogText, setOgText] = useState<any | unknown>(post);
   const [isAvailabePost, setIsAvailabePost] = useState(true);
   const { setActivePage } = useContext(appContext);
   const navigate = useNavigate();
+  console.log("post is", post, "reply is", reply);
+  async function getPostDetails() {
+    try {
+      const { data } = await agent.getPostThread({
+        uri: uri,
+      });
+      if (data.error === "NotFound") return;
+      console.log("notifications post data", data.thread.post, "reply is", reply)
+      setOgText(data.thread.post);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     setHandleSplit(handle.split(".")[0]);
-    setOgText(post);
+    // getPostDetails();
   }, []);
 
   let reason = "";
@@ -131,7 +144,7 @@ const NotificationCard = ({
             : "hidden"
             } px-3 w-full -mt-3 py-1`}
         >
-          {title === "reply" && <ReplyInnerPOst reply={reply} post={post} image={image} uri={uri} cid={cid} author={author} handle={handle} />}
+          {title === "reply" && <ReplyInnerPOst reply={reply} post={ogText} image={image} uri={uri} cid={cid} author={author} handle={handle} />}
           {title === "mention" && (
             <div className="mt-[-0.2rem]">
               <ReplyInnerPOst reply={reply} post={post} image={image} uri={uri} cid={cid} author={author} handle={handle} />
@@ -139,7 +152,7 @@ const NotificationCard = ({
           )}
           {title === "like" && <LikeInnerPost ogText={ogText} />}
           {title === "repost" && <LikeInnerPost ogText={ogText} />}
-          {title === "quote" && <QuotePost reply={reply} post={post} image={image} uri={uri} cid={cid} author={author} handle={handle} />}
+          {title === "quote" && <QuotePost reply={reply} post={ogText} image={image} uri={uri} cid={cid} author={author} handle={handle} />}
         </div>
       )}
     </div>

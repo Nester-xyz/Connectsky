@@ -44,9 +44,8 @@ const Notification = () => {
           postData = await agent.getPostThread({
             uri: notification.reasonSubject,
           });
-          // console.log(postData);
         }
-        if (notification.reason === "mention") {
+        if (notification.reason === "mention" || notification.reason == "reply") {
           postData = await agent.getPostThread({
             uri: notification?.uri,
           });
