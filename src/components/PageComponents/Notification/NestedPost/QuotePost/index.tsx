@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
-import { formatDateAgo, checkIfAlreadyRepost, checkIfLikedApi, deleteRepostApi, repostApi, disLikeApi, likeApi } from "../../../../../utils";
+import {
+  formatDateAgo,
+  checkIfAlreadyRepost,
+  checkIfLikedApi,
+  deleteRepostApi,
+  repostApi,
+  disLikeApi,
+  likeApi,
+} from "../../../../../utils";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { appContext } from "../../../../../context/appContext";
@@ -22,6 +30,7 @@ const QuotePost = ({ reply, post, image }: Props) => {
   const [repost, setRepost] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [repostCnt, setRepostCnt] = useState(post.repostCount);
+  const [commentCnt, setCommentCnt] = useState(post.replyCount);
 
   async function handleRepost() {
     try {
@@ -85,7 +94,16 @@ const QuotePost = ({ reply, post, image }: Props) => {
           e.stopPropagation();
         }}
       >
-        <PostComments setShowCommentModal={setShowCommentModal} profileImg={image} caption={reply} author={post.author.displayName} uri={post.uri} cid={post.cid} handle={post.author.handle} />
+        <PostComments
+          setShowCommentModal={setShowCommentModal}
+          profileImg={image}
+          caption={reply}
+          author={post.author.displayName}
+          uri={post.uri}
+          cid={post.cid}
+          handle={post.author.handle}
+          setCommentCnt={setCommentCnt}
+        />
       </div>
     </div>
   );
@@ -157,12 +175,15 @@ const QuotePost = ({ reply, post, image }: Props) => {
             </div>
 
             {/* Section for the buttons */}
-            <div className="flex justify-between px-6 pt-4">
+            <div className="flex justify-between pl-[1.5rem] pr-[5rem] pt-4">
               <div>
                 <div className="flex flex-col items-center">
-                  <div className="text-lg flex items-center cursor-pointer" onClick={() => setShowCommentModal(true)}>
+                  <div
+                    className="text-lg flex items-center cursor-pointer mt-[-3.5px]"
+                    onClick={() => setShowCommentModal(true)}
+                  >
                     <FiMessageCircle />
-                    &nbsp;<p className="text-sm">{post.replyCount}</p>
+                    &nbsp;<p className="text-sm">{commentCnt}</p>
                   </div>
                 </div>
               </div>
@@ -170,10 +191,13 @@ const QuotePost = ({ reply, post, image }: Props) => {
                 <div className="flex flex-col items-center">
                   <div className="text-xl flex items-center">
                     <LuRepeat2
-                      className={`cursor-pointer ${repost ? "text-green-500" : ""}`}
+                      className={`cursor-pointer ${
+                        repost ? "text-green-500" : ""
+                      }`}
                       onClick={handleRepost}
                       style={{ opacity: 0.8 }}
-                    /><p className="text-sm">&nbsp;{repostCnt}</p>
+                    />
+                    <p className="text-sm">&nbsp;{repostCnt}</p>
                   </div>
                 </div>
               </div>

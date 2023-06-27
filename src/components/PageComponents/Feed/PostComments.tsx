@@ -22,6 +22,7 @@ type props = {
   uri: string | undefined;
   cid: string | undefined;
   handle: string;
+  setCommentCnt: React.Dispatch<React.SetStateAction<number>>;
 };
 const PostComments = ({
   setShowCommentModal,
@@ -31,6 +32,7 @@ const PostComments = ({
   uri,
   cid,
   handle,
+  setCommentCnt,
 }: props) => {
   const [textFieldValue, setTextFieldValue] = useState("");
   const [avatarURL, setAvatarURL] = useState("");
@@ -55,6 +57,7 @@ const PostComments = ({
         },
       });
       console.log(response);
+      setCommentCnt((prev) => prev + 1);
       setIsReplying(false);
       setTextFieldValue("");
       setShowCommentModal(false);

@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { BiRepost } from "react-icons/bi";
 import { FiMessageCircle } from "react-icons/fi";
-import { formatDateAgo, checkIfAlreadyRepost, checkIfLikedApi, deleteRepostApi, repostApi, disLikeApi, likeApi } from "../../../../../utils";
+import {
+  formatDateAgo,
+  checkIfAlreadyRepost,
+  checkIfLikedApi,
+  deleteRepostApi,
+  repostApi,
+  disLikeApi,
+  likeApi,
+} from "../../../../../utils";
 import PostComments from "../../../Feed/PostComments";
 import { LuRepeat2 } from "react-icons/lu";
 type Props = {
@@ -19,6 +26,7 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
   const [repost, setRepost] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [repostCnt, setRepostCnt] = useState(post.repostCount);
+  const [commentCnt, setCommentCnt] = useState(post.replyCount);
 
   async function handleRepost() {
     try {
@@ -81,7 +89,16 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
           e.stopPropagation();
         }}
       >
-        <PostComments setShowCommentModal={setShowCommentModal} profileImg={image} caption={reply} author={post.author.displayName} uri={post.uri} cid={post.cid} handle={post.author.handle} />
+        <PostComments
+          setShowCommentModal={setShowCommentModal}
+          profileImg={image}
+          caption={reply}
+          author={post.author.displayName}
+          uri={post.uri}
+          cid={post.cid}
+          handle={post.author.handle}
+          setCommentCnt={setCommentCnt}
+        />
       </div>
     </div>
   );
@@ -105,11 +122,15 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
             <div className="break-words w-full  mb-4 -mt-4 opacity-90 rounded-md">
               <div className="ml-7">{reply}</div>
             </div>
-            <div className="flex w-full justify-between px-6">
+            <div className="flex w-full justify-between pl-[1.5rem] pr-[5rem]">
               <div>
                 <div className="flex flex-col items-center">
-                  <div className="text-lg flex items-center cursor-pointer" onClick={() => setShowCommentModal(true)}>
-                    <FiMessageCircle />&nbsp;<p className='text-sm'>{post?.replyCount}</p>
+                  <div
+                    className="text-lg flex items-center cursor-pointer mt-[-3.5px]"
+                    onClick={() => setShowCommentModal(true)}
+                  >
+                    <FiMessageCircle />
+                    &nbsp;<p className="text-sm">{commentCnt}</p>
                   </div>
                 </div>
               </div>
@@ -117,10 +138,13 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
                 <div className="flex flex-col items-center">
                   <div className="text-xl flex items-center">
                     <LuRepeat2
-                      className={`cursor-pointer ${repost ? "text-green-500" : ""}`}
+                      className={`cursor-pointer ${
+                        repost ? "text-green-500" : ""
+                      }`}
                       onClick={handleRepost}
                       style={{ opacity: 0.8 }}
-                    /><p className="text-sm">&nbsp;{repostCnt}</p>
+                    />
+                    <p className="text-sm">&nbsp;{repostCnt}</p>
                   </div>
                 </div>
               </div>

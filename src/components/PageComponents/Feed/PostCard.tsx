@@ -49,6 +49,7 @@ const PostCard = ({
   const [repost, setRepost] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [repostCnt, setRepostCnt] = useState(repostCount);
+  const [commentCnt, setCommentCnt] = useState(comments);
   const [isFetching, setIsFetching] = useState(true);
   const [showFullText, setShowFullText] = useState(false);
   const [showEmbedFullText, setShowEmbedFullText] = useState(false);
@@ -310,6 +311,7 @@ const PostCard = ({
           uri={uri}
           cid={cid}
           handle={handle}
+          setCommentCnt={setCommentCnt}
         />
       </div>
     </div>
@@ -577,7 +579,7 @@ const PostCard = ({
               onClick={() => setShowCommentModal(true)}
             >
               <FiMessageCircle />
-              <p className="text-sm">{comments}</p>
+              <p className="text-sm">{commentCnt}</p>
             </div>
             <div className="flex items-center  gap-1 scale-[1.1]">
               <LuRepeat2
