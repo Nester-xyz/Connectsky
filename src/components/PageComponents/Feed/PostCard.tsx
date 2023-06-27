@@ -16,6 +16,7 @@ import {
 import { userImage } from "../../UI/DefaultUserImage";
 import "../../UI/static.css";
 import PostLoader from "./PostLoader";
+import PostComments from "./PostComments";
 // just a random Image I grabbed from the internet to show when no image is provided
 
 const MAX_WORDS = 40; // Maximum number of words to display initially
@@ -46,6 +47,7 @@ const PostCard = ({
   const [showFullText, setShowFullText] = useState(false);
   const [showEmbedFullText, setShowEmbedFullText] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [showCommentModal, setShowCommentModal] = useState(false);
   // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
   const navigate = useNavigate();
   const { setActivePage } = useContext(appContext);
@@ -264,6 +266,7 @@ const PostCard = ({
       }
     }
 
+
     // const processedLinks = handleLinks(text);
     // const stringWithLinksHandled = processedLinks?.__html || text;
 
@@ -296,9 +299,27 @@ const PostCard = ({
     // if (words === undefined) return;
     // return <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}></p>;
   };
+  const classModal = (
+    <div
+      onClick={() => {
+        // setShowCommentModal(false);
+      }}
+      className="fixed top-0 left-0 right-0 bottom-0 w-screen z-40 h-screen bg-slate-600 bg-opacity-80 flex justify-center items-center"
+    >
+      <div
+        className=" py-5 px-5"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <PostComments setShowCommentModal={setShowCommentModal} profileImg={profileImg} caption={caption} author={author} uri={uri} cid={cid} />
+      </div>
+    </div>
+  );
 
   return (
     <>
+      {showCommentModal && classModal}
       <div className="w-full bg-white px-8 py-3 rounded-xl ">
         {/* if replies available then this runs */}
         {/* {replyParent && (
@@ -339,9 +360,8 @@ const PostCard = ({
                 <LuRepeat2 /> &nbsp;{" "}
               </div>
               <div
-                className={`break-all text-sm line-clamp-1 ${
-                  reason?.did !== params.did && "cursor-pointer"
-                }`}
+                className={`break-all text-sm line-clamp-1 ${reason?.did !== params.did && "cursor-pointer"
+                  }`}
                 onClick={() => {
                   console.log(reason);
                   if (reason?.did == params.did) return;
@@ -353,9 +373,8 @@ const PostCard = ({
                 {" "}
                 Reposted by{" "}
                 <span
-                  className={`${
-                    reason?.did !== params.did && "hover:underline"
-                  }`}
+                  className={`${reason?.did !== params.did && "hover:underline"
+                    }`}
                 >
                   {reason?.by}
                 </span>
@@ -397,9 +416,8 @@ const PostCard = ({
 
                       {/* handle and username */}
                       <div
-                        className={`flex items-center gap-2  ${
-                          did !== params.did && "cursor-pointer hover:underline"
-                        }`}
+                        className={`flex items-center gap-2  ${did !== params.did && "cursor-pointer hover:underline"
+                          }`}
                         onClick={() => {
                           console.log(did);
                           if (did == params.did) return;
@@ -425,9 +443,8 @@ const PostCard = ({
                         <BiShare /> &nbsp;{" "}
                       </div>
                       <div
-                        className={`text-sm break-all line-clamp-1 ${
-                          reply?.did !== params.did && "cursor-pointer"
-                        }`}
+                        className={`text-sm break-all line-clamp-1 ${reply?.did !== params.did && "cursor-pointer"
+                          }`}
                         onClick={() => {
                           console.log(reply);
                           if (reply?.did == params.did) return;
@@ -438,9 +455,8 @@ const PostCard = ({
                       >
                         Replied to{" "}
                         <span
-                          className={`${
-                            reply?.did !== params.did && "hover:underline"
-                          }`}
+                          className={`${reply?.did !== params.did && "hover:underline"
+                            }`}
                         >
                           {reply?.by}
                         </span>
@@ -467,18 +483,18 @@ const PostCard = ({
         {image?.length == 0
           ? ""
           : image && (
-              <div>
-                {/* Render the post image */}
-                <div className="aspect-video overflow-hidden">
-                  <img
-                    src={image}
-                    alt=""
-                    className="h-full object-contain  cursor-pointer"
-                    onClick={() => setShowImageModal(true)}
-                  />
-                </div>
+            <div>
+              {/* Render the post image */}
+              <div className="aspect-video overflow-hidden">
+                <img
+                  src={image}
+                  alt=""
+                  className="h-full object-contain  cursor-pointer"
+                  onClick={() => setShowImageModal(true)}
+                />
               </div>
-            )}
+            </div>
+          )}
         {embed?.$type === "app.bsky.embed.record#view" &&
           embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
             <div className="flex flex-col p-4 border border-slate-300 rounded-lg mt-[4px]">
@@ -501,10 +517,9 @@ const PostCard = ({
                     )}
                   </div>
                   <div
-                    className={`flex items-center gap-2  ${
-                      embed.data?.author?.did !== params.did &&
+                    className={`flex items-center gap-2  ${embed.data?.author?.did !== params.did &&
                       "cursor-pointer hover:underline"
-                    }`}
+                      }`}
                     onClick={() => {
                       console.log(did);
                       if (embed.data?.author?.did == params.did) return;
@@ -553,7 +568,7 @@ const PostCard = ({
           <div
             className={`flex mt-5 text-xl gap-[4rem] items-center select-none `}
           >
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 cursor-pointer" onClick={() => setShowCommentModal(true)}>
               <FiMessageCircle />
               <p className="text-sm">{comments}</p>
             </div>
@@ -585,9 +600,8 @@ const PostCard = ({
         <div
           id="modal"
           onClick={() => setShowImageModal(false)}
-          className={`${
-            showImageModal ? "opacity-100" : "opacity-0 pointer-events-none"
-          } fixed top-0 left-0 z-40 w-screen h-screen bg-black/70 flex justify-center items-center transition-opacity duration-300`}
+          className={`${showImageModal ? "opacity-100" : "opacity-0 pointer-events-none"
+            } fixed top-0 left-0 z-40 w-screen h-screen bg-black/70 flex justify-center items-center transition-opacity duration-300`}
         >
           {/* <a
             className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
@@ -618,6 +632,10 @@ const PostCard = ({
             </div>
           </div>
         </div>
+        {/* Comment Modal */}
+        {/* {
+          showCommentModal && <PostComments />
+        } */}
       </div>
     </>
   );
