@@ -26,6 +26,26 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
       console.log(error);
     }
   }
+
+  async function getProfileAvatar() {
+    console.log(localStorage.getItem("did"));
+    const userDID = localStorage.getItem("did");
+    try {
+      await refreshSession();
+      if (userDID === null) return;
+      if (userDID === "") return;
+      const { data } = await agent.getProfile({
+        actor: userDID,
+      });
+      const avatar = data.avatar;
+      chrome.storage.sync.set({ avatar }, function () {
+        console.log("Value is set to " + avatar);
+      });
+      console.log(data.avatar);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     if (location.pathname == "/") {
       setActivePage("Home");
@@ -34,6 +54,7 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
 
   useEffect(() => {
     getUnreadNotifications();
+    getProfileAvatar();
     if (activePage == "Notifications") {
       setNotiCount(0);
       console.log("count 0");
