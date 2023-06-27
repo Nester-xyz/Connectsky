@@ -1,7 +1,7 @@
 import React from "react";
 import { AiOutlineHeart } from "react-icons/ai";
-import { BiRepost } from "react-icons/bi";
 import { FiMessageCircle } from "react-icons/fi";
+import { LuRepeat2 } from "react-icons/lu";
 
 type Props = {
   reply: string;
@@ -22,21 +22,24 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
             <div>
               <div className="flex flex-col items-center">
                 <div className="text-lg flex items-center">
-                  <FiMessageCircle />&nbsp;<p className='text-sm'>{post?.replyCount}</p>
+                  <FiMessageCircle />
+                  &nbsp;<p className="text-sm">{post?.replyCount}</p>
                 </div>
               </div>
             </div>
             <div>
               <div className="flex flex-col items-center">
                 <div className="text-xl flex items-center">
-                  <BiRepost />&nbsp; <p className='text-sm'>{post?.repostCount}</p>
+                  <LuRepeat2 />
+                  &nbsp; <p className="text-sm">{post?.repostCount}</p>
                 </div>
               </div>
             </div>
             <div>
               <div className="flex flex-col items-center">
                 <div className="text-lg flex items-center">
-                  <AiOutlineHeart />&nbsp; <p className='text-sm'>{post?.likeCount}</p>
+                  <AiOutlineHeart />
+                  &nbsp; <p className="text-sm">{post?.likeCount}</p>
                 </div>
               </div>
             </div>

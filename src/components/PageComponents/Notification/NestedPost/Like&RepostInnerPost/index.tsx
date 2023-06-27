@@ -1,7 +1,4 @@
 import React from "react";
-import { AiOutlineHeart } from "react-icons/ai";
-import { BiRepost } from "react-icons/bi";
-import { FiMessageCircle } from "react-icons/fi";
 
 type Props = {
   reply?: string;

@@ -1,6 +1,6 @@
 import React from "react";
 import { AiFillHeart } from "react-icons/ai";
-import { BiRepost } from "react-icons/bi";
+import { LuRepeat2 } from "react-icons/lu";
 import { BsReplyFill, BsFillChatLeftQuoteFill } from "react-icons/bs";
 import { VscMention } from "react-icons/vsc";
 import { MdPersonAddAlt1 } from "react-icons/md";
@@ -22,7 +22,7 @@ const Badges = ({ color, title }: Props) => {
       )}
       {title === "repost" && (
         <div className="mt-[0.05rem] ml-[0.05rem] text-sm">
-          <BiRepost />
+          <LuRepeat2 />
         </div>
       )}
       {title === "follow" && (

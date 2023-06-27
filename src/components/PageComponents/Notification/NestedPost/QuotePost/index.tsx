@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
-import { BiRepost } from "react-icons/bi";
+import { LuRepeat2 } from "react-icons/lu";
 import { FiMessageCircle } from "react-icons/fi";
 import { formatDateAgo } from "../../../../../utils";
 import { useNavigate } from "react-router-dom";
@@ -82,7 +82,7 @@ const QuotePost = ({ reply, post }: Props) => {
             <div>
               <div className="flex flex-col items-center">
                 <div className="text-xl flex items-center">
-                  <BiRepost />
+                  <LuRepeat2 />
                   &nbsp; <p className="text-sm">{post.repostCount}</p>
                 </div>
               </div>

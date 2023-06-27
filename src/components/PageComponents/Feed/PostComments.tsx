@@ -6,8 +6,9 @@ import React, {
   CSSProperties,
 } from "react";
 import { SlClose } from "react-icons/sl";
-import { agent, refreshSession } from "../../../utils";
+import { agent, refreshSession, handleSplit } from "../../../utils";
 import ClipLoader from "react-spinners/ClipLoader";
+import { userImage } from "../../UI/DefaultUserImage";
 
 const override: CSSProperties = {
   display: "block",
@@ -20,6 +21,7 @@ type props = {
   author: string | undefined;
   uri: string | undefined;
   cid: string | undefined;
+  handle: string;
 };
 const PostComments = ({
   setShowCommentModal,
@@ -28,6 +30,7 @@ const PostComments = ({
   author,
   uri,
   cid,
+  handle,
 }: props) => {
   const [textFieldValue, setTextFieldValue] = useState("");
   const [avatarURL, setAvatarURL] = useState("");
@@ -78,7 +81,7 @@ const PostComments = ({
         <div className="flex justify-between mb-2">
           <button
             onClick={() => setShowCommentModal(false)}
-            className="px-4 rounded-md focus:outline-none font-bold text-xl"
+            className=" rounded-md focus:outline-none font-bold text-xl"
           >
             <SlClose size={22} />
           </button>
@@ -108,13 +111,15 @@ const PostComments = ({
         <div className="flex gap-2 border-y-[1px] border-slate-300 py-2">
           <div className="w-10 h-10 flex-shrink-0">
             <img
-              src={profileImg}
+              src={profileImg === undefined ? userImage : profileImg}
               alt=""
               className="rounded-full w-10 h-10 aspect-square"
             />
           </div>
           <div>
-            <p className="text-lg">{author}</p>
+            <p className="text-lg">
+              {author === undefined ? handleSplit(handle) : author}
+            </p>
             <p className="text-md line-clamp-3">{caption}</p>
           </div>
         </div>
