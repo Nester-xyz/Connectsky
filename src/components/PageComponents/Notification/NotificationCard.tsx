@@ -18,6 +18,8 @@ type NotificationCardProps = {
   reply: string;
   reasonSubject: string;
   post: any;
+  uri: string;
+  cid: string;
 };
 
 const NotificationCard = ({
@@ -30,6 +32,8 @@ const NotificationCard = ({
   authorDiD,
   reasonSubject,
   post,
+  uri,
+  cid,
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
   const [ogText, setOgText] = useState<any | unknown>({});
@@ -127,15 +131,15 @@ const NotificationCard = ({
             : "hidden"
             } px-3 w-full -mt-3 py-1`}
         >
-          {title === "reply" && <ReplyInnerPOst reply={reply} post={post} image={image} />}
+          {title === "reply" && <ReplyInnerPOst reply={reply} post={post} image={image} uri={uri} cid={cid} author={author} handle={handle} />}
           {title === "mention" && (
             <div className="mt-[-0.2rem]">
-              <ReplyInnerPOst reply={reply} post={post} image={image} />
+              <ReplyInnerPOst reply={reply} post={post} image={image} uri={uri} cid={cid} author={author} handle={handle} />
             </div>
           )}
           {title === "like" && <LikeInnerPost ogText={ogText} />}
           {title === "repost" && <LikeInnerPost ogText={ogText} />}
-          {title === "quote" && <QuotePost reply={reply} post={post} image={image} />}
+          {title === "quote" && <QuotePost reply={reply} post={post} image={image} uri={uri} cid={cid} author={author} handle={handle} />}
         </div>
       )}
     </div>
