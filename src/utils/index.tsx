@@ -172,3 +172,56 @@ export function handleSplit(handle: string | undefined) {
   if (!handle) return "";
   return handle.split(".")[0];
 }
+
+
+export async function disLikeApi(uri: string, cid: string) {
+  await refreshSession();
+  const res = await agent.like(uri, cid);
+  await agent.deleteLike(res.uri);
+}
+
+export async function likeApi(uri: string, cid: string) {
+  await refreshSession();
+  await agent.like(uri, cid);
+}
+
+function isAvailable(handle: string) {
+  const localHandle = localStorage.getItem("handle");
+  return handle === localHandle;
+}
+
+export async function deleteRepostApi(uri: string, cid: string) {
+  await refreshSession();
+  const res = await agent.repost(uri, cid);
+  await agent.deleteRepost(res.uri);
+}
+export async function repostApi(uri: string, cid: string) {
+  await refreshSession();
+  await agent.repost(uri, cid);
+}
+
+export async function checkIfLikedApi(uri: string, cid: string) {
+  try {
+    const { data } = await agent.getLikes({ uri, cid });
+    const alreadyLiked = data.likes.some((item) =>
+      isAvailable(item.actor.handle)
+    );
+    return alreadyLiked;
+  } catch (error) {
+    console.log(error);
+  }
+  return false;
+}
+
+export async function checkIfAlreadyRepost(uri: string, cid: string) {
+  try {
+    const { data } = await agent.getRepostedBy({ uri, cid });
+    const alreadyReposted = data.repostedBy.some((item) =>
+      isAvailable(item.handle)
+    );
+    return alreadyReposted;
+  } catch (error) {
+    console.log(error);
+  }
+  return false;
+}

@@ -8,10 +8,16 @@ import { fieldDataProps } from "../../../components/@types/Feed/Feed";
 import { appContext } from "../../../context/appContext";
 import {
   agent,
+  checkIfAlreadyRepost,
+  checkIfLikedApi,
+  deleteRepostApi,
+  disLikeApi,
   formatDateAgo,
   handleLinks,
   handleSplit,
+  likeApi,
   refreshSession,
+  repostApi,
 } from "../../../utils";
 import { userImage } from "../../UI/DefaultUserImage";
 import "../../UI/static.css";
@@ -57,14 +63,11 @@ const PostCard = ({
       if (repost) {
         setRepost(!repost);
         setRepostCnt((prev) => prev - 1);
-        await refreshSession();
-        const res = await agent.repost(uri, cid);
-        await agent.deleteRepost(res.uri);
+        await deleteRepostApi(uri, cid);
       } else {
         setRepost(!repost);
         setRepostCnt((prev) => prev + 1);
-        await refreshSession();
-        await agent.repost(uri, cid);
+        await repostApi(uri, cid);
       }
     } catch (error) {
       console.log(error);
@@ -75,14 +78,11 @@ const PostCard = ({
       if (like) {
         setLike(!like);
         setLikeCount((prev) => prev - 1);
-        await refreshSession();
-        const res = await agent.like(uri, cid);
-        await agent.deleteLike(res.uri);
+        await disLikeApi(uri, cid);
       } else {
         setLike(!like);
         setLikeCount((prev) => prev + 1);
-        await refreshSession();
-        await agent.like(uri, cid);
+        await likeApi(uri, cid);
       }
     } catch (error) {
       console.log(error);
@@ -96,10 +96,7 @@ const PostCard = ({
 
   async function checkAlreadyLiked() {
     try {
-      const { data } = await agent.getLikes({ uri, cid });
-      const alreadyLiked = data.likes.some((item) =>
-        isAvailable(item.actor.handle)
-      );
+      const alreadyLiked = await checkIfLikedApi(uri, cid);
       setLike(alreadyLiked);
     } catch (error) {
       console.log(error);
@@ -107,10 +104,7 @@ const PostCard = ({
   }
   async function checkAlreadyRepost() {
     try {
-      const { data } = await agent.getRepostedBy({ uri, cid });
-      const alreadyReposted = data.repostedBy.some((item) =>
-        isAvailable(item.handle)
-      );
+      const alreadyReposted = await checkIfAlreadyRepost(uri, cid);
       setRepost(alreadyReposted);
     } catch (error) {
       console.log(error);

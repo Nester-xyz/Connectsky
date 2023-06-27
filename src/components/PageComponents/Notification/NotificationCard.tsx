@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { agent, refreshSession, formatDateAgo } from "../../../utils";
-
 import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
 import LikeInnerPost from "./NestedPost/Like&RepostInnerPost";
 import Badges from "./Badges";
@@ -119,25 +118,24 @@ const NotificationCard = ({
       </div>
       {isAvailabePost && (
         <div
-          className={`${
-            title === "reply" ||
+          className={`${title === "reply" ||
             title === "like" ||
             title === "repost" ||
             title === "mention" ||
             title === "quote"
-              ? "block"
-              : "hidden"
-          } px-3 w-full -mt-3 py-1`}
+            ? "block"
+            : "hidden"
+            } px-3 w-full -mt-3 py-1`}
         >
-          {title === "reply" && <ReplyInnerPOst reply={reply} post={post} />}
+          {title === "reply" && <ReplyInnerPOst reply={reply} post={post} image={image} />}
           {title === "mention" && (
             <div className="mt-[-0.2rem]">
-              <ReplyInnerPOst reply={reply} post={post} />
+              <ReplyInnerPOst reply={reply} post={post} image={image} />
             </div>
           )}
           {title === "like" && <LikeInnerPost ogText={ogText} />}
           {title === "repost" && <LikeInnerPost ogText={ogText} />}
-          {title === "quote" && <QuotePost reply={reply} post={post} />}
+          {title === "quote" && <QuotePost reply={reply} post={post} image={image} />}
         </div>
       )}
     </div>
