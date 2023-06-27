@@ -81,7 +81,7 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
           e.stopPropagation();
         }}
       >
-        <PostComments setShowCommentModal={setShowCommentModal} profileImg={image} caption={reply} author={post.author.displayName} uri={post.uri} cid={post.cid} />
+        <PostComments setShowCommentModal={setShowCommentModal} profileImg={image} caption={reply} author={post.author.displayName} uri={post.uri} cid={post.cid} handle={post.author.handle} />
       </div>
     </div>
   );
