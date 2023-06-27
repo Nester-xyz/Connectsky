@@ -44,7 +44,7 @@ const PostSection: React.FC<Props> = ({
       const file = files[0];
       const localImageURL = URL.createObjectURL(file);
       setImgUpload(localImageURL);
-      const fileArrrayBuffer = await readFileAsArrayBuffer(file);
+      const fileArrrayBuffer = await readFileAsArrayBuffer({ file });
       const fileUint8Array = new Uint8Array(fileArrrayBuffer);
       setUploadedFile(fileUint8Array);
     }

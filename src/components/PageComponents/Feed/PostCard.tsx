@@ -1,24 +1,31 @@
-import React, { useState, useEffect, useContext } from "react";
-import { fieldDataProps } from "../../../components/@types/Feed/Feed";
-
+import React, { useContext, useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { LuRepeat2 } from "react-icons/lu";
+import { BiShare } from "react-icons/bi";
 import { FiMessageCircle } from "react-icons/fi";
-import { BiShare, BiRepost } from "react-icons/bi";
+import { useNavigate, useParams } from "react-router-dom";
+import { fieldDataProps } from "../../../components/@types/Feed/Feed";
+import { appContext } from "../../../context/appContext";
 import {
   agent,
+  checkIfAlreadyRepost,
+  checkIfLikedApi,
+  deleteRepostApi,
+  disLikeApi,
   formatDateAgo,
   handleLinks,
   handleSplit,
+  likeApi,
   refreshSession,
+  repostApi,
 } from "../../../utils";
-import PostLoader from "./PostLoader";
 import { userImage } from "../../UI/DefaultUserImage";
-import { useNavigate } from "react-router-dom";
-import { appContext } from "../../../context/appContext";
-import { useParams } from "react-router-dom";
+import "../../UI/static.css";
+import PostLoader from "./PostLoader";
+import PostComments from "./PostComments";
 // just a random Image I grabbed from the internet to show when no image is provided
 
-const MAX_WORDS = 20; // Maximum number of words to display initially
+const MAX_WORDS = 40; // Maximum number of words to display initially
 const PostCard = ({
   author,
   handle,
@@ -42,10 +49,12 @@ const PostCard = ({
   const [repost, setRepost] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [repostCnt, setRepostCnt] = useState(repostCount);
+  const [commentCnt, setCommentCnt] = useState(comments);
   const [isFetching, setIsFetching] = useState(true);
   const [showFullText, setShowFullText] = useState(false);
   const [showEmbedFullText, setShowEmbedFullText] = useState(false);
-  // const [handleSplit, setHandleSplit] = useState<string | undefined>("");
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [showCommentModal, setShowCommentModal] = useState(false);
   const navigate = useNavigate();
   const { setActivePage } = useContext(appContext);
   const params = useParams();
@@ -54,14 +63,11 @@ const PostCard = ({
       if (repost) {
         setRepost(!repost);
         setRepostCnt((prev) => prev - 1);
-        await refreshSession();
-        const res = await agent.repost(uri, cid);
-        await agent.deleteRepost(res.uri);
+        await deleteRepostApi(uri, cid);
       } else {
         setRepost(!repost);
         setRepostCnt((prev) => prev + 1);
-        await refreshSession();
-        await agent.repost(uri, cid);
+        await repostApi(uri, cid);
       }
     } catch (error) {
       console.log(error);
@@ -72,14 +78,11 @@ const PostCard = ({
       if (like) {
         setLike(!like);
         setLikeCount((prev) => prev - 1);
-        await refreshSession();
-        const res = await agent.like(uri, cid);
-        await agent.deleteLike(res.uri);
+        await disLikeApi(uri, cid);
       } else {
         setLike(!like);
         setLikeCount((prev) => prev + 1);
-        await refreshSession();
-        await agent.like(uri, cid);
+        await likeApi(uri, cid);
       }
     } catch (error) {
       console.log(error);
@@ -93,10 +96,7 @@ const PostCard = ({
 
   async function checkAlreadyLiked() {
     try {
-      const { data } = await agent.getLikes({ uri, cid });
-      const alreadyLiked = data.likes.some((item) =>
-        isAvailable(item.actor.handle)
-      );
+      const alreadyLiked = await checkIfLikedApi(uri, cid);
       setLike(alreadyLiked);
     } catch (error) {
       console.log(error);
@@ -104,10 +104,7 @@ const PostCard = ({
   }
   async function checkAlreadyRepost() {
     try {
-      const { data } = await agent.getRepostedBy({ uri, cid });
-      const alreadyReposted = data.repostedBy.some((item) =>
-        isAvailable(item.handle)
-      );
+      const alreadyReposted = await checkIfAlreadyRepost(uri, cid);
       setRepost(alreadyReposted);
     } catch (error) {
       console.log(error);
@@ -123,8 +120,6 @@ const PostCard = ({
     }
     dataFetcher();
     if (handle === undefined) return undefined;
-
-    // setHandleSplit(handle.split(".")[0]);
   }, [cid, uri]);
 
   if (isFetching) {
@@ -295,12 +290,39 @@ const PostCard = ({
     // if (words === undefined) return;
     // return <p dangerouslySetInnerHTML={{ __html: words.join(" ") }}></p>;
   };
+  const classModal = (
+    <div
+      onClick={() => {
+        // setShowCommentModal(false);
+      }}
+      className="fixed top-0 left-0 right-0 bottom-0 w-screen z-40 h-screen bg-slate-600 bg-opacity-80 flex justify-center items-center"
+    >
+      <div
+        className=" py-5 px-5"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <PostComments
+          setShowCommentModal={setShowCommentModal}
+          profileImg={profileImg}
+          caption={caption}
+          author={author}
+          uri={uri}
+          cid={cid}
+          handle={handle}
+          setCommentCnt={setCommentCnt}
+        />
+      </div>
+    </div>
+  );
 
   return (
     <>
+      {showCommentModal && classModal}
       <div className="w-full bg-white px-8 py-3 rounded-xl ">
         {/* if replies available then this runs */}
-        {replyParent && (
+        {/* {replyParent && (
           <div className="-mx-5 border-b border-slate-200">
             <PostCard
               author={replyParent?.author?.displayName}
@@ -329,13 +351,13 @@ const PostCard = ({
               isFromProfile={isFromProfile}
             />
           </div>
-        )}
+        )} */}
         <div className="flex flex-col mt-3 w-full ">
           {/* Render author's profile image, name and caption */}
           {reason?.by !== undefined && (
-            <div className="text-slate-600 flex flex-row items-center ">
-              <div className="text-lg flex items-center">
-                <BiRepost /> &nbsp;{" "}
+            <div className={`text-slate-600 flex flex-row items-center `}>
+              <div className="text-base flex items-center">
+                <LuRepeat2 /> &nbsp;{" "}
               </div>
               <div
                 className={`break-all text-sm line-clamp-1 ${
@@ -361,9 +383,11 @@ const PostCard = ({
               </div>
             </div>
           )}
-          <div className="flex flex-col gap-2">
+          <div
+            className={`flex flex-col gap-2 ${reply?.did ? "ml-[-12px]" : ""} `}
+          >
             <div className="flex justify-between">
-              <div className="flex flex-col">
+              <div className={`flex flex-col ${reply?.did ? "ml-3" : ""}`}>
                 <div className="flex gap-4 items-center">
                   <div className="w-10 h-10 rounded-full overflow-hidden min-w-fit">
                     {/* <img src={userImage} alt="" className="w-10 h-10 object-cover" /> */}
@@ -382,7 +406,7 @@ const PostCard = ({
                       />
                     )}
                   </div>
-                  <div className="text-xl flex flex-col  w-full">
+                  <div className="text-xl flex flex-col">
                     <div className="flex flex-row-reverse items-center gap-2 bg--300 h-10 flex-nowrap">
                       {/* time stamp */}
                       <div className="flex items-center gap-2">
@@ -447,8 +471,8 @@ const PostCard = ({
                 </div>
               </div>
             </div>
-            <div className="flex">
-              <p className="text-lg text-thin">
+            <div className={`flex ${reply?.did ? "ml-3" : ""}`}>
+              <p className="text-[15px] font-light tracking-[.020em] text-slate-800 feed-caption">
                 <span
                 // dangerouslySetInnerHTML={{
                 //   __html: handleLongText(caption),
@@ -466,18 +490,19 @@ const PostCard = ({
           : image && (
               <div>
                 {/* Render the post image */}
-                <div className="w-full aspect-video overflow-hidden">
+                <div className="aspect-video overflow-hidden">
                   <img
                     src={image}
                     alt=""
-                    className="w-full h-full object-contain"
+                    className="h-full object-contain  cursor-pointer"
+                    onClick={() => setShowImageModal(true)}
                   />
                 </div>
               </div>
             )}
         {embed?.$type === "app.bsky.embed.record#view" &&
           embed?.data?.$type !== "app.bsky.feed.defs#generatorView" && (
-            <div className="flex flex-col p-4 border-2 border-slate-200 rounded-lg drop-shadow-md">
+            <div className="flex flex-col p-4 border border-slate-300 rounded-lg mt-[4px]">
               <div className="flex flex-row justify-between items-center ">
                 {/* section of the profileImage,handle,time, */}
                 <div className="flex flex-row items-center w-full gap-2">
@@ -509,7 +534,7 @@ const PostCard = ({
                       isFromProfile && window.location.reload();
                     }}
                   >
-                    <div className="text-lg  break-all line-clamp-1">
+                    <div className="text-lg break-all line-clamp-1">
                       {embed?.data?.author?.displayName === undefined
                         ? handleSplit(embed?.data?.author?.handle)
                         : embed?.data?.author?.displayName}
@@ -527,13 +552,18 @@ const PostCard = ({
                 </div>
               </div>
               {/* section for text */}
-              <div className="text-base mt-1">
+              <div className="text-base mt-1 feed-caption">
                 {handleLongText(embed?.data?.value?.text, false)}
               </div>
               <div>
                 {/* section for image if available; */}
                 {embed.data?.embeds && embed.data?.embeds[0]?.images && (
-                  <img src={embed?.data?.embeds[0]?.images[0]?.thumb} alt="" />
+                  <img
+                    className="cursor-pointer"
+                    src={embed?.data?.embeds[0]?.images[0]?.thumb}
+                    alt=""
+                    onClick={() => setShowImageModal(true)}
+                  />
                 )}
               </div>
             </div>
@@ -541,15 +571,21 @@ const PostCard = ({
 
         <div>
           {/* Render the number of likes and comments */}
-          <div className="flex mt-5 text-xl gap-16 items-center select-none">
-            <div className="flex items-center gap-1">
+          <div
+            className={`flex mt-5 text-xl gap-[4rem] items-center select-none `}
+          >
+            <div
+              className="flex items-center gap-1 cursor-pointer"
+              onClick={() => setShowCommentModal(true)}
+            >
               <FiMessageCircle />
-              <p className="text-sm">{comments}</p>
+              <p className="text-sm">{commentCnt}</p>
             </div>
-            <div className="flex items-center text-3xl gap-1">
-              <BiRepost
+            <div className="flex items-center  gap-1 scale-[1.1]">
+              <LuRepeat2
                 className={`cursor-pointer ${repost ? "text-green-500" : ""}`}
                 onClick={handleRepost}
+                style={{ opacity: 0.8 }}
               />
               <p className="text-sm">{repostCnt}</p>
             </div>
@@ -569,6 +605,47 @@ const PostCard = ({
             </div>
           </div>
         </div>
+        {/* Modal here */}
+        <div
+          id="modal"
+          onClick={() => setShowImageModal(false)}
+          className={`${
+            showImageModal ? "opacity-100" : "opacity-0 pointer-events-none"
+          } fixed top-0 left-0 z-40 w-screen h-screen bg-black/70 flex justify-center items-center transition-opacity duration-300`}
+        >
+          {/* <a
+            className="fixed z-90 top-6 right-8 text-white text-5xl font-bold"
+            href="javascript:void(0)"
+            onClick={() => setShowImageModal(false)}
+          >
+            HI
+          </a> */}
+          <div className="relative">
+            <div className="mx-5">
+              <img
+                id="modal-img"
+                src={
+                  embed?.data?.embeds
+                    ? embed?.data?.embeds[0]?.images?.[0]?.thumb
+                    : image
+                }
+                className=" w-full max-h-[520px] object-contain relative"
+              />
+              <div className="absolute -top-12 right-8 w-4 h-4">
+                <div
+                  className="text-5xl text-white font-bold cursor-pointer"
+                  onClick={() => setShowImageModal(false)}
+                >
+                  &times;
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Comment Modal */}
+        {/* {
+          showCommentModal && <PostComments />
+        } */}
       </div>
     </>
   );

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { agent, refreshSession, formatDateAgo } from "../../../utils";
-
 import ReplyInnerPOst from "./NestedPost/ReplyInnerPost";
 import LikeInnerPost from "./NestedPost/Like&RepostInnerPost";
 import Badges from "./Badges";
@@ -19,6 +18,8 @@ type NotificationCardProps = {
   reply: string;
   reasonSubject: string;
   post: any;
+  uri: string;
+  cid: string;
 };
 
 const NotificationCard = ({
@@ -31,15 +32,30 @@ const NotificationCard = ({
   authorDiD,
   reasonSubject,
   post,
+  uri,
+  cid,
 }: NotificationCardProps) => {
   const [handleSplit, setHandleSplit] = useState("");
-  const [ogText, setOgText] = useState<any | unknown>({});
+  const [ogText, setOgText] = useState<any | unknown>(post);
   const [isAvailabePost, setIsAvailabePost] = useState(true);
   const { setActivePage } = useContext(appContext);
   const navigate = useNavigate();
+  console.log("post is", post, "reply is", reply);
+  async function getPostDetails() {
+    try {
+      const { data } = await agent.getPostThread({
+        uri: uri,
+      });
+      if (data.error === "NotFound") return;
+      console.log("notifications post data", data.thread.post, "reply is", reply)
+      setOgText(data.thread.post);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     setHandleSplit(handle.split(".")[0]);
-    setOgText(post);
+    // getPostDetails();
   }, []);
 
   let reason = "";
@@ -119,25 +135,24 @@ const NotificationCard = ({
       </div>
       {isAvailabePost && (
         <div
-          className={`${
-            title === "reply" ||
+          className={`${title === "reply" ||
             title === "like" ||
             title === "repost" ||
             title === "mention" ||
             title === "quote"
-              ? "block"
-              : "hidden"
-          } px-3 w-full -mt-3 py-1`}
+            ? "block"
+            : "hidden"
+            } px-3 w-full -mt-3 py-1`}
         >
-          {title === "reply" && <ReplyInnerPOst reply={reply} post={post} />}
+          {title === "reply" && <ReplyInnerPOst reply={reply} post={ogText} image={image} uri={uri} cid={cid} author={author} handle={handle} />}
           {title === "mention" && (
             <div className="mt-[-0.2rem]">
-              <ReplyInnerPOst reply={reply} post={post} />
+              <ReplyInnerPOst reply={reply} post={post} image={image} uri={uri} cid={cid} author={author} handle={handle} />
             </div>
           )}
           {title === "like" && <LikeInnerPost ogText={ogText} />}
           {title === "repost" && <LikeInnerPost ogText={ogText} />}
-          {title === "quote" && <QuotePost reply={reply} post={post} />}
+          {title === "quote" && <QuotePost reply={reply} post={ogText} image={image} uri={uri} cid={cid} author={author} handle={handle} />}
         </div>
       )}
     </div>

@@ -104,7 +104,6 @@ const Feed = () => {
     });
     if (data.cursor == null) return;
     setCursor(data.cursor);
-    // console.log(data);
     const mappedData: dataGotFromApi[] = data.feed.map((feed: any) => {
       // console.log(feed);
       const images =
@@ -116,12 +115,12 @@ const Feed = () => {
       return {
         reason: {
           by: feed.reason?.by?.displayName,
-          did: feed.reason?.by?.did
+          did: feed.reason?.by?.did,
         },
         reply: {
           text: feed.reply?.parent?.record?.text,
           by: feed.reply?.parent?.author?.displayName,
-          did: feed.reply?.parent?.author?.did
+          did: feed.reply?.parent?.author?.did,
         },
         author: {
           displayName: feed.post.author.displayName,
@@ -198,7 +197,7 @@ const Feed = () => {
       ) : (
         <div className="w-full h-full">
           <button
-            className="md:hidden z-50 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white"
+            className="md:hidden z-30 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white pb-[6px]"
             onClick={() => setShowAddPost(true)}
           >
             +

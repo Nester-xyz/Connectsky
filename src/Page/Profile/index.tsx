@@ -5,6 +5,7 @@ import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 import PostCard from "../../components/PageComponents/Feed/PostCard";
 import { useParams } from "react-router-dom";
 import { userImage } from "../../components/UI/DefaultUserImage";
+import "../../components/UI/static.css";
 
 type Props = {};
 
@@ -210,7 +211,7 @@ const index = (props: Props) => {
       {/* profile details */}
       <div className="flex flex-col gap-3 mt-[64px]">
         <div className="flex flex-col">
-          <div className="text-2xl font-bold ml-2">
+          <div className="text-2xl display-font ml-2">
             {displayName === undefined ? handle : displayName}
           </div>
           <div className="flex ml-2 gap-2">

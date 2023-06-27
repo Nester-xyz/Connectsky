@@ -6,7 +6,13 @@ import { IoMdNotifications } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
-export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
+import ProfileImage from "./profileImage";
+
+export function readFileAsArrayBuffer({
+  file,
+}: {
+  file: File;
+}): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as ArrayBuffer);
@@ -59,8 +65,18 @@ export const links: linksType[] = [
   {
     linkName: "Profile",
     links: `/profile/${getUserDid()}`,
-    icon: <FaRegUserCircle />,
-    activeIcon: <FaUserCircle />,
+    icon: <ProfileImage />,
+    activeIcon: (
+      <ProfileImage
+        style={{
+          border: "1px solid #005A9C",
+          borderRadius: "50%",
+          padding: "1px",
+          objectFit: "cover",
+          scale: "1.2",
+        }}
+      />
+    ),
   },
 ];
 
@@ -155,4 +171,57 @@ export function handleLinks(
 export function handleSplit(handle: string | undefined) {
   if (!handle) return "";
   return handle.split(".")[0];
+}
+
+
+export async function disLikeApi(uri: string, cid: string) {
+  await refreshSession();
+  const res = await agent.like(uri, cid);
+  await agent.deleteLike(res.uri);
+}
+
+export async function likeApi(uri: string, cid: string) {
+  await refreshSession();
+  await agent.like(uri, cid);
+}
+
+function isAvailable(handle: string) {
+  const localHandle = localStorage.getItem("handle");
+  return handle === localHandle;
+}
+
+export async function deleteRepostApi(uri: string, cid: string) {
+  await refreshSession();
+  const res = await agent.repost(uri, cid);
+  await agent.deleteRepost(res.uri);
+}
+export async function repostApi(uri: string, cid: string) {
+  await refreshSession();
+  await agent.repost(uri, cid);
+}
+
+export async function checkIfLikedApi(uri: string, cid: string) {
+  try {
+    const { data } = await agent.getLikes({ uri, cid });
+    const alreadyLiked = data.likes.some((item) =>
+      isAvailable(item.actor.handle)
+    );
+    return alreadyLiked;
+  } catch (error) {
+    console.log(error);
+  }
+  return false;
+}
+
+export async function checkIfAlreadyRepost(uri: string, cid: string) {
+  try {
+    const { data } = await agent.getRepostedBy({ uri, cid });
+    const alreadyReposted = data.repostedBy.some((item) =>
+      isAvailable(item.handle)
+    );
+    return alreadyReposted;
+  } catch (error) {
+    console.log(error);
+  }
+  return false;
 }
