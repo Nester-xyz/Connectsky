@@ -16,9 +16,21 @@ type Props = {
   reply: string;
   image?: string;
   post?: any;
+  uri: string;
+  cid: string;
+  author: string;
+  handle: string;
 };
 
-const ReplyInnerPOst = ({ reply, image, post }: Props) => {
+const ReplyInnerPOst = ({
+  reply,
+  image,
+  post,
+  uri,
+  cid,
+  author,
+  handle,
+}: Props) => {
   console.log(reply);
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
@@ -33,11 +45,11 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
       if (repost) {
         setRepost(!repost);
         setRepostCnt((prev: number) => prev - 1);
-        await deleteRepostApi(post.uri, post.cid);
+        await deleteRepostApi(uri, cid);
       } else {
         setRepost(!repost);
         setRepostCnt((prev: number) => prev + 1);
-        await repostApi(post.uri, post.cid);
+        await repostApi(uri, cid);
       }
     } catch (error) {
       console.log(error);
@@ -49,11 +61,11 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
       if (like) {
         setLike(!like);
         setLikeCount((prev: number) => prev - 1);
-        await disLikeApi(post.uri, post.cid);
+        await disLikeApi(uri, cid);
       } else {
         setLike(!like);
         setLikeCount((prev: number) => prev + 1);
-        await likeApi(post.uri, post.cid);
+        await likeApi(uri, cid);
       }
     } catch (error) {
       console.log(error);
@@ -62,7 +74,7 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
 
   async function checkAlreadyLiked() {
     try {
-      const alreadyLiked = await checkIfLikedApi(post.uri, post.cid);
+      const alreadyLiked = await checkIfLikedApi(uri, cid);
       setLike(alreadyLiked);
     } catch (error) {
       console.log(error);
@@ -70,7 +82,7 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
   }
   async function checkAlreadyRepost() {
     try {
-      const alreadyReposted = await checkIfAlreadyRepost(post.uri, post.cid);
+      const alreadyReposted = await checkIfAlreadyRepost(uri, cid);
       setRepost(alreadyReposted);
     } catch (error) {
       console.log(error);
@@ -93,10 +105,10 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
           setShowCommentModal={setShowCommentModal}
           profileImg={image}
           caption={reply}
-          author={post.author.displayName}
-          uri={post.uri}
-          cid={post.cid}
-          handle={post.author.handle}
+          author={author}
+          uri={uri}
+          cid={cid}
+          handle={handle}
           setCommentCnt={setCommentCnt}
         />
       </div>
@@ -112,7 +124,7 @@ const ReplyInnerPOst = ({ reply, image, post }: Props) => {
     }
     dataFetcher();
     // setHandleSplit(handle.split(".")[0]);
-  }, [post.cid, post.uri]);
+  }, [cid, uri]);
   return (
     <>
       {showCommentModal && classModal}

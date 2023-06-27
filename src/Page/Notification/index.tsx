@@ -13,6 +13,8 @@ interface NotificationItem {
   reply: string;
   reasonSubject: string;
   post: any;
+  uri: string;
+  cid: string;
 }
 
 const Notification = () => {
@@ -52,6 +54,8 @@ const Notification = () => {
         }
 
         return {
+          uri: notification.uri,
+          cid: notification.cid,
           image: notification.author.avatar,
           title: notification.reason,
           author: notification.author.displayName,
@@ -130,6 +134,8 @@ const Notification = () => {
                     authorDiD={item.authorDiD}
                     reasonSubject={item.reasonSubject}
                     post={item.post}
+                    uri={item.uri}
+                    cid={item.cid}
                   />
                 </div>
               );
@@ -146,6 +152,8 @@ const Notification = () => {
                     authorDiD={item.authorDiD}
                     reasonSubject={item.reasonSubject}
                     post={item.post}
+                    uri={item.uri}
+                    cid={item.cid}
                   />
                 </div>
               );

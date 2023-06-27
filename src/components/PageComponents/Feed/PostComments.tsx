@@ -90,9 +90,8 @@ const PostComments = ({
           </button>
           <button
             onClick={handleSubmit}
-            className={`bg-blue-500 text-white text-md py-2 rounded-full focus:outline-none ${
-              isReplying ? "px-[22.75px]" : "px-4"
-            }`}
+            className={`bg-blue-500 text-white text-md py-2 rounded-full focus:outline-none ${isReplying ? "px-[22.75px]" : "px-4"
+              }`}
           >
             {isReplying ? (
               <ClipLoader
