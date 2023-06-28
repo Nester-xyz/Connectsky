@@ -4,7 +4,7 @@ import PostCard from "../../components/PageComponents/Feed/PostCard";
 import { BlobRef } from "@atproto/api";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
-
+import { HiOutlinePencilSquare } from 'react-icons/hi2'
 import { agent, refreshSession } from "../../utils";
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 // the component begins here
@@ -195,12 +195,13 @@ const Feed = () => {
           submitPost={submitPost}
         />
       ) : (
-        <div className="w-full h-full">
+        <div className="w-full h-full relative">
           <button
-            className="md:hidden z-30 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white pb-[6px]"
+            // className="md:hidden z-30 fixed bottom-20 right-8 w-12 h-12 bg-blue-500 rounded-full text-4xl flex items-center justify-center text-white pb-[6px]"
+            className="md:hidden p-3 fixed right-10 bottom-20 z-30 bg-blue-500 rounded-full text-2xl text-white"
             onClick={() => setShowAddPost(true)}
           >
-            +
+            <HiOutlinePencilSquare />
           </button>
 
           <div className="grid grid-cols-4 gap-5 h-screen relative">
