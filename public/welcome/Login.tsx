@@ -84,14 +84,34 @@ const Login = React.memo(
           chrome.storage.sync.set({ avatar }, function () {
             console.log("Value is set to " + avatar);
           });
-
-          localStorage.setItem("handle", sess?.handle);
-          localStorage.setItem("accessJWT", sess?.accessJwt);
-          localStorage.setItem("refreshJWT", sess?.refreshJwt);
-          localStorage.setItem("did", sess?.did);
-          if (sess?.email) localStorage.setItem("email", sess?.email);
+          const handle = sess?.handle;
+          chrome.storage.sync.set({ handle}, function() {
+            console.log('Value is set to' + handle);
+          });
+        
+          const accessJWT = sess?.accessJwt;
+          chrome.storage.sync.set({accessJWT}, function() {
+            console.log("Value is set to" + accessJWT);
+          })
+      
+          const refreshJWT = sess?.refreshJwt;
+          chrome.storage.sync.set({refreshJWT}, function() {
+            console.log("Value is set to" + refreshJWT);
+          })
+          const did = sess?.did;
+         
+          chrome.storage.sync.set({refreshJWT}, function() {
+            console.log("Value is set to" + refreshJWT);
+          })
+          const email = sess?.email;
+          if (sess?.email) chrome.storage.sync.set({email}, function() {
+            console.log("Value is set to" + email);
+          });
           const sessData = JSON.stringify(sess);
-          localStorage.setItem("sess", sessData);
+          chrome.storage.sync.set({sessData}, function() {
+            console.log("Value is set to" + sessData);
+          })
+         
           if (sess != null) {
             // setSession(sess!);
             setLoggedInSuccess(true);
@@ -138,13 +158,6 @@ const Login = React.memo(
     //         //   console.log(error);
     //         // }
 
-    //         localStorage.setItem("handle", sess?.handle);
-    //         localStorage.setItem("accessJWT", sess?.accessJwt);
-    //         localStorage.setItem("refreshJWT", sess?.refreshJwt);
-    //         localStorage.setItem("did", sess?.did);
-    //         if (sess?.email) localStorage.setItem("email", sess?.email);
-    //         const sessData = JSON.stringify(sess);
-    //         localStorage.setItem("sess", sessData);
     //         if (sess != null) {
     //           // setSession(sess!);
     //           setLoggedInSuccess(true);

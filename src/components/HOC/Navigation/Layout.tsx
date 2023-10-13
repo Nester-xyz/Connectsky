@@ -28,24 +28,39 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
   }
 
   async function getProfileAvatar() {
-    console.log(localStorage.getItem("did"));
-    const userDID = localStorage.getItem("did");
+    const userDIDResult = await new Promise<string | undefined>((resolve) => {
+      chrome.storage.sync.get(['did'], (data) => {
+        resolve(data.did);
+      });
+    });
+  
+    // Type assertion (casting) to assert that userDID is a string
+    const userDID = userDIDResult as string;
+  
     try {
       await refreshSession();
-      if (userDID === null) return;
-      if (userDID === "") return;
+  
+      if (userDID === null || userDID === "") {
+        return;
+      }
+  
       const { data } = await agent.getProfile({
         actor: userDID,
       });
+  
       const avatar = data.avatar;
+  
       chrome.storage.sync.set({ avatar }, function () {
         console.log("Value is set to " + avatar);
       });
+  
       console.log(data.avatar);
     } catch (error) {
       console.log(error);
     }
   }
+  
+  
   useEffect(() => {
     if (location.pathname == "/") {
       setActivePage("Home");

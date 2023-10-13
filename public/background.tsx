@@ -1,3 +1,4 @@
+import { agent, refreshSession } from "../src/utils";
 type typeValue = "popup" | "normal" | "panel";
 let responseReceived: boolean = false;
 
@@ -74,3 +75,40 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     sendResponse({ message: "createWindow has been successfully triggered!" });
   }
 });
+
+
+// Icon Notification Counter
+chrome.action.setBadgeBackgroundColor({ color: '#005063' });
+function updateBadgeText(text: string | number | null) {
+  if (typeof text === 'number') {
+    chrome.action.setBadgeText({ text: text.toString() });
+  } else if (typeof text === 'string') {
+    chrome.action.setBadgeText({ text });
+  } else {
+    chrome.action.setBadgeText({ text: '' });
+  }
+}
+
+
+
+async function getUnreadNotifications() {
+  try {
+    await refreshSession();
+    const { data } = await agent.countUnreadNotifications();
+    const counter = data.count;
+
+    if (counter > 9) {
+      updateBadgeText("9+"); // Pass a string for "9+"
+    } else if (counter === 0) {
+     updateBadgeText(null) // Pass a string for "none"
+    } else {
+      updateBadgeText(counter); // Pass the number as is
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+//checks for notifications in 2 minutes interval
+setInterval(getUnreadNotifications, 20000);

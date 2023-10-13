@@ -89,10 +89,22 @@ const PostCard = ({
     }
   }
 
-  function isAvailable(handle: string) {
-    const localHandle = localStorage.getItem("handle");
-    return handle === localHandle;
+  async function isAvailable(handle: string) {
+    const result = await new Promise<{ handle?: string }>((resolve) => {
+      chrome.storage.sync.get(['handle'], (data) => {
+        resolve(data);
+      });
+    });
+  
+    const localHandle = result.handle;
+  
+    if (localHandle === handle) {
+      return true;
+    }
+  
+    return false;
   }
+  
 
   async function checkAlreadyLiked() {
     try {

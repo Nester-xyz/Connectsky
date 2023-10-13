@@ -80,7 +80,7 @@ const index = (props: Props) => {
 
   async function fetchAuthorFeed() {
     try {
-      // const did = localStorage.getItem("did");
+     
       // setUserDiD(params.did);
       if (params.did === null) return;
       await refreshSession();

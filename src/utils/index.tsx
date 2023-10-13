@@ -32,7 +32,7 @@ export type activePageCheck =
 // this contains the actual links which will be made into the buttons
 
 export function getUserDid() {
-  const DID = localStorage.getItem("did");
+  const DID = chrome.storage.sync.get(['did']);
   if (DID === null) return;
   return DID;
 }
@@ -99,20 +99,34 @@ export function formatDateAgo(date: Date) {
 export const agent = new BskyAgent({
   service: "https://bsky.social",
   persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-    // console.log("first");
     const sessData = JSON.stringify(sess);
     if (sessData == undefined) return;
-    localStorage.setItem("sess", sessData);
+    chrome.storage.sync.set({sessData});
   },
 });
 
 export async function refreshSession() {
-  const sessData = localStorage.getItem("sess");
-  if (sessData !== null) {
-    const sessParse = JSON.parse(sessData);
-    await agent.resumeSession(sessParse);
-  }
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(['sessData'], (result) => {
+      const sessData = result.sessData;
+      if (sessData) {
+        const sessParse = JSON.parse(sessData);
+        agent.resumeSession(sessParse)
+          .then((response) => {
+            resolve(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+            reject(error);
+          });
+      } else {
+        // Handle the case when sessData is not found in storage
+        reject(new Error('sessData not found in storage'));
+      }
+    });
+  });
 }
+
 
 // const MAX_WORDS = 20; // Maximum number of words to display initially
 // export function handleLongText(
@@ -185,9 +199,18 @@ export async function likeApi(uri: string, cid: string) {
   await agent.like(uri, cid);
 }
 
-function isAvailable(handle: string) {
-  const localHandle = localStorage.getItem("handle");
-  return handle === localHandle;
+async function isAvailable(handle: string) {
+  return new Promise<boolean>((resolve, reject) => {
+    chrome.storage.sync.get(['handle'], (result) => {
+      const localHandle = result.handle;
+
+      if (chrome.runtime.lastError) {
+        reject(chrome.runtime.lastError);
+      } else {
+        resolve(handle === localHandle);
+      }
+    });
+  });
 }
 
 export async function deleteRepostApi(uri: string, cid: string) {

@@ -31,7 +31,7 @@ function App() {
     // await agent.getFollows({
     //   actor: response.data.did,
     // });
-    // Update localStorage whenever activePage changes
+    // Update local store whenever activePage changes
     localStorage.setItem("activePage", JSON.stringify(activePage));
   }, [activePage]);
   return (

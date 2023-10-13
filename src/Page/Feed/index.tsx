@@ -22,67 +22,68 @@ const Feed = () => {
   const { postText, setPostText, fileRef, uploadedFile } =
     useContext(appContext);
 
-  const differentButtonsForFeed = [
-    {
-      name: "Media",
-      icon: undefined,
-      action: () => {
-        fileRef.current?.click();
+    const differentButtonsForFeed = [
+      {
+        name: "Media",
+        icon: undefined,
+        action: () => {
+          fileRef.current?.click();
+        },
       },
-    },
-    {
-      name: "Post",
-      icon: undefined,
-      action: async () => {
-        setSubmitPost(true);
-        try {
-          const sessData = localStorage.getItem("sess");
-          if (sessData !== null) {
-            const sessParse = JSON.parse(sessData);
-            await agent.resumeSession(sessParse);
+      {
+        name: "Post",
+        icon: undefined,
+        action: async () => {
+          setSubmitPost(true);
+          try {
+            const { sess } = await chrome.storage.sync.get(['sess']);
+            if (sess) {
+              const sessParse = JSON.parse(sess);
+              await agent.resumeSession(sessParse);
+            }
+            if (image !== null && postText.length > 0) {
+              const res = await agent.post({
+                text: postText,
+                embed: {
+                  $type: "app.bsky.embed.images",
+                  images: [
+                    {
+                      image,
+                      alt: "Posted via Connectsky!",
+                    },
+                  ],
+                },
+              });
+            } else if (postText.length > 0) {
+              await agent.post({ text: postText });
+            } else {
+              await agent.post({
+                text: "",
+                embed: {
+                  $type: "app.bsky.embed.images",
+                  images: [{ image, alt: "Posted via Connectsy!" }],
+                },
+              });
+            }
+            setPostText("");
+            setImage(null);
+            setSubmitPost(false);
+            setShowImage(false);
+          } catch (error) {
+            setShowImage(false);
+            setPostText("");
+            setImage(null);
+            setSubmitPost(false);
+            console.log(error);
           }
-          if (image !== null && postText.length > 0) {
-            const res = await agent.post({
-              text: postText,
-              embed: {
-                $type: "app.bsky.embed.images",
-                images: [
-                  {
-                    image,
-                    alt: "Posted via Connectsky!",
-                  },
-                ],
-              },
-            });
-          } else if (postText.length > 0) {
-            await agent.post({ text: postText });
-          } else {
-            await agent.post({
-              text: "",
-              embed: {
-                $type: "app.bsky.embed.images",
-                images: [{ image, alt: "Posted via Connectsy!" }],
-              },
-            });
-          }
-          setPostText("");
-          setImage(null);
-          setSubmitPost(false);
-          setShowImage(false);
-        } catch (error) {
-          setShowImage(false);
-          setPostText("");
-          setImage(null);
-          setSubmitPost(false);
-          console.log(error);
-        }
+        },
       },
-    },
-  ];
+    ];
+  
 
   // async function isFollowing() {
   //   console.log("Following button has been triggered!");
-  //   const loggedDID = localStorage.getItem("did");
+
   //   try {
   //     if (loggedDID == null) return;
   //     await refreshSession();
