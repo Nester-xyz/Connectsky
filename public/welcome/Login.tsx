@@ -12,6 +12,7 @@ import { HiEyeSlash } from "react-icons/hi2";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import Signup from "./Signup";
 import { profile } from "console";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const { BskyAgent } = bsky;
 
@@ -36,7 +37,7 @@ const Login = React.memo(
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const [signUpClick, setSignUpClick] = useState<boolean>(false);
     const [isSignedUp, setIsSignedUp] = useState<boolean>(false);
-    const [isNewsLetterChecked, setIsNewsLetterChecked] = useState(true);
+    // const [isNewsLetterChecked, setIsNewsLetterChecked] = useState(true);
     const [agent, setAgent] = useState<any>(null);
 
     useEffect(() => {
@@ -53,64 +54,47 @@ const Login = React.memo(
             return;
           }
           // Storing the email and handle at Server
-          const data = {
-            username: sess?.handle,
-            email: sess?.email,
-          };
-          if (isNewsLetterChecked) {
-            console.log("newsletter checked", isNewsLetterChecked);
-            try {
-              const url =
-                "https://connect-sky-backend-4wyymuz0y-yogesh0918npl.vercel.app/users/";
-              fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-                credentials: "include",
-                mode: "no-cors",
-              }).then((res) => {
-                console.log(res.body);
-              });
-            } catch (error) {
-              console.log(error);
-            }
-          }
+          // const data = {
+          //   username: sess?.handle,
+          //   email: sess?.email,
+          // };
+          // if (isNewsLetterChecked) {
+          //   console.log("newsletter checked", isNewsLetterChecked);
+          //   try {
+          //     const url =
+          //       "https://connect-sky-backend-4wyymuz0y-yogesh0918npl.vercel.app/users/";
+          //     fetch(url, {
+          //       method: "POST",
+          //       headers: { "Content-Type": "application/json" },
+          //       body: JSON.stringify(data),
+          //       credentials: "include",
+          //       mode: "no-cors",
+          //     }).then((res) => {
+          //       console.log(res.body);
+          //     });
+          //   } catch (error) {
+          //     console.log(error);
+          //   }
+          // }
           console.log(agent);
           const response = await agentInstance.getProfile({
             actor: sess?.did,
           });
           console.log(response.data.avatar);
           const avatar = response.data.avatar;
-          chrome.storage.sync.set({ avatar }, function () {
-            console.log("Value is set to " + avatar);
-          });
+          chrome.storage.sync.set({ avatar });
           const handle = sess?.handle;
-          chrome.storage.sync.set({ handle}, function() {
-            console.log('Value is set to' + handle);
-          });
-        
+          chrome.storage.sync.set({ handle});       
           const accessJWT = sess?.accessJwt;
-          chrome.storage.sync.set({accessJWT}, function() {
-            console.log("Value is set to" + accessJWT);
-          })
-      
+          chrome.storage.sync.set({accessJWT});     
           const refreshJWT = sess?.refreshJwt;
-          chrome.storage.sync.set({refreshJWT}, function() {
-            console.log("Value is set to" + refreshJWT);
-          })
+          chrome.storage.sync.set({refreshJWT});
           const did = sess?.did;
-         
-          chrome.storage.sync.set({refreshJWT}, function() {
-            console.log("Value is set to" + refreshJWT);
-          })
+          chrome.storage.sync.set({refreshJWT})
           const email = sess?.email;
-          if (sess?.email) chrome.storage.sync.set({email}, function() {
-            console.log("Value is set to" + email);
-          });
+          if (sess?.email) chrome.storage.sync.set({email});
           const sessData = JSON.stringify(sess);
-          chrome.storage.sync.set({sessData}, function() {
-            console.log("Value is set to" + sessData);
-          })
+          chrome.storage.sync.set({sessData})
          
           if (sess != null) {
             // setSession(sess!);
@@ -177,10 +161,10 @@ const Login = React.memo(
     //   []
     // );
 
-    const handleCheckBoxChange = () => {
-      // console.log("tweaked", !isNewsLetterChecked)
-      setIsNewsLetterChecked((prevState) => !prevState);
-    };
+    // const handleCheckBoxChange = () => {
+    //   // console.log("tweaked", !isNewsLetterChecked)
+    //   setIsNewsLetterChecked((prevState) => !prevState);
+    // };
 
     const login = async () => {
       try {
@@ -213,9 +197,9 @@ const Login = React.memo(
       setSignUpClick(true);
     }
 
-    useEffect(() => {
-      console.log("tweaked", isNewsLetterChecked);
-    }, [isNewsLetterChecked]);
+    // useEffect(() => {
+    //   console.log("tweaked", isNewsLetterChecked);
+    // }, [isNewsLetterChecked]);
     return (
       <>
         <div className="background_main">
@@ -314,7 +298,7 @@ const Login = React.memo(
                     <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
                   )}
 
-              <div
+              {/* <div
                 style={{
                   display: "grid",
                   gridTemplateColumns: "auto 1fr",
@@ -339,11 +323,12 @@ const Login = React.memo(
                 >
                   Subscribe to our Email Newsletter
                 </label>
-              </div>
+              </div> */}
 
+              {attemptedLogin ? <button className="submit"> <BeatLoader color="#FFFFFF" size={6}/> </button> : 
               <button className="submit" type="submit">
                 Login
-              </button>
+              </button>}
               <div className="signUp">
                 <p>
                   Don't have an account?{" "}

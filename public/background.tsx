@@ -98,11 +98,11 @@ async function getUnreadNotifications() {
     const counter = data.count;
 
     if (counter > 9) {
-      updateBadgeText("9+"); // Pass a string for "9+"
+      updateBadgeText("9+");
     } else if (counter === 0) {
-     updateBadgeText(null) // Pass a string for "none"
+     updateBadgeText(null)
     } else {
-      updateBadgeText(counter); // Pass the number as is
+      updateBadgeText(counter);
     }
   } catch (error) {
     console.log(error);
