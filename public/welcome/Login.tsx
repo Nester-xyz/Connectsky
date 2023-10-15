@@ -108,6 +108,10 @@ const Login = React.memo(
                   console.log("Message sent successfully!");
                 }
               });
+              //send message to service worker to check notification count intially
+              chrome.runtime.sendMessage({ action: "triggerFunction" }, response => {
+                // Handle the response if needed
+              });
             });
           }
         },
@@ -325,10 +329,24 @@ const Login = React.memo(
                 </label>
               </div> */}
 
-              {attemptedLogin ? <button className="submit"> <BeatLoader color="#FFFFFF" size={6}/> </button> : 
-              <button className="submit" type="submit">
-                Login
-              </button>}
+{attemptedLogin ? (
+  submitted && !loggedInSuccess ? (
+    <button className="submit" type="submit">
+    Login
+  </button>
+  ) : (
+    <button className="submit">
+      <BeatLoader color="#FFFFFF" size={6} />
+    </button>
+  )
+) : (
+  <button className="submit" type="submit">
+    Login
+  </button>
+)}
+
+
+
               <div className="signUp">
                 <p>
                   Don't have an account?{" "}

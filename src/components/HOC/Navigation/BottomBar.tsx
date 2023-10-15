@@ -56,7 +56,7 @@ const BottomBar = ({
             className="w-10 h-10  relative"
           >
             {notiCount.valueOf() > 0 && activePage !== "Notifications" ? (
-              <span className="absolute flex items-center justify-center top-0 right-0 w-4 h-4 z-50 bg-blue-500 text-white rounded-full p-0 text-xs">
+              <span className="absolute flex items-center justify-center top-0 right-0 w-4 h-4 z-50 bg-blue-500 text-white rounded-full p-0 text-xs select-none" style={{ pointerEvents: "none" }}>
                 {notiCount.toString()}
               </span>
             ) : (

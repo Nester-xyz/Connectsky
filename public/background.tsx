@@ -109,6 +109,11 @@ async function getUnreadNotifications() {
   }
 }
 
-
-//checks for notifications in 2 minutes interval
-setInterval(getUnreadNotifications, 20000);
+//checks for initial stage for unread notification
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "triggerFunction") {
+    getUnreadNotifications();
+    //checks for notifications in 2 minutes interval
+    setInterval(getUnreadNotifications, 20000)
+  }
+});
