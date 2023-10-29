@@ -76,20 +76,17 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
-
 // Icon Notification Counter
-chrome.action.setBadgeBackgroundColor({ color: '#005063' });
+chrome.action.setBadgeBackgroundColor({ color: "#005063" });
 function updateBadgeText(text: string | number | null) {
-  if (typeof text === 'number') {
+  if (typeof text === "number") {
     chrome.action.setBadgeText({ text: text.toString() });
-  } else if (typeof text === 'string') {
+  } else if (typeof text === "string") {
     chrome.action.setBadgeText({ text });
   } else {
-    chrome.action.setBadgeText({ text: '' });
+    chrome.action.setBadgeText({ text: "" });
   }
 }
-
-
 
 async function getUnreadNotifications() {
   try {
@@ -100,7 +97,7 @@ async function getUnreadNotifications() {
     if (counter > 9) {
       updateBadgeText("9+");
     } else if (counter === 0) {
-     updateBadgeText(null)
+      updateBadgeText(null);
     } else {
       updateBadgeText(counter);
     }
@@ -114,6 +111,51 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "triggerFunction") {
     getUnreadNotifications();
     //checks for notifications in 2 minutes interval
-    setInterval(getUnreadNotifications, 20000)
+    setInterval(getUnreadNotifications, 20000);
   }
 });
+
+function getFromStorage(key) {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(key, (result) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error(chrome.runtime.lastError.message));
+      } else {
+        resolve(result[key]);
+      }
+    });
+  });
+}
+
+// Example usage:
+getFromStorage("handle")
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((error) => {
+    console.error("Error fetching from storage:", error.message);
+  });
+
+getFromStorage("email")
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((error) => {
+    console.error("Error fetching from storage:", error.message);
+  });
+
+getFromStorage("sessData")
+  .then((value) => {
+    console.log("sessdata" + value);
+  })
+  .catch((error) => {
+    console.error("Error fetching from storage:", error.message);
+  });
+
+getFromStorage("accessJWT")
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((error) => {
+    console.error("Error fetching from storage:", error.message);
+  });

@@ -81,21 +81,30 @@ const Login = React.memo(
             actor: sess?.did,
           });
           console.log(response.data.avatar);
-          const avatar = response.data.avatar;
-          chrome.storage.sync.set({ avatar });
-          const handle = sess?.handle;
-          chrome.storage.sync.set({ handle});       
-          const accessJWT = sess?.accessJwt;
-          chrome.storage.sync.set({accessJWT});     
-          const refreshJWT = sess?.refreshJwt;
-          chrome.storage.sync.set({refreshJWT});
-          const did = sess?.did;
-          chrome.storage.sync.set({refreshJWT})
-          const email = sess?.email;
-          if (sess?.email) chrome.storage.sync.set({email});
           const sessData = JSON.stringify(sess);
-          chrome.storage.sync.set({sessData})
-         
+          console.log(sessData);
+
+          const avatar = response.data.avatar;
+
+          const handle = sess?.handle;
+
+          const accessJWT = sess?.accessJwt;
+
+          const refreshJWT = sess?.refreshJwt;
+
+          const did = sess?.did;
+
+          const email = sess?.email;
+          chrome.storage.sync.set({
+            sessData,
+            avatar,
+            handle,
+            accessJWT,
+            refreshJWT,
+            did,
+            email,
+          });
+
           if (sess != null) {
             // setSession(sess!);
             setLoggedInSuccess(true);
@@ -109,9 +118,12 @@ const Login = React.memo(
                 }
               });
               //send message to service worker to check notification count intially
-              chrome.runtime.sendMessage({ action: "triggerFunction" }, response => {
-                // Handle the response if needed
-              });
+              chrome.runtime.sendMessage(
+                { action: "triggerFunction" },
+                (response) => {
+                  // Handle the response if needed
+                }
+              );
             });
           }
         },
@@ -329,23 +341,21 @@ const Login = React.memo(
                 </label>
               </div> */}
 
-{attemptedLogin ? (
-  submitted && !loggedInSuccess ? (
-    <button className="submit" type="submit">
-    Login
-  </button>
-  ) : (
-    <button className="submit">
-      <BeatLoader color="#FFFFFF" size={6} />
-    </button>
-  )
-) : (
-  <button className="submit" type="submit">
-    Login
-  </button>
-)}
-
-
+              {attemptedLogin ? (
+                submitted && !loggedInSuccess ? (
+                  <button className="submit" type="submit">
+                    Login
+                  </button>
+                ) : (
+                  <button className="submit">
+                    <BeatLoader color="#FFFFFF" size={6} />
+                  </button>
+                )
+              ) : (
+                <button className="submit" type="submit">
+                  Login
+                </button>
+              )}
 
               <div className="signUp">
                 <p>
