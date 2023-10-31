@@ -140,6 +140,13 @@ const Login = React.memo(
                   console.log("Message sent successfully!");
                 }
               });
+              //send message to service worker to check notification count intially
+              chrome.runtime.sendMessage(
+                { action: "triggerFunction" },
+                (response) => {
+                  // Handle the response if needed
+                }
+              );
             });
           }
         },

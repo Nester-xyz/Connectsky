@@ -1,3 +1,4 @@
+import { agent, refreshSession } from "../src/utils";
 type typeValue = "popup" | "normal" | "panel";
 let responseReceived: boolean = false;
 
@@ -64,6 +65,7 @@ chrome.action.onClicked.addListener(onClickHandler);
 
 //Login page redirect once installing the app
 chrome.runtime.onInstalled.addListener(function () {
+  chrome.alarms.create("checkNotifications", { periodInMinutes: 0.1 }); // approximately every 20 seconds
   chrome.tabs.create({ url: "./welcome.html" });
 });
 
@@ -72,5 +74,54 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.isWindowCreate !== undefined) {
     createWindow();
     sendResponse({ message: "createWindow has been successfully triggered!" });
+  }
+});
+
+// Icon Notification Counter
+chrome.action.setBadgeBackgroundColor({ color: "#005063" });
+function updateBadgeText(text: string | number | null) {
+  if (typeof text === "number") {
+    chrome.action.setBadgeText({ text: text.toString() });
+  } else if (typeof text === "string") {
+    chrome.action.setBadgeText({ text });
+  } else {
+    chrome.action.setBadgeText({ text: "" });
+  }
+}
+
+async function getUnreadNotifications() {
+  try {
+    await refreshSession();
+    const { data } = await agent.countUnreadNotifications();
+    const counter = data.count;
+
+    if (counter > 9) {
+      updateBadgeText("9+");
+    } else if (counter === 0) {
+      updateBadgeText(null);
+    } else {
+      updateBadgeText(counter);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//checks for initial stage for unread notification
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "triggerFunction") {
+    getUnreadNotifications();
+  }
+});
+
+//checkNotifications alarm triggered onStartup of Chrome
+chrome.runtime.onStartup.addListener(function () {
+  chrome.alarms.create("checkNotifications", { periodInMinutes: 0.1 });
+});
+
+//triggers alarm when alarm name matches
+chrome.alarms.onAlarm.addListener(function (alarm) {
+  if (alarm.name === "checkNotifications") {
+    getUnreadNotifications();
   }
 });

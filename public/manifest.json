@@ -9,7 +9,7 @@
     "48": "./favicons/icon48.png",
     "128": "./favicons/icon128.png"
   },
-  "permissions": ["storage", "system.display"],
+  "permissions": ["storage", "system.display", "alarms"],
   "action": {
     "default_title": "Connectsky - A Bluesky Client"
   },
