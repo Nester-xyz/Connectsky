@@ -42,14 +42,13 @@ const Notification = () => {
           // console.log(notification.reasonSubject);
 
           postData = await agent.getPostThread({
-            uri: notification.reasonSubject,
+            uri: notification?.reasonSubject,
           });
         }
         if (notification.reason === "mention" || notification.reason == "reply") {
           postData = await agent.getPostThread({
             uri: notification?.uri,
           });
-          console.log("mention", postData);
         }
 
         return {

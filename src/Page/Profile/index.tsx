@@ -10,6 +10,7 @@ import "../../components/UI/static.css";
 type Props = {};
 
 const index = (props: Props) => {
+  // Current author did may be the user or friend
   const [userDiD, setUserDiD] = useState<string | undefined>("");
   const [displayName, setDisplayName] = useState<string | undefined>("");
   const [handle, setHandle] = useState<string | undefined>("");
@@ -26,13 +27,12 @@ const index = (props: Props) => {
   const [isFollowing, setisFollowing] = useState<boolean>(false);
   const [followsYou, setfollowsYou] = useState<boolean>(false);
   const [followURI, setFollowURI] = useState<string | undefined>("");
+
   const [userDID, setUserDID] = useState<string | null>(null);
 
   const params = useParams();
-
   async function fetchAuthorData() {
     try {
-      // setUserDid();
       if (userDiD === undefined) return;
       if (userDiD === "") return;
       await refreshSession();
@@ -160,8 +160,8 @@ const index = (props: Props) => {
   const observer = new IntersectionObserver(observerCallback, {
     threshold: 1,
   });
+
   useEffect(() => {
-    setUserDiD(params.did);
     if (!isLoading) {
       fetchAuthorFeed();
       setIsLoading(true);
@@ -178,11 +178,14 @@ const index = (props: Props) => {
   }, [isLoading, observer]);
 
   useEffect(() => {
-    setUserDiD(params.did);
+    console.log("line 181", params.did)
+    setUserDiD(params?.did)
     fetchAuthorData();
     const fetchData = async () => {
       try {
         const did = await getUserDid();
+        console.log("line 186")
+        console.log(did)
         setUserDID(did);
       } catch (error) {
         console.error("Failed to fetch user DID:", error);
@@ -210,9 +213,8 @@ const index = (props: Props) => {
           {userDID && userDID !== params.did && (
             <button
               onClick={isFollowing ? unfollow : follow}
-              className={`px-5 py-1 select-none ${
-                isFollowing ? `bg-slate-700` : ` bg-blue-600`
-              } cursor-pointer absolute rounded-lg right-10 top-3 mt-[8rem] text-white`}
+              className={`px-5 py-1 select-none ${isFollowing ? `bg-slate-700` : ` bg-blue-600`
+                } cursor-pointer absolute rounded-lg right-10 top-3 mt-[8rem] text-white`}
             >
               {isFollowing ? "Following" : "+ Follow"}
             </button>

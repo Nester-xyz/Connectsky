@@ -14,13 +14,19 @@ import HoverButtonIconOnly from "../../UI/HoverButtonIconOnly";
 
 // this contains the actual links which will be made into the button
 import { links } from "../../../utils";
-
+import { useNavigate } from "react-router-dom";
 // the components code begins from here
 const BottomBar = ({
   activePage,
   setActivePage,
   notiCount,
 }: BottomBarProps) => {
+  const [userDID, setUserDID] = React.useState<String | null>(null)
+  chrome.storage.sync.get("did", function (result) {
+    console.log("did is", result.did);
+    setUserDID(result.did)
+  });
+  const navigate = useNavigate()
   return (
     <div className="flex justify-evenly items-center h-16 border-t border-slate-200 bg-white">
       {links.map((link, index) => {
@@ -30,6 +36,7 @@ const BottomBar = ({
             onClick={() => {
               setActivePage(link.linkName);
               if (link.linkName === "Profile") {
+                navigate(`/profile/${userDID}`);
                 window.location.reload();
               }
             }}
@@ -50,6 +57,7 @@ const BottomBar = ({
             onClick={() => {
               setActivePage(link.linkName);
               if (link.linkName === "Profile") {
+                navigate(`/profile/${userDID}`);
                 window.location.reload();
               }
             }}
