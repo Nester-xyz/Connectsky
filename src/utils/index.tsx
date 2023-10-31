@@ -31,11 +31,18 @@ export type activePageCheck =
   | "Profile";
 // this contains the actual links which will be made into the buttons
 
-export function getUserDid() {
-  const DID = localStorage.getItem("did");
-  if (DID === null) return;
-  return DID;
+export async function getUserDid(): Promise<string | null> {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get("did", (result) => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError);
+      }
+      resolve(result.did || null);
+      console.log(result.did);
+    });
+  });
 }
+
 export const links: linksType[] = [
   {
     linkName: "Home",
@@ -98,20 +105,40 @@ export function formatDateAgo(date: Date) {
 
 export const agent = new BskyAgent({
   service: "https://bsky.social",
-  persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-    // console.log("first");
+  persistSession: async (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
+    console.log(sess);
     const sessData = JSON.stringify(sess);
-    if (sessData == undefined) return;
-    localStorage.setItem("sess", sessData);
+    chrome.storage.sync.set({ sessData }, function () {
+      console.log("Session data has been saved");
+      chrome.storage.sync.get("sessData", function (result) {
+        console.log("sessData from new agent is", result.sessData);
+      });
+    });
   },
 });
 
-export async function refreshSession() {
-  const sessData = localStorage.getItem("sess");
-  if (sessData !== null) {
-    const sessParse = JSON.parse(sessData);
-    await agent.resumeSession(sessParse);
-  }
+export async function refreshSession(): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    chrome.storage.sync.get("sessData", async (result) => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError);
+      }
+
+      const sessData = result.sessData;
+      console.log(sessData);
+      console.log("refreshsession" + sessData);
+      if (sessData !== null && sessData !== undefined) {
+        try {
+          await agent.resumeSession(sessData);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      } else {
+        resolve();
+      }
+    });
+  });
 }
 
 // const MAX_WORDS = 20; // Maximum number of words to display initially
@@ -173,7 +200,6 @@ export function handleSplit(handle: string | undefined) {
   return handle.split(".")[0];
 }
 
-
 export async function disLikeApi(uri: string, cid: string) {
   await refreshSession();
   const res = await agent.like(uri, cid);
@@ -185,9 +211,14 @@ export async function likeApi(uri: string, cid: string) {
   await agent.like(uri, cid);
 }
 
-function isAvailable(handle: string) {
-  const localHandle = localStorage.getItem("handle");
-  return handle === localHandle;
+export async function isAvailable(handle: string): Promise<boolean> {
+  return new Promise<boolean>((resolve) => {
+    chrome.storage.sync.get("handle", (result) => {
+      const localHandle = result.handle;
+      console.log(localHandle);
+      resolve(handle === localHandle);
+    });
+  });
 }
 
 export async function deleteRepostApi(uri: string, cid: string) {

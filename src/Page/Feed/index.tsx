@@ -4,7 +4,7 @@ import PostCard from "../../components/PageComponents/Feed/PostCard";
 import { BlobRef } from "@atproto/api";
 import PostLoader from "../../components/PageComponents/Feed/PostLoader";
 import { appContext } from "../../context/appContext";
-import { HiOutlinePencilSquare } from 'react-icons/hi2'
+import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { agent, refreshSession } from "../../utils";
 import { dataGotFromApi } from "../../components/@types/Feed/Feed";
 // the component begins here
@@ -36,39 +36,44 @@ const Feed = () => {
       action: async () => {
         setSubmitPost(true);
         try {
-          const sessData = localStorage.getItem("sess");
-          if (sessData !== null) {
-            const sessParse = JSON.parse(sessData);
-            await agent.resumeSession(sessParse);
-          }
-          if (image !== null && postText.length > 0) {
-            const res = await agent.post({
-              text: postText,
-              embed: {
-                $type: "app.bsky.embed.images",
-                images: [
-                  {
-                    image,
-                    alt: "Posted via Connectsky!",
-                  },
-                ],
-              },
-            });
-          } else if (postText.length > 0) {
-            await agent.post({ text: postText });
-          } else {
-            await agent.post({
-              text: "",
-              embed: {
-                $type: "app.bsky.embed.images",
-                images: [{ image, alt: "Posted via Connectsy!" }],
-              },
-            });
-          }
-          setPostText("");
-          setImage(null);
-          setSubmitPost(false);
-          setShowImage(false);
+          chrome.storage.sync.get("sessData", async (result) => {
+            const sessData = result.sess;
+            console.log("sessdata from feed" + sessData);
+            if (sessData !== undefined) {
+              const sessParse = JSON.parse(sessData);
+              await agent.resumeSession(sessParse);
+            }
+
+            if (image !== null && postText.length > 0) {
+              const res = await agent.post({
+                text: postText,
+                embed: {
+                  $type: "app.bsky.embed.images",
+                  images: [
+                    {
+                      image,
+                      alt: "Posted via Connectsky!",
+                    },
+                  ],
+                },
+              });
+            } else if (postText.length > 0) {
+              await agent.post({ text: postText });
+            } else {
+              await agent.post({
+                text: "",
+                embed: {
+                  $type: "app.bsky.embed.images",
+                  images: [{ image, alt: "Posted via Connectsy!" }],
+                },
+              });
+            }
+
+            setPostText("");
+            setImage(null);
+            setSubmitPost(false);
+            setShowImage(false);
+          });
         } catch (error) {
           setShowImage(false);
           setPostText("");
@@ -98,6 +103,7 @@ const Feed = () => {
 
   async function followingFeed() {
     await refreshSession();
+    console.log("refreshSession done");
     const { data } = await agent.getTimeline({
       limit: 20,
       cursor: cursor,

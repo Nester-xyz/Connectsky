@@ -70,10 +70,10 @@ const PostComments = ({
   };
 
   useEffect(() => {
-    chrome.storage.sync.get(["avatar"], function (result) {
+    chrome.storage.sync.get("avatar", function (result) {
       // console.log("Value currently is " + result.avatar);
       setAvatarURL(result.avatar); // Set the state within the callback
-      // console.log(result.avatar);
+      console.log("avatar is " + result.avatar);
     });
   }, []);
 
@@ -90,8 +90,9 @@ const PostComments = ({
           </button>
           <button
             onClick={handleSubmit}
-            className={`bg-blue-500 text-white text-md py-2 rounded-full focus:outline-none ${isReplying ? "px-[22.75px]" : "px-4"
-              }`}
+            className={`bg-blue-500 text-white text-md py-2 rounded-full focus:outline-none ${
+              isReplying ? "px-[22.75px]" : "px-4"
+            }`}
           >
             {isReplying ? (
               <ClipLoader

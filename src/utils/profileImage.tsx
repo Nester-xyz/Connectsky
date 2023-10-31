@@ -9,7 +9,7 @@ const ProfileImage = ({ style }: Props) => {
   const [avatarURL, setAvatarURL] = useState("");
 
   useEffect(() => {
-    chrome.storage.sync.get(["avatar"], function (result) {
+    chrome.storage.sync.get("avatar", function (result) {
       console.log("Value currently is " + result.avatar);
       setAvatarURL(result.avatar); // Set the state within the callback
       console.log(result.avatar);

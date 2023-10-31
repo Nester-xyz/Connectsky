@@ -28,24 +28,39 @@ const Layout = ({ children, activePage, setActivePage }: LayoutProps) => {
   }
 
   async function getProfileAvatar() {
-    console.log(localStorage.getItem("did"));
-    const userDID = localStorage.getItem("did");
     try {
+      // First, refresh the session
       await refreshSession();
-      if (userDID === null) return;
-      if (userDID === "") return;
-      const { data } = await agent.getProfile({
-        actor: userDID,
+
+      // Then, get the user DID
+      chrome.storage.sync.get("did", async function (result) {
+        const userDID = result.did;
+
+        if (!userDID) {
+          console.error("User DID is null, undefined, or empty");
+          return;
+        }
+
+        console.log("User DID:", userDID);
+
+        try {
+          const { data } = await agent.getProfile({
+            actor: userDID,
+          });
+          const avatar = data.avatar;
+          chrome.storage.sync.set({ avatar }, function () {
+            console.log("Avatar is set to " + avatar);
+          });
+          console.log(data.avatar);
+        } catch (error) {
+          console.error("Error fetching profile avatar:", error);
+        }
       });
-      const avatar = data.avatar;
-      chrome.storage.sync.set({ avatar }, function () {
-        console.log("Value is set to " + avatar);
-      });
-      console.log(data.avatar);
     } catch (error) {
-      console.log(error);
+      console.error("An error occurred:", error);
     }
   }
+
   useEffect(() => {
     if (location.pathname == "/") {
       setActivePage("Home");

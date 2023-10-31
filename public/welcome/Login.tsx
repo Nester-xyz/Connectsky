@@ -48,50 +48,86 @@ const Login = React.memo(
         ) => {
           // Your existing logic here
           console.log("setSession", sess);
-          console.log(sess);
+          // console.log(sess);
           if (sess == null) {
             return;
           }
           // Storing the email and handle at Server
-          const data = {
-            username: sess?.handle,
-            email: sess?.email,
-          };
-          if (isNewsLetterChecked) {
-            console.log("newsletter checked", isNewsLetterChecked);
-            try {
-              const url =
-                "https://connect-sky-backend-4wyymuz0y-yogesh0918npl.vercel.app/users/";
-              fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-                credentials: "include",
-                mode: "no-cors",
-              }).then((res) => {
-                console.log(res.body);
-              });
-            } catch (error) {
-              console.log(error);
-            }
-          }
+          // const data = {
+          //   username: sess?.handle,
+          //   email: sess?.email,
+          // };
+          // if (isNewsLetterChecked) {
+          //   console.log("newsletter checked", isNewsLetterChecked);
+          //   try {
+          //     const url =
+          //       "https://connect-sky-backend-4wyymuz0y-yogesh0918npl.vercel.app/users/";
+          //     fetch(url, {
+          //       method: "POST",
+          //       headers: { "Content-Type": "application/json" },
+          //       body: JSON.stringify(data),
+          //       credentials: "include",
+          //       mode: "no-cors",
+          //     }).then((res) => {
+          //       console.log(res.body);
+          //     });
+          //   } catch (error) {
+          //     console.log(error);
+          //   }
+          // }
           console.log(agent);
           const response = await agentInstance.getProfile({
             actor: sess?.did,
           });
           console.log(response.data.avatar);
           const avatar = response.data.avatar;
-          chrome.storage.sync.set({ avatar }, function () {
-            console.log("Value is set to " + avatar);
-          });
+          const handle = sess?.handle;
+          const accessJWT = sess?.accessJwt;
+          const refreshJWT = sess?.refreshJwt;
+          const did = sess?.did;
+          const email = sess?.email;
 
-          localStorage.setItem("handle", sess?.handle);
-          localStorage.setItem("accessJWT", sess?.accessJwt);
-          localStorage.setItem("refreshJWT", sess?.refreshJwt);
-          localStorage.setItem("did", sess?.did);
-          if (sess?.email) localStorage.setItem("email", sess?.email);
+          // localStorage.setItem("handle", sess?.handle);
+          // localStorage.setItem("accessJWT", sess?.accessJwt);
+          // localStorage.setItem("refreshJWT", sess?.refreshJwt);
+          // localStorage.setItem("did", sess?.did);
+          // if (sess?.email) localStorage.setItem("email", sess?.email);
           const sessData = JSON.stringify(sess);
-          localStorage.setItem("sess", sessData);
+          // localStorage.setItem("sess", sessData);
+          chrome.storage.sync.set(
+            { sessData, avatar, handle, accessJWT, refreshJWT, did, email },
+            function () {
+              console.log("Session data has been saved");
+
+              chrome.storage.sync.get("sessData", function (result) {
+                console.log("sessData is", result.sessData);
+              });
+              chrome.storage.sync.get("avatar", function (result) {
+                console.log("avatar is", result.avatar);
+              });
+              chrome.storage.sync.get("handle", function (result) {
+                console.log("handle is", result.handle);
+              });
+              chrome.storage.sync.get("accessJWT", function (result) {
+                console.log("accessJWT is", result.accessJWT);
+              });
+              chrome.storage.sync.get("refreshJWT", function (result) {
+                console.log("refreshJWT is", result.refreshJWT);
+              });
+              chrome.storage.sync.get("did", function (result) {
+                console.log("did is", result.did);
+              });
+              chrome.storage.sync.get("email", function (result) {
+                console.log("email is", result.email);
+              });
+            }
+          );
+          // console.log("avatar is" + chrome.storage.sync.get("avatar"));
+          // console.log("handle is" + chrome.storage.sync.get("handle"));
+          // console.log("accessJWT is" + chrome.storage.sync.get("accessJWT"));
+          // console.log("refreshJWT is" + chrome.storage.sync.get("refreshJWT"));
+          // console.log("did is" + chrome.storage.sync.get("did"));
+          // console.log("email is" + chrome.storage.sync.get("email"));
           if (sess != null) {
             // setSession(sess!);
             setLoggedInSuccess(true);
@@ -301,7 +337,7 @@ const Login = React.memo(
                     <h5 className="login-msg"> Oops! Incorrect Credentials.</h5>
                   )}
 
-              <div
+              {/* <div
                 style={{
                   display: "grid",
                   gridTemplateColumns: "auto 1fr",
@@ -326,7 +362,7 @@ const Login = React.memo(
                 >
                   Subscribe to our Email Newsletter
                 </label>
-              </div>
+              </div> */}
 
               <button className="submit" type="submit">
                 Login

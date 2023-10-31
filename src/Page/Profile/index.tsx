@@ -26,6 +26,7 @@ const index = (props: Props) => {
   const [isFollowing, setisFollowing] = useState<boolean>(false);
   const [followsYou, setfollowsYou] = useState<boolean>(false);
   const [followURI, setFollowURI] = useState<string | undefined>("");
+  const [userDID, setUserDID] = useState<string | null>(null);
 
   const params = useParams();
 
@@ -178,6 +179,16 @@ const index = (props: Props) => {
   useEffect(() => {
     setUserDiD(params.did);
     fetchAuthorData();
+    const fetchData = async () => {
+      try {
+        const did = await getUserDid();
+        setUserDID(did);
+      } catch (error) {
+        console.error("Failed to fetch user DID:", error);
+      }
+    };
+
+    fetchData();
   }, [userDiD]);
 
   return (
@@ -195,7 +206,7 @@ const index = (props: Props) => {
               className="rounded-full"
             />
           </div>
-          {getUserDid() !== params.did && (
+          {userDID && userDID !== params.did && (
             <button
               onClick={isFollowing ? unfollow : follow}
               className={`px-5 py-1 select-none ${
