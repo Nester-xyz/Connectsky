@@ -6,16 +6,16 @@ import LogInSuccess from "./welcome/LogInSuccess";
 const Welcome = () => {
   const [attemptedLogin, setAttemptedLogin] = useState(false);
   const [loggedInSuccess, setLoggedInSucces] = useState(false);
-  useEffect(() => {
-    chrome.storage.sync.clear(function () {
-      var error = chrome.runtime.lastError;
-      if (error) {
-        console.error(error);
-      } else {
-        console.log("Sync Storage cleared");
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   chrome.storage.sync.clear(function () {
+  //     var error = chrome.runtime.lastError;
+  //     if (error) {
+  //       console.error(error);
+  //     } else {
+  //       console.log("Sync Storage cleared");
+  //     }
+  //   });
+  // }, []);
 
   return (
     <div className="screen ">

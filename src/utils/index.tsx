@@ -105,15 +105,10 @@ export function formatDateAgo(date: Date) {
 
 export const agent = new BskyAgent({
   service: "https://bsky.social",
-  persistSession: async (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
-    console.log(sess);
+  persistSession: (_evt: AtpSessionEvent, sess?: AtpSessionData) => {
     const sessData = JSON.stringify(sess);
-    chrome.storage.sync.set({ sessData }, function () {
-      console.log("Session data has been saved");
-      chrome.storage.sync.get("sessData", function (result) {
-        console.log("sessData from new agent is", result.sessData);
-      });
-    });
+    // console.log(sessData);
+    if (sessData == undefined) return;
   },
 });
 
@@ -123,13 +118,12 @@ export async function refreshSession(): Promise<void> {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
-
       const sessData = result.sessData;
-      console.log(sessData);
-      console.log("refreshsession" + sessData);
+      // console.log("refreshsession" + sessData);
       if (sessData !== null && sessData !== undefined) {
+        const sessParse = JSON.parse(sessData);
         try {
-          await agent.resumeSession(sessData);
+          await agent.resumeSession(sessParse);
           resolve();
         } catch (error) {
           reject(error);
@@ -215,7 +209,7 @@ export async function isAvailable(handle: string): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
     chrome.storage.sync.get("handle", (result) => {
       const localHandle = result.handle;
-      console.log(localHandle);
+      // console.log("my handle is" + localHandle);
       resolve(handle === localHandle);
     });
   });
@@ -231,28 +225,39 @@ export async function repostApi(uri: string, cid: string) {
   await agent.repost(uri, cid);
 }
 
-export async function checkIfLikedApi(uri: string, cid: string) {
+export async function checkIfLikedApi(
+  uri: string,
+  cid: string
+): Promise<boolean> {
   try {
     const { data } = await agent.getLikes({ uri, cid });
-    const alreadyLiked = data.likes.some((item) =>
-      isAvailable(item.actor.handle)
-    );
-    return alreadyLiked;
+    for (const item of data.likes) {
+      if (await isAvailable(item.actor.handle)) {
+        return true;
+      }
+    }
   } catch (error) {
     console.log(error);
+    return false;
   }
   return false;
 }
 
-export async function checkIfAlreadyRepost(uri: string, cid: string) {
+export async function checkIfAlreadyRepost(
+  uri: string,
+  cid: string
+): Promise<boolean> {
   try {
     const { data } = await agent.getRepostedBy({ uri, cid });
-    const alreadyReposted = data.repostedBy.some((item) =>
-      isAvailable(item.handle)
-    );
-    return alreadyReposted;
+    for (const item of data.repostedBy) {
+      if (await isAvailable(item.handle)) {
+        // console.log("reposted?: true");
+        return true;
+      }
+    }
   } catch (error) {
     console.log(error);
+    return false;
   }
   return false;
 }

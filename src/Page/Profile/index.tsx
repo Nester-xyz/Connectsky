@@ -37,6 +37,7 @@ const index = (props: Props) => {
       if (userDiD === "") return;
       await refreshSession();
       const { data } = await agent.getProfile({ actor: userDiD });
+      console.log("profile data is:" + data);
       setFollowURI(data.viewer?.following);
       if (data.viewer?.following !== undefined) {
         setisFollowing(true);

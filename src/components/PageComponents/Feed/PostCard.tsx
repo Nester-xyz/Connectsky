@@ -100,6 +100,7 @@ const PostCard = ({
 
   async function checkAlreadyLiked() {
     try {
+      console.log("Like checking");
       const alreadyLiked = await checkIfLikedApi(uri, cid);
       setLike(alreadyLiked);
     } catch (error) {
@@ -118,7 +119,9 @@ const PostCard = ({
   useEffect(() => {
     async function dataFetcher() {
       setIsFetching(true);
+      console.log("Check already liked");
       await checkAlreadyLiked();
+      console.log("like check completed");
       await checkAlreadyRepost();
       setIsFetching(false);
     }
