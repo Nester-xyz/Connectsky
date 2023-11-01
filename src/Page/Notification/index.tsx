@@ -37,20 +37,28 @@ const Notification = () => {
     console.log("notifications data", notificationsData);
     const fetchPromises = notificationsData
       .map(async (notification: any) => {
-        let postData;
+        let postData = null;
         if (notification.reasonSubject !== undefined) {
-          // console.log(notification.reasonSubject);
-
-          postData = await agent.getPostThread({
-            uri: notification?.reasonSubject,
-          });
-        }
-        if (notification.reason === "mention" || notification.reason == "reply") {
-          postData = await agent.getPostThread({
-            uri: notification?.uri,
-          });
+          try {
+            postData = await agent.getPostThread({
+              uri: notification?.reasonSubject,
+            });
+          } catch (error) {
+            console.error("Failed to fetch post data:", error);
+            return null; // Return null for failed request
+          }
         }
 
+        if (notification.reason === "mention" || notification.reason === "reply") {
+          try {
+            postData = await agent.getPostThread({
+              uri: notification?.uri,
+            });
+          } catch (error) {
+            console.error("Failed to fetch post data:", error);
+            return null; // Return null for failed request
+          }
+        }
         return {
           uri: notification.uri,
           cid: notification.cid,
@@ -67,9 +75,10 @@ const Notification = () => {
       })
       .filter((item) => item !== null);
 
-    const mappedData: NotificationItem[] = await Promise.all(
+    const mappedData: NotificationItem[] = (await Promise.all(
       fetchPromises as Promise<NotificationItem>[]
-    );
+    )).filter((item) => item != null)
+    console.log("mappeddata", mappedData)
     setFetchedDataLength(mappedData.length);
     setNotifications((prevData) => [...prevData, ...mappedData]);
     console.log("notifications ", mappedData);
